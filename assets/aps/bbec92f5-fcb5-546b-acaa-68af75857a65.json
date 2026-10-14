@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "bbec92f5-fcb5-546b-acaa-68af75857a65",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Knowledge Graph Schema Generator",
+    "description": "Converts an array of text chunks and a database schema string into a knowledge graph schema of node classes, properties, and expected property types.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "b7285002-6d25-5667-89ac-edd6237af096",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "206917e6-19c5-57ff-83e5-b7e261108960",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entities"
+   }
+  },
+  {
+   "id": "0b2cf30b-7bcd-5e5e-9dcd-11f9f0d424e3",
+   "labels": [
+    "Graph_Schema_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_schema_builder",
+    "description": "Derives a knowledge graph schema from a database schema and a sample of entity records. The returned schema describes node classes, properties, and expected property types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "bbec92f5-fcb5-546b-acaa-68af75857a65",
+   "to": "b7285002-6d25-5667-89ac-edd6237af096",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b7285002-6d25-5667-89ac-edd6237af096",
+   "to": "206917e6-19c5-57ff-83e5-b7e261108960",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entities']": "from['outputs']['entities']"
+    }
+   }
+  },
+  {
+   "from": "206917e6-19c5-57ff-83e5-b7e261108960",
+   "to": "0b2cf30b-7bcd-5e5e-9dcd-11f9f0d424e3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_records']": "from['entities']"
+    }
+   }
+  },
+  {
+   "from": "0b2cf30b-7bcd-5e5e-9dcd-11f9f0d424e3",
+   "to": "b7285002-6d25-5667-89ac-edd6237af096",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "bbec92f5-fcb5-546b-acaa-68af75857a65",
+   "to": "0b2cf30b-7bcd-5e5e-9dcd-11f9f0d424e3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

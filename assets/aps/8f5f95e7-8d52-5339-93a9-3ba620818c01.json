@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "8f5f95e7-8d52-5339-93a9-3ba620818c01",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Ordered Text Document Splitter",
+    "description": "Splits one long plain-text document into an ordered array of text chunks.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "ed1d75d2-89be-58b0-a4f2-174dcf1f2d0b",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8f5f95e7-8d52-5339-93a9-3ba620818c01",
+   "to": "ed1d75d2-89be-58b0-a4f2-174dcf1f2d0b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

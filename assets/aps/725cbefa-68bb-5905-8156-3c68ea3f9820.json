@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "725cbefa-68bb-5905-8156-3c68ea3f9820",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Search Query Expansion",
+    "description": "Expands a given information-retrieval query string into a broader query string containing synonyms, abbreviations, and related terms.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "63e3141a-9efd-531c-b5fb-b6bc6e1637e0",
+   "labels": [
+    "Query_Expansion_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "query_expander",
+    "description": "Expands an information-retrieval query with synonyms, abbreviations, and related terms.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "original_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "725cbefa-68bb-5905-8156-3c68ea3f9820",
+   "to": "63e3141a-9efd-531c-b5fb-b6bc6e1637e0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

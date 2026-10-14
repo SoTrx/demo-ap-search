@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "16fd4a16-f7a9-56de-b00d-ce0fb88cab66",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate Key Specification From Rows",
+    "description": "Profiles sample table rows and selects candidate duplicate-key columns with matching options, returning a duplicate-key specification without grouping rows.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "2fdeae1e-e59f-5401-8f9f-780d142350ac",
+   "labels": [
+    "DatasetColumnProfileBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_column_profile",
+    "description": "Builds a column-level profile from table records. It summarizes observed column names, inferred types, and row counts for catalogue comparison.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dcd2d8ea-670c-5065-8852-47a6209700c1",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "2ce720aa-4e89-5ed1-84d6-29e7088a7525",
+   "labels": [
+    "Duplicate_Key_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_key_selector",
+    "description": "Selects candidate duplicate-key columns and matching options from a dataset profile. Returns a duplicate-key specification without grouping rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "16fd4a16-f7a9-56de-b00d-ce0fb88cab66",
+   "to": "2fdeae1e-e59f-5401-8f9f-780d142350ac",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2fdeae1e-e59f-5401-8f9f-780d142350ac",
+   "to": "dcd2d8ea-670c-5065-8852-47a6209700c1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "dcd2d8ea-670c-5065-8852-47a6209700c1",
+   "to": "2ce720aa-4e89-5ed1-84d6-29e7088a7525",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "2ce720aa-4e89-5ed1-84d6-29e7088a7525",
+   "to": "2fdeae1e-e59f-5401-8f9f-780d142350ac",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "16fd4a16-f7a9-56de-b00d-ce0fb88cab66",
+   "to": "2ce720aa-4e89-5ed1-84d6-29e7088a7525",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

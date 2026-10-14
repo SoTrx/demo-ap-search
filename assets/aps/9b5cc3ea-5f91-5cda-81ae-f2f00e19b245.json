@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "9b5cc3ea-5f91-5cda-81ae-f2f00e19b245",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Document Page Image Converter",
+    "description": "Converts a PDF or scanned document into an ordered array of page images for the entire document.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "d82d1095-0702-54bd-82c2-bdf828b14f38",
+   "labels": [
+    "Document_To_Page_Images_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_to_page_images",
+    "description": "Converts a PDF or scanned document into an ordered array of page images.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "document_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9b5cc3ea-5f91-5cda-81ae-f2f00e19b245",
+   "to": "d82d1095-0702-54bd-82c2-bdf828b14f38",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

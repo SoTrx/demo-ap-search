@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "ed662817-cdb1-5372-84b2-c16beea8a4a7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Crosstab",
+    "description": "Builds a cross-tabulation table from weighted survey records and a column mapping, returning rows with unweighted counts, weighted counts, and percentages.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "25099683-2b6e-5ea8-b92e-cb332e6a7343",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ed662817-cdb1-5372-84b2-c16beea8a4a7",
+   "to": "25099683-2b6e-5ea8-b92e-cb332e6a7343",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

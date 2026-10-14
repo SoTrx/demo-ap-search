@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "6eeb2c21-068f-5ad3-bc20-f98338925a02",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymised Table Risk Score",
+    "description": "Detects direct personal fields and quasi-identifier combinations, groups equivalence classes, and returns a single re-identification risk score.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "cc13d3d7-eddd-5e7d-bb13-9fdaa9db33f5",
+   "labels": [
+    "Personal_Data_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "personal_data_detector",
+    "description": "Detects direct personal-data fields in table records and returns a row-level detection report. It reports fields such as names, government identifiers, contact details, and addresses.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "db92c299-a892-5b09-9c43-df475218629b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ca9a8a75-ee66-532a-bd9c-d27300850d25",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f403b193-887d-5476-be24-e30bb5c2f6af",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "groups"
+   }
+  },
+  {
+   "id": "526e6bac-8df8-5bf5-b2fc-b83adafb1914",
+   "labels": [
+    "Reidentification_Risk_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "reidentification_risk_scorer",
+    "description": "Combines k-anonymity, l-diversity, and equivalence-class size evidence into one re-identification risk score. Higher values indicate a greater chance of linking a pseudonymised record to an external dataset.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "k_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "l_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6eeb2c21-068f-5ad3-bc20-f98338925a02",
+   "to": "cc13d3d7-eddd-5e7d-bb13-9fdaa9db33f5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "cc13d3d7-eddd-5e7d-bb13-9fdaa9db33f5",
+   "to": "db92c299-a892-5b09-9c43-df475218629b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "db92c299-a892-5b09-9c43-df475218629b",
+   "to": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['personal_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "to": "cc13d3d7-eddd-5e7d-bb13-9fdaa9db33f5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6eeb2c21-068f-5ad3-bc20-f98338925a02",
+   "to": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "to": "ca9a8a75-ee66-532a-bd9c-d27300850d25",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "ca9a8a75-ee66-532a-bd9c-d27300850d25",
+   "to": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['quasi_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "to": "c90260e1-5a18-5904-bb66-7b6653efd64c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6eeb2c21-068f-5ad3-bc20-f98338925a02",
+   "to": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "to": "f403b193-887d-5476-be24-e30bb5c2f6af",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['groups']": "from['outputs']['groups']"
+    }
+   }
+  },
+  {
+   "from": "f403b193-887d-5476-be24-e30bb5c2f6af",
+   "to": "526e6bac-8df8-5bf5-b2fc-b83adafb1914",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['groups']": "from['groups']"
+    }
+   }
+  },
+  {
+   "from": "526e6bac-8df8-5bf5-b2fc-b83adafb1914",
+   "to": "76e17880-b440-5ae1-8e7a-cd8149176a1c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6eeb2c21-068f-5ad3-bc20-f98338925a02",
+   "to": "526e6bac-8df8-5bf5-b2fc-b83adafb1914",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "caebd90d-dfca-5956-b703-8b936fec3d7d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker-attributed audio transcript alignment",
+    "description": "Recognizes speech from audio segments and merges the timed transcripts with speaker assignment records to produce speaker-attributed transcript entries with timing and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "b81c3378-4eeb-5883-8461-439ac8ed6655",
+   "labels": [
+    "Speech_Transcriber_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speech_transcriber",
+    "description": "Converts audio segments to text using an automatic speech recognition model. Returns transcript records containing recognized text, segment timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1095858f-d8e9-563a-90ea-10f6e2e4d516",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "transcripts"
+   }
+  },
+  {
+   "id": "7aa96dc1-30e2-5b9e-8fbe-221f6d1e6d4f",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "caebd90d-dfca-5956-b703-8b936fec3d7d",
+   "to": "b81c3378-4eeb-5883-8461-439ac8ed6655",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b81c3378-4eeb-5883-8461-439ac8ed6655",
+   "to": "1095858f-d8e9-563a-90ea-10f6e2e4d516",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['transcripts']": "from['outputs']['transcripts']"
+    }
+   }
+  },
+  {
+   "from": "1095858f-d8e9-563a-90ea-10f6e2e4d516",
+   "to": "7aa96dc1-30e2-5b9e-8fbe-221f6d1e6d4f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['transcripts']"
+    }
+   }
+  },
+  {
+   "from": "7aa96dc1-30e2-5b9e-8fbe-221f6d1e6d4f",
+   "to": "b81c3378-4eeb-5883-8461-439ac8ed6655",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "caebd90d-dfca-5956-b703-8b936fec3d7d",
+   "to": "7aa96dc1-30e2-5b9e-8fbe-221f6d1e6d4f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

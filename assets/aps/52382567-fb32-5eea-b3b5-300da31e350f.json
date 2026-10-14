@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "52382567-fb32-5eea-b3b5-300da31e350f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Typed Relation Candidate Extraction",
+    "description": "Given text chunks, linked entity pairs, and a graph schema, this AP produces candidate typed relation triples whose relation types and argument types fit the schema.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "a5826a45-e35f-57a1-8591-3336402ef613",
+   "labels": [
+    "Relation_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "relation_extractor",
+    "description": "Extracts typed relation candidates from text chunks for pairs of linked entities. The graph schema guides relation classes and expected argument types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "52382567-fb32-5eea-b3b5-300da31e350f",
+   "to": "a5826a45-e35f-57a1-8591-3336402ef613",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

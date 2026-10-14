@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "ff1fb817-c9c6-5e35-9667-9ca56b879d8d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Weather Variable Readings",
+    "description": "Executes an SQL query and converts the returned rows into normalized weather reading records for the chosen measured variable.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "808ddefd-35ba-5c6c-80cb-ce97fb1f4c06",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "d13a7d11-945c-538a-9240-0eba67dfb57f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "ce0d897d-a0c1-5375-bb7f-44171aed6393",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ff1fb817-c9c6-5e35-9667-9ca56b879d8d",
+   "to": "808ddefd-35ba-5c6c-80cb-ce97fb1f4c06",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "808ddefd-35ba-5c6c-80cb-ce97fb1f4c06",
+   "to": "d13a7d11-945c-538a-9240-0eba67dfb57f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "d13a7d11-945c-538a-9240-0eba67dfb57f",
+   "to": "ce0d897d-a0c1-5375-bb7f-44171aed6393",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "ce0d897d-a0c1-5375-bb7f-44171aed6393",
+   "to": "808ddefd-35ba-5c6c-80cb-ce97fb1f4c06",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ff1fb817-c9c6-5e35-9667-9ca56b879d8d",
+   "to": "ce0d897d-a0c1-5375-bb7f-44171aed6393",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "ca9daa74-6bc5-5a52-a6bb-a0cf0a650f83",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Quasi-Identifier Risk Report",
+    "description": "Encodes chosen categorical columns and returns a report of quasi-identifier columns and combinations that could uniquely identify records once direct personal data has been removed.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "b832b031-470a-5dec-861e-634246f51de1",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9cca0686-08eb-533f-912d-b0f962f9fab4",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "a428c3ad-1d09-592c-a82f-24ee85f39e62",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ca9daa74-6bc5-5a52-a6bb-a0cf0a650f83",
+   "to": "b832b031-470a-5dec-861e-634246f51de1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b832b031-470a-5dec-861e-634246f51de1",
+   "to": "9cca0686-08eb-533f-912d-b0f962f9fab4",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "9cca0686-08eb-533f-912d-b0f962f9fab4",
+   "to": "a428c3ad-1d09-592c-a82f-24ee85f39e62",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "a428c3ad-1d09-592c-a82f-24ee85f39e62",
+   "to": "b832b031-470a-5dec-861e-634246f51de1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ca9daa74-6bc5-5a52-a6bb-a0cf0a650f83",
+   "to": "a428c3ad-1d09-592c-a82f-24ee85f39e62",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

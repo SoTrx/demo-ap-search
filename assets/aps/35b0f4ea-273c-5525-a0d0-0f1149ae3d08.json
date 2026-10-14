@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "35b0f4ea-273c-5525-a0d0-0f1149ae3d08",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Query-Matched Chunk Sentiment Scorer",
+    "description": "Builds a searchable index over text chunks, retrieves passages semantically matching a query, and returns a polarity score and sentiment label for those passages.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "1da6db60-d81f-5d3b-905f-0a466519fc89",
+   "labels": [
+    "Passage_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "passage_index_builder",
+    "description": "Builds a searchable index from ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e710f337-3816-5f08-ba08-b55258423181",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "labels": [
+    "Dense_Vector_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dense_vector_retriever",
+    "description": "Retrieves text chunks from a search index using dense vector similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "bc9dcfd5-bfa4-59d3-aa05-98d78be2f47a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "f3f13e13-237a-5372-87fb-277308e178dd",
+   "labels": [
+    "Chunk_Sentiment_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_sentiment_scorer",
+    "description": "Computes polarity and a coarse sentiment label for the combined text represented by the chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "35b0f4ea-273c-5525-a0d0-0f1149ae3d08",
+   "to": "1da6db60-d81f-5d3b-905f-0a466519fc89",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1da6db60-d81f-5d3b-905f-0a466519fc89",
+   "to": "e710f337-3816-5f08-ba08-b55258423181",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "e710f337-3816-5f08-ba08-b55258423181",
+   "to": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "to": "1da6db60-d81f-5d3b-905f-0a466519fc89",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "35b0f4ea-273c-5525-a0d0-0f1149ae3d08",
+   "to": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "to": "bc9dcfd5-bfa4-59d3-aa05-98d78be2f47a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "bc9dcfd5-bfa4-59d3-aa05-98d78be2f47a",
+   "to": "f3f13e13-237a-5372-87fb-277308e178dd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "f3f13e13-237a-5372-87fb-277308e178dd",
+   "to": "a498f4f4-81bf-5d5b-95f7-3c089eda252e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "35b0f4ea-273c-5525-a0d0-0f1149ae3d08",
+   "to": "f3f13e13-237a-5372-87fb-277308e178dd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

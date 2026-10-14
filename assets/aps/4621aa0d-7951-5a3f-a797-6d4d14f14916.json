@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "4621aa0d-7951-5a3f-a797-6d4d14f14916",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filtered Key Phrase Extraction",
+    "description": "Extracts weighted key phrases from text chunks and keeps only the phrases whose relevance score meets the supplied threshold.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "1060e6bc-276d-597a-b771-54f2b9c07a9b",
+   "labels": [
+    "Chunk_Keyword_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_keyword_extractor",
+    "description": "Extracts weighted key phrases from an array of text chunks and returns keyword records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fcce0c0a-3a1b-57ec-8d7c-20224db381e9",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "keywords"
+   }
+  },
+  {
+   "id": "5bcf01c6-057a-57ad-bc80-2febec1469b8",
+   "labels": [
+    "Keyword_Threshold_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "keyword_threshold_filter",
+    "description": "Keeps keyword records whose relevance score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "4621aa0d-7951-5a3f-a797-6d4d14f14916",
+   "to": "1060e6bc-276d-597a-b771-54f2b9c07a9b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1060e6bc-276d-597a-b771-54f2b9c07a9b",
+   "to": "fcce0c0a-3a1b-57ec-8d7c-20224db381e9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['keywords']": "from['outputs']['keywords']"
+    }
+   }
+  },
+  {
+   "from": "fcce0c0a-3a1b-57ec-8d7c-20224db381e9",
+   "to": "5bcf01c6-057a-57ad-bc80-2febec1469b8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['keywords']": "from['keywords']"
+    }
+   }
+  },
+  {
+   "from": "5bcf01c6-057a-57ad-bc80-2febec1469b8",
+   "to": "1060e6bc-276d-597a-b771-54f2b9c07a9b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4621aa0d-7951-5a3f-a797-6d4d14f14916",
+   "to": "5bcf01c6-057a-57ad-bc80-2febec1469b8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "9eb6a6bc-f5d3-563f-91ba-0a0925fc1b49",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Classifier Evaluation Metrics Report",
+    "description": "Takes aligned prediction rows, labeled rows, and a label mapping, then outputs an accuracy, precision, recall, and F1 evaluation report.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "12f1081f-7045-52e5-a0e4-32a25a85702e",
+   "labels": [
+    "Evaluate_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "evaluate_classifier",
+    "description": "Computes accuracy, precision, recall, and F1 from aligned classifier prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9eb6a6bc-f5d3-563f-91ba-0a0925fc1b49",
+   "to": "12f1081f-7045-52e5-a0e4-32a25a85702e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

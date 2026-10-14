@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "7bb4832a-6e4a-5291-ae11-d9269b8aca21",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Compliant Weather SQL Readings Normalizer",
+    "description": "Checks whether a provenance report lists required sources and transformations, runs the supplied query when it is compliant, and returns normalized weather readings for one measured variable.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "39cb2428-fdfa-5518-823e-08d4cb405b14",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9934a559-d5d1-5d8a-86d8-3978ad5609b5",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "bd2cd734-b536-5514-a056-b0520cf8756d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "fcff632f-57b2-53ed-a7ef-6ae61e5594cd",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7bb4832a-6e4a-5291-ae11-d9269b8aca21",
+   "to": "39cb2428-fdfa-5518-823e-08d4cb405b14",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "39cb2428-fdfa-5518-823e-08d4cb405b14",
+   "to": "9934a559-d5d1-5d8a-86d8-3978ad5609b5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "9934a559-d5d1-5d8a-86d8-3978ad5609b5",
+   "to": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "to": "39cb2428-fdfa-5518-823e-08d4cb405b14",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7bb4832a-6e4a-5291-ae11-d9269b8aca21",
+   "to": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "to": "bd2cd734-b536-5514-a056-b0520cf8756d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "bd2cd734-b536-5514-a056-b0520cf8756d",
+   "to": "fcff632f-57b2-53ed-a7ef-6ae61e5594cd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "fcff632f-57b2-53ed-a7ef-6ae61e5594cd",
+   "to": "015981ea-29ec-5a2e-9910-fd836d835b4c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7bb4832a-6e4a-5291-ae11-d9269b8aca21",
+   "to": "fcff632f-57b2-53ed-a7ef-6ae61e5594cd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

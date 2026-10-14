@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "c6cab522-b2f4-5e60-a9a5-a1d59b19f2c8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Transcripts Meeting Language Confidence",
+    "description": "Returns only transcript records whose associated language identification confidence score meets a supplied threshold.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "cae870b8-ccd9-5ef0-b2a1-cc4a1346de34",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c6cab522-b2f4-5e60-a9a5-a1d59b19f2c8",
+   "to": "cae870b8-ccd9-5ef0-b2a1-cc4a1346de34",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "8d327840-0ac7-5a7b-b196-d70083a9baa4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Patient-Level Clinical Encoding Extract",
+    "description": "Builds patient-level records from clinical table rows by binarizing selected categorical columns and returning only the mapped fields.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "612ea655-503a-59dd-9fd3-f25e76faea35",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "90cc35e5-7884-5be7-a9e6-9f11d2446bdd",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "2a80b4c8-e65c-5643-a644-10576f00bbf9",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8d327840-0ac7-5a7b-b196-d70083a9baa4",
+   "to": "612ea655-503a-59dd-9fd3-f25e76faea35",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "612ea655-503a-59dd-9fd3-f25e76faea35",
+   "to": "90cc35e5-7884-5be7-a9e6-9f11d2446bdd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "90cc35e5-7884-5be7-a9e6-9f11d2446bdd",
+   "to": "2a80b4c8-e65c-5643-a644-10576f00bbf9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_records']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "2a80b4c8-e65c-5643-a644-10576f00bbf9",
+   "to": "612ea655-503a-59dd-9fd3-f25e76faea35",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8d327840-0ac7-5a7b-b196-d70083a9baa4",
+   "to": "2a80b4c8-e65c-5643-a644-10576f00bbf9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

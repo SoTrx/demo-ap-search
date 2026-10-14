@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "a76eef3a-dd7a-5a4b-8bcc-6ba9828d127c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Equivalence Class Group Builder",
+    "description": "From a records array and a quasi_report array, it outputs groups containing pseudonymised records with identical quasi-identifier patterns.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "2e785cc8-7154-505e-a5d9-3e159fa3da7f",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a76eef3a-dd7a-5a4b-8bcc-6ba9828d127c",
+   "to": "2e785cc8-7154-505e-a5d9-3e159fa3da7f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

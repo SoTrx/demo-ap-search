@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "fa5af7d1-7ab7-5a14-a9bd-7c3a45c55960",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Query Performance Rewriter",
+    "description": "Rewrites a supplied SQL query, using its database schema, into a faster query that should return the same results.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "5a6df649-fb0b-5e22-886a-48c78f95b61c",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fa5af7d1-7ab7-5a14-a9bd-7c3a45c55960",
+   "to": "5a6df649-fb0b-5e22-886a-48c78f95b61c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

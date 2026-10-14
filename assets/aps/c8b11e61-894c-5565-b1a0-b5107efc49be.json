@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "c8b11e61-894c-5565-b1a0-b5107efc49be",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Change Point Detector",
+    "description": "Detects significant level or trend changes in a periodic series after separating its fixed seasonal pattern and returns the change points.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "07c6369c-3f23-5530-8144-8efd0c00d4c8",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "30da7650-b9b4-5256-b443-5fa15404c429",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "0942dde7-d8b0-5179-a710-07d056aace7e",
+   "labels": [
+    "Time_Series_Change_Point_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Change Point Detector",
+    "description": "Detects abrupt level or trend changes in a time series using a sensitivity threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "change_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c8b11e61-894c-5565-b1a0-b5107efc49be",
+   "to": "07c6369c-3f23-5530-8144-8efd0c00d4c8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "07c6369c-3f23-5530-8144-8efd0c00d4c8",
+   "to": "30da7650-b9b4-5256-b443-5fa15404c429",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "30da7650-b9b4-5256-b443-5fa15404c429",
+   "to": "0942dde7-d8b0-5179-a710-07d056aace7e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "0942dde7-d8b0-5179-a710-07d056aace7e",
+   "to": "07c6369c-3f23-5530-8144-8efd0c00d4c8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c8b11e61-894c-5565-b1a0-b5107efc49be",
+   "to": "0942dde7-d8b0-5179-a710-07d056aace7e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

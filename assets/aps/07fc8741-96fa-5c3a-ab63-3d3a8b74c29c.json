@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "07fc8741-96fa-5c3a-ab63-3d3a8b74c29c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Clinical Patient Enrollment Extract",
+    "description": "Extracts patient-level records from clinical table data using a column mapping and returns only those enrolled between the specified start and end dates, with enrollment dates normalized to date strings.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "6fd818fd-6958-5052-af25-e200f242bd1e",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "56fe726b-ec8c-5fd4-ba3b-1227f5f09a2d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "patient_records"
+   }
+  },
+  {
+   "id": "4c8f154f-65ee-5be6-819e-f8a664d28732",
+   "labels": [
+    "Enrollment_Date_Window_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "enrollment_date_window_filter",
+    "description": "Keeps patient records whose enrollment date is between the start and end dates. Dates are returned as normalized date strings.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "07fc8741-96fa-5c3a-ab63-3d3a8b74c29c",
+   "to": "6fd818fd-6958-5052-af25-e200f242bd1e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6fd818fd-6958-5052-af25-e200f242bd1e",
+   "to": "56fe726b-ec8c-5fd4-ba3b-1227f5f09a2d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['patient_records']": "from['outputs']['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "56fe726b-ec8c-5fd4-ba3b-1227f5f09a2d",
+   "to": "4c8f154f-65ee-5be6-819e-f8a664d28732",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['patient_records']": "from['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "4c8f154f-65ee-5be6-819e-f8a664d28732",
+   "to": "6fd818fd-6958-5052-af25-e200f242bd1e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "07fc8741-96fa-5c3a-ab63-3d3a8b74c29c",
+   "to": "4c8f154f-65ee-5be6-819e-f8a664d28732",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

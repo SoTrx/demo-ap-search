@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "5c620c64-9299-5e3c-91d9-f97b4c091e19",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Query ISCO Coding",
+    "description": "Selects query-relevant occupational text chunks from supplied passages and assigns candidate ISCO codes with confidence scores.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "182a7505-a2d2-597f-bafd-a35b529ab384",
+   "labels": [
+    "Passage_Reranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "passage_reranker",
+    "description": "Reranks candidate text chunks by relevance to the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "candidate_passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "14ce6720-a19e-5375-bc56-3b180980f4c0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "5cc01187-264f-5662-8c26-714c4ecf5d1e",
+   "labels": [
+    "ISCO_Candidate_Matcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_candidate_matcher",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns candidate occupation codes with confidence scores. It may return multiple candidates for each text chunk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "occupation_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5c620c64-9299-5e3c-91d9-f97b4c091e19",
+   "to": "182a7505-a2d2-597f-bafd-a35b529ab384",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "182a7505-a2d2-597f-bafd-a35b529ab384",
+   "to": "14ce6720-a19e-5375-bc56-3b180980f4c0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "14ce6720-a19e-5375-bc56-3b180980f4c0",
+   "to": "5cc01187-264f-5662-8c26-714c4ecf5d1e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "5cc01187-264f-5662-8c26-714c4ecf5d1e",
+   "to": "182a7505-a2d2-597f-bafd-a35b529ab384",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5c620c64-9299-5e3c-91d9-f97b4c091e19",
+   "to": "5cc01187-264f-5662-8c26-714c4ecf5d1e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

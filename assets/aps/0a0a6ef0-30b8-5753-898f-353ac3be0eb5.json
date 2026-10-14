@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "0a0a6ef0-30b8-5753-898f-353ac3be0eb5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Answer Support Verification",
+    "description": "Checks whether an answer summary is supported by retrieved passages for a query by identifying supporting citations, normalizing their fields, and returning a support decision.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "f0798405-cf1e-5b4a-90f3-7d3f41448a2c",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d949a375-7d3e-5e6d-8fc3-f7793fde4c4b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citations"
+   }
+  },
+  {
+   "id": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "labels": [
+    "Citation_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_citations",
+    "description": "Parses citation records into consistent fields such as authors, title, venue, and year.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8cb2d91b-7923-56de-92f9-27f6071e25ca",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citation_records"
+   }
+  },
+  {
+   "id": "ffcb5ec9-a1ee-5ae8-9464-4ef913c4df1e",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0a0a6ef0-30b8-5753-898f-353ac3be0eb5",
+   "to": "f0798405-cf1e-5b4a-90f3-7d3f41448a2c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f0798405-cf1e-5b4a-90f3-7d3f41448a2c",
+   "to": "d949a375-7d3e-5e6d-8fc3-f7793fde4c4b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citations']": "from['outputs']['citations']"
+    }
+   }
+  },
+  {
+   "from": "d949a375-7d3e-5e6d-8fc3-f7793fde4c4b",
+   "to": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citation_records']": "from['citations']"
+    }
+   }
+  },
+  {
+   "from": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "to": "f0798405-cf1e-5b4a-90f3-7d3f41448a2c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0a0a6ef0-30b8-5753-898f-353ac3be0eb5",
+   "to": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "to": "8cb2d91b-7923-56de-92f9-27f6071e25ca",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citation_records']": "from['outputs']['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "8cb2d91b-7923-56de-92f9-27f6071e25ca",
+   "to": "ffcb5ec9-a1ee-5ae8-9464-4ef913c4df1e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citations']": "from['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "ffcb5ec9-a1ee-5ae8-9464-4ef913c4df1e",
+   "to": "d4e93e2c-af1d-5f0c-a4a8-744c48e9401c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0a0a6ef0-30b8-5753-898f-353ac3be0eb5",
+   "to": "ffcb5ec9-a1ee-5ae8-9464-4ef913c4df1e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

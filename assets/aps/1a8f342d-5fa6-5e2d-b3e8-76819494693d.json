@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "1a8f342d-5fa6-5e2d-b3e8-76819494693d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Query Plain Language Explainer",
+    "description": "Explains a supplied SQL query in plain language using its target database schema.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "e4f22bb1-2a6f-52fb-9e02-075ba4e92c89",
+   "labels": [
+    "SQL_With_Context_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL With Context",
+    "description": "Produces a plain-language explanation of an SQL query given the target schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "explanation",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1a8f342d-5fa6-5e2d-b3e8-76819494693d",
+   "to": "e4f22bb1-2a6f-52fb-9e02-075ba4e92c89",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

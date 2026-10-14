@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "aa82e685-dc5b-5565-9196-c2623e70ee81",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Batch Image Caption Generator",
+    "description": "Generates one short natural-language caption for each image in a supplied batch, preserving the input order.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "019f8caf-1090-5994-a4fb-2fee24db3ccf",
+   "labels": [
+    "Image_Caption_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_caption_generator",
+    "description": "Generates a short natural-language caption for each image in an image batch. Returns one caption record per image in the same order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "captions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "aa82e685-dc5b-5565-9196-c2623e70ee81",
+   "to": "019f8caf-1090-5994-a4fb-2fee24db3ccf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

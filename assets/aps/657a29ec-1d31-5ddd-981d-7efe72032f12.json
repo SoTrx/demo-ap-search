@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "657a29ec-1d31-5ddd-981d-7efe72032f12",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjusted Series Forecast",
+    "description": "It estimates seasonal patterns in a supplied economic indicator series, removes them, and forecasts the next horizon observations from the adjusted series.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "b3a9f1f2-39e1-5a47-b144-5c029199115a",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a997b67f-c14b-5a5a-8c72-c79ef9f34bce",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "080e8e79-7d9e-56ac-98e5-cca0c74210a1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "adjusted_series"
+   }
+  },
+  {
+   "id": "0b41a903-7023-5daa-ad06-cfdd360ba420",
+   "labels": [
+    "Time_Series_Forecaster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Forecaster",
+    "description": "Forecasts the next requested number of observations from a time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "657a29ec-1d31-5ddd-981d-7efe72032f12",
+   "to": "b3a9f1f2-39e1-5a47-b144-5c029199115a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b3a9f1f2-39e1-5a47-b144-5c029199115a",
+   "to": "a997b67f-c14b-5a5a-8c72-c79ef9f34bce",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "a997b67f-c14b-5a5a-8c72-c79ef9f34bce",
+   "to": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "to": "b3a9f1f2-39e1-5a47-b144-5c029199115a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "657a29ec-1d31-5ddd-981d-7efe72032f12",
+   "to": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "to": "080e8e79-7d9e-56ac-98e5-cca0c74210a1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['adjusted_series']": "from['outputs']['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "080e8e79-7d9e-56ac-98e5-cca0c74210a1",
+   "to": "0b41a903-7023-5daa-ad06-cfdd360ba420",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "0b41a903-7023-5daa-ad06-cfdd360ba420",
+   "to": "3b4f2cf4-95bd-528c-8def-1935d46122ca",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "657a29ec-1d31-5ddd-981d-7efe72032f12",
+   "to": "0b41a903-7023-5daa-ad06-cfdd360ba420",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

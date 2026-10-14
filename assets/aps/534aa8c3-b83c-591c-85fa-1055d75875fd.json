@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "534aa8c3-b83c-591c-85fa-1055d75875fd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Bilingual Segment Alignment Confidence",
+    "description": "Matches source and translated text chunks into confident segment pairs using length, order, and content cues.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "f667e2bc-bd55-5cde-9113-1c51d15fe9ce",
+   "labels": [
+    "Parallel_Segment_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "parallel_segment_aligner",
+    "description": "Aligns source and translated text chunks by length, order, and content cues, returning segment pairs with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "align_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "534aa8c3-b83c-591c-85fa-1055d75875fd",
+   "to": "f667e2bc-bd55-5cde-9113-1c51d15fe9ce",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

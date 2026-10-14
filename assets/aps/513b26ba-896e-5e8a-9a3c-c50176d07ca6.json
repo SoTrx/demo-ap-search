@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "513b26ba-896e-5e8a-9a3c-c50176d07ca6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Deduplicated Grouped Distribution Summaries",
+    "description": "Removes duplicate records using supplied duplicate groups, then reports mean, variance, skewness, and kurtosis for numeric fields overall and by mapped groups.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "a202b7a3-20c5-5854-8ec1-6549ca18e69d",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ec73aedf-6ae6-5305-ae1b-bc239e5ef070",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "deduplicated_rows"
+   }
+  },
+  {
+   "id": "a6430644-f0bb-5337-9421-e9277dee8305",
+   "labels": [
+    "Descriptive_Statistics_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "descriptive_statistics_calculator",
+    "description": "Computes mean, variance, skewness, and kurtosis for selected numeric columns in table rows. Also computes the same summaries within each group defined by the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "overall",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "grouped",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "513b26ba-896e-5e8a-9a3c-c50176d07ca6",
+   "to": "a202b7a3-20c5-5854-8ec1-6549ca18e69d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a202b7a3-20c5-5854-8ec1-6549ca18e69d",
+   "to": "ec73aedf-6ae6-5305-ae1b-bc239e5ef070",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['deduplicated_rows']": "from['outputs']['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "ec73aedf-6ae6-5305-ae1b-bc239e5ef070",
+   "to": "a6430644-f0bb-5337-9421-e9277dee8305",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "a6430644-f0bb-5337-9421-e9277dee8305",
+   "to": "a202b7a3-20c5-5854-8ec1-6549ca18e69d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "513b26ba-896e-5e8a-9a3c-c50176d07ca6",
+   "to": "a6430644-f0bb-5337-9421-e9277dee8305",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

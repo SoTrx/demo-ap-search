@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "b20820cf-113c-5a93-aac7-07de8b16e1f0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Overlap Refinement from Audio",
+    "description": "Given an audio file and raw speaker assignments, it returns non-overlapping speaker time slices for detected speech while keeping speaker identifiers unchanged.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "b942be0a-68e4-5303-b286-1f04d7b424c2",
+   "labels": [
+    "Audio_Segmenter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "audio_segmenter",
+    "description": "Splits an audio file into speech segments using silence and energy thresholds. Returns segment records with identifiers, start times, and end times.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "audio_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "silence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "264fa7d6-96a3-5d0d-b363-40b91529447e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "segments"
+   }
+  },
+  {
+   "id": "659eca11-ad9f-5a56-92fb-fadfe650db0f",
+   "labels": [
+    "Speaker_Overlap_Resolver_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_overlap_resolver",
+    "description": "Resolves overlapping speaker assignments into single-speaker time slices using the original segment timing. Returns refined speaker assignment records without changing speaker identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "refined_assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b20820cf-113c-5a93-aac7-07de8b16e1f0",
+   "to": "b942be0a-68e4-5303-b286-1f04d7b424c2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b942be0a-68e4-5303-b286-1f04d7b424c2",
+   "to": "264fa7d6-96a3-5d0d-b363-40b91529447e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['segments']": "from['outputs']['segments']"
+    }
+   }
+  },
+  {
+   "from": "264fa7d6-96a3-5d0d-b363-40b91529447e",
+   "to": "659eca11-ad9f-5a56-92fb-fadfe650db0f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['segments']": "from['segments']"
+    }
+   }
+  },
+  {
+   "from": "659eca11-ad9f-5a56-92fb-fadfe650db0f",
+   "to": "b942be0a-68e4-5303-b286-1f04d7b424c2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b20820cf-113c-5a93-aac7-07de8b16e1f0",
+   "to": "659eca11-ad9f-5a56-92fb-fadfe650db0f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

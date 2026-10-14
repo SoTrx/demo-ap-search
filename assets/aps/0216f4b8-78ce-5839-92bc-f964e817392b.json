@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "0216f4b8-78ce-5839-92bc-f964e817392b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Index Estimator",
+    "description": "From tabular rows and column mapping, builds a date-ordered indicator or price series and estimates a seasonality profile with indices for each period.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "c8e28fc6-f163-5930-8295-aa8b0364c1ec",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4a145e45-4faa-5f14-98e3-8db535e9f8c1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "ffe50def-b7b9-5003-a500-e4cb272a4449",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0216f4b8-78ce-5839-92bc-f964e817392b",
+   "to": "c8e28fc6-f163-5930-8295-aa8b0364c1ec",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c8e28fc6-f163-5930-8295-aa8b0364c1ec",
+   "to": "4a145e45-4faa-5f14-98e3-8db535e9f8c1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "4a145e45-4faa-5f14-98e3-8db535e9f8c1",
+   "to": "ffe50def-b7b9-5003-a500-e4cb272a4449",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "ffe50def-b7b9-5003-a500-e4cb272a4449",
+   "to": "c8e28fc6-f163-5930-8295-aa8b0364c1ec",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0216f4b8-78ce-5839-92bc-f964e817392b",
+   "to": "ffe50def-b7b9-5003-a500-e4cb272a4449",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

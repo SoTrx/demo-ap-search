@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "f41ac15e-a853-584b-ac77-2ef0b3ddc258",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Knowledge Graph Schema Deriver",
+    "description": "Derives a knowledge graph schema with node classes, properties, and expected property types from a database schema and sample entity records.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "5480ecdb-79ca-56cd-a49c-a0bdc4d5aa73",
+   "labels": [
+    "Graph_Schema_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_schema_builder",
+    "description": "Derives a knowledge graph schema from a database schema and a sample of entity records. The returned schema describes node classes, properties, and expected property types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f41ac15e-a853-584b-ac77-2ef0b3ddc258",
+   "to": "5480ecdb-79ca-56cd-a49c-a0bdc4d5aa73",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

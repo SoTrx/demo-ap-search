@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "64707169-12ea-57e1-b0f9-cdf93834fef4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Reading Record Normalizer",
+    "description": "This AP takes generic result rows and a measured variable name and outputs normalized weather reading records for that single variable.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "04835ff1-6a2f-5457-a5b4-a20faa403a20",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "64707169-12ea-57e1-b0f9-cdf93834fef4",
+   "to": "04835ff1-6a2f-5457-a5b4-a20faa403a20",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

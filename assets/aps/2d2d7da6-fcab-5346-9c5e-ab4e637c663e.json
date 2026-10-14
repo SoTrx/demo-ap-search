@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "2d2d7da6-fcab-5346-9c5e-ab4e637c663e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Enrich Records With Graph Fields",
+    "description": "Links entity records to candidate graph nodes using a schema, then joins query result fields onto each record to produce enriched records while leaving unrelated fields unchanged.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "b02c0392-9989-5e1f-aba4-ba6f5ceb93a6",
+   "labels": [
+    "Entity_Record_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_record_linker",
+    "description": "Links entity records to candidate graph nodes using a graph schema. Returns link records that include node candidates and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b4616294-f87c-5eb7-ae27-e060f47b3ff6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entity_link_records"
+   }
+  },
+  {
+   "id": "f59bd9db-6b19-5232-85b4-24d316f5dfc9",
+   "labels": [
+    "Graph_Enrichment_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_enrichment_joiner",
+    "description": "Joins query result rows to entity link records to add graph-derived fields to each entity record. Returns enriched entity records without changing unrelated fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "enriched_entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2d2d7da6-fcab-5346-9c5e-ab4e637c663e",
+   "to": "b02c0392-9989-5e1f-aba4-ba6f5ceb93a6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b02c0392-9989-5e1f-aba4-ba6f5ceb93a6",
+   "to": "b4616294-f87c-5eb7-ae27-e060f47b3ff6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entity_link_records']": "from['outputs']['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "b4616294-f87c-5eb7-ae27-e060f47b3ff6",
+   "to": "f59bd9db-6b19-5232-85b4-24d316f5dfc9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_link_records']": "from['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "f59bd9db-6b19-5232-85b4-24d316f5dfc9",
+   "to": "b02c0392-9989-5e1f-aba4-ba6f5ceb93a6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "2d2d7da6-fcab-5346-9c5e-ab4e637c663e",
+   "to": "f59bd9db-6b19-5232-85b4-24d316f5dfc9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

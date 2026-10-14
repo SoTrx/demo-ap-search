@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "ee8b96d9-e853-5a53-9e86-d265104ad2a1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Grouped Two-Sample t-Test",
+    "description": "Uses descriptive statistics for two groups and a significance level to produce a two-sample t-test statistic, p-value, and decision.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "5cd3f35e-ac47-50df-bd51-cab4859c2b0f",
+   "labels": [
+    "Two_Sample_T_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "two_sample_t_test",
+    "description": "Runs a two-sample t-test from grouped descriptive statistics for two groups. Returns a hypothesis test result with statistic, p-value, and decision.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "grouped_stats",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ee8b96d9-e853-5a53-9e86-d265104ad2a1",
+   "to": "5cd3f35e-ac47-50df-bd51-cab4859c2b0f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

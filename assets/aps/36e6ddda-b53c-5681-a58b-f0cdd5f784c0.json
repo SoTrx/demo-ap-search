@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "36e6ddda-b53c-5681-a58b-f0cdd5f784c0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymized QI Grouping",
+    "description": "Takes raw records and a pseudonymization plan, masks direct identifiers, and groups the masked records into equivalence classes according to quasi-identifier fields.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "97063483-0203-5b81-88d8-3d7a83d019cc",
+   "labels": [
+    "Pseudonymisation_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pseudonymisation_applier",
+    "description": "Applies a pseudonymisation plan to table records and returns pseudonymised table records. Detected direct-identifier values are replaced with reversible pseudonyms, while non-target fields are preserved.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "pseudonymised_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9eb3537a-2f12-54e8-bf0d-79964bdfa86a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "pseudonymised_records"
+   }
+  },
+  {
+   "id": "51248804-2aa3-5f7c-a1ea-8a16a0a0dc9a",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "36e6ddda-b53c-5681-a58b-f0cdd5f784c0",
+   "to": "97063483-0203-5b81-88d8-3d7a83d019cc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "97063483-0203-5b81-88d8-3d7a83d019cc",
+   "to": "9eb3537a-2f12-54e8-bf0d-79964bdfa86a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['pseudonymised_records']": "from['outputs']['pseudonymised_records']"
+    }
+   }
+  },
+  {
+   "from": "9eb3537a-2f12-54e8-bf0d-79964bdfa86a",
+   "to": "51248804-2aa3-5f7c-a1ea-8a16a0a0dc9a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['pseudonymised_records']"
+    }
+   }
+  },
+  {
+   "from": "51248804-2aa3-5f7c-a1ea-8a16a0a0dc9a",
+   "to": "97063483-0203-5b81-88d8-3d7a83d019cc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "36e6ddda-b53c-5681-a58b-f0cdd5f784c0",
+   "to": "51248804-2aa3-5f7c-a1ea-8a16a0a0dc9a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

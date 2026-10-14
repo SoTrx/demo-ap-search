@@ -1,0 +1,239 @@
+{
+ "nodes": [
+  {
+   "id": "ea86a964-2a0e-5e1e-99e7-54ef1a8a9008",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Normalized Regional Climate Indicator",
+    "description": "Aggregates weather readings by region and period, compares them with a reference summary, and combines the period and regional differences with extreme events into a normalized indicator.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "8f1aed49-6feb-5ad4-b4d4-b0d1e71a4a52",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "07222901-64ff-5209-bb85-8f9bfbb66f0e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "labels": [
+    "Regional_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_summary_comparator",
+    "description": "Compares left and right regional summary tables and returns region-by-region differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "04732377-5784-5b2a-a0bb-fce452ef03af",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "c85a6225-1e22-51af-9c65-225ab9221d58",
+   "labels": [
+    "Climate_Indicator_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "climate_indicator_calculator",
+    "description": "Computes a normalized climate indicator from period comparison, regional comparison, and detected extreme events.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "period_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "regional_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "extreme_events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "indicator",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ea86a964-2a0e-5e1e-99e7-54ef1a8a9008",
+   "to": "8f1aed49-6feb-5ad4-b4d4-b0d1e71a4a52",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8f1aed49-6feb-5ad4-b4d4-b0d1e71a4a52",
+   "to": "07222901-64ff-5209-bb85-8f9bfbb66f0e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "07222901-64ff-5209-bb85-8f9bfbb66f0e",
+   "to": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "to": "8f1aed49-6feb-5ad4-b4d4-b0d1e71a4a52",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ea86a964-2a0e-5e1e-99e7-54ef1a8a9008",
+   "to": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "to": "04732377-5784-5b2a-a0bb-fce452ef03af",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "04732377-5784-5b2a-a0bb-fce452ef03af",
+   "to": "c85a6225-1e22-51af-9c65-225ab9221d58",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['regional_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "c85a6225-1e22-51af-9c65-225ab9221d58",
+   "to": "58b4e509-1ebc-54cc-a5df-106313e41a1b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ea86a964-2a0e-5e1e-99e7-54ef1a8a9008",
+   "to": "c85a6225-1e22-51af-9c65-225ab9221d58",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

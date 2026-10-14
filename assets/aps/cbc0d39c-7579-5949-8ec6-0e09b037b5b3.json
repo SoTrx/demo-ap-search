@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "cbc0d39c-7579-5949-8ec6-0e09b037b5b3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Survey Response ISCO Coding",
+    "description": "Reranks occupation reference passages against a survey query, matches cleaned text chunks to ISCO codes with confidence, and returns survey responses with one threshold-accepted code each.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "177af40c-bd5d-54d5-823a-9ab178eb1aeb",
+   "labels": [
+    "Passage_Reranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "passage_reranker",
+    "description": "Reranks candidate text chunks by relevance to the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "candidate_passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b6d0daff-7ad7-5ffd-ae07-0a5c93603d35",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "09783c64-e074-5730-a412-36e65286ce03",
+   "labels": [
+    "ISCO_Candidate_Matcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_candidate_matcher",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns candidate occupation codes with confidence scores. It may return multiple candidates for each text chunk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "occupation_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0ae15d77-d4db-5df2-908f-0929dadc6473",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "occupation_coding_records"
+   }
+  },
+  {
+   "id": "5360def6-27eb-5034-a939-6e74025ac380",
+   "labels": [
+    "ISCO_Code_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_code_selector",
+    "description": "Assigns one ISCO code to each survey response by selecting the highest confidence candidate that meets the threshold. It returns coded response records with the original response fields and the selected occupation code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cbc0d39c-7579-5949-8ec6-0e09b037b5b3",
+   "to": "177af40c-bd5d-54d5-823a-9ab178eb1aeb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "177af40c-bd5d-54d5-823a-9ab178eb1aeb",
+   "to": "b6d0daff-7ad7-5ffd-ae07-0a5c93603d35",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "b6d0daff-7ad7-5ffd-ae07-0a5c93603d35",
+   "to": "09783c64-e074-5730-a412-36e65286ce03",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "09783c64-e074-5730-a412-36e65286ce03",
+   "to": "177af40c-bd5d-54d5-823a-9ab178eb1aeb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cbc0d39c-7579-5949-8ec6-0e09b037b5b3",
+   "to": "09783c64-e074-5730-a412-36e65286ce03",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "09783c64-e074-5730-a412-36e65286ce03",
+   "to": "0ae15d77-d4db-5df2-908f-0929dadc6473",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['occupation_coding_records']": "from['outputs']['occupation_coding_records']"
+    }
+   }
+  },
+  {
+   "from": "0ae15d77-d4db-5df2-908f-0929dadc6473",
+   "to": "5360def6-27eb-5034-a939-6e74025ac380",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['occupation_coding_records']": "from['occupation_coding_records']"
+    }
+   }
+  },
+  {
+   "from": "5360def6-27eb-5034-a939-6e74025ac380",
+   "to": "09783c64-e074-5730-a412-36e65286ce03",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cbc0d39c-7579-5949-8ec6-0e09b037b5b3",
+   "to": "5360def6-27eb-5034-a939-6e74025ac380",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "cbee151c-66fb-57b7-83ee-df3eb5940826",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translated Segment Rechunker",
+    "description": "Rebuilds a translated text from accepted aligned segments and source fallbacks, returning a size-limited list of translatable chunks.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "2fd93e2f-1b94-57e9-b994-53e58357b7ad",
+   "labels": [
+    "Multilingual_Text_Recomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "multilingual_text_recomposer",
+    "description": "Reassembles accepted aligned translated chunks into a full translated text, using original source chunks as fallback for unaligned content.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0378837b-f5b0-5b9b-8664-65612fea835b",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "translated_text"
+   }
+  },
+  {
+   "id": "9b805120-4868-51d2-a45e-4521407decfa",
+   "labels": [
+    "Plain_Text_Chunk_Splitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "plain_text_chunk_splitter",
+    "description": "Splits a plain-text document into translatable chunks using the maximum chunk size threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "max_chunk_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cbee151c-66fb-57b7-83ee-df3eb5940826",
+   "to": "2fd93e2f-1b94-57e9-b994-53e58357b7ad",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2fd93e2f-1b94-57e9-b994-53e58357b7ad",
+   "to": "0378837b-f5b0-5b9b-8664-65612fea835b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['translated_text']": "from['outputs']['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "0378837b-f5b0-5b9b-8664-65612fea835b",
+   "to": "9b805120-4868-51d2-a45e-4521407decfa",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text']": "from['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "9b805120-4868-51d2-a45e-4521407decfa",
+   "to": "2fd93e2f-1b94-57e9-b994-53e58357b7ad",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cbee151c-66fb-57b7-83ee-df3eb5940826",
+   "to": "9b805120-4868-51d2-a45e-4521407decfa",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

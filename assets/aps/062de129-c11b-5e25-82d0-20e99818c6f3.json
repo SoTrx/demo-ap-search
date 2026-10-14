@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "062de129-c11b-5e25-82d0-20e99818c6f3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Coded Patient Survival Regression Fit",
+    "description": "Builds survival records from coded patient data and a column mapping, then fits a Cox proportional hazards model and returns hazard ratios and model diagnostics.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "dce6762b-7b04-576d-91e5-45308261ef74",
+   "labels": [
+    "Survival_Event_Table_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survival_table_builder",
+    "description": "Builds survival records from coded patient records by extracting patient identifier, follow-up time, and event indicator columns named in the column mapping. Records with missing time or event values are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f9321f81-aef5-5a6e-951b-4dfa598305b8",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "survival_records"
+   }
+  },
+  {
+   "id": "c19de0da-a5a2-5502-a085-a75cfeea341f",
+   "labels": [
+    "Cox_Proportional_Hazards_Fitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cox_hazard_fitter",
+    "description": "Fits a Cox proportional hazards model to survival records using covariates named in the column mapping. The output is a regression fit containing hazard ratios and model diagnostics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "regression_fit",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "062de129-c11b-5e25-82d0-20e99818c6f3",
+   "to": "dce6762b-7b04-576d-91e5-45308261ef74",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "dce6762b-7b04-576d-91e5-45308261ef74",
+   "to": "f9321f81-aef5-5a6e-951b-4dfa598305b8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['survival_records']": "from['outputs']['survival_records']"
+    }
+   }
+  },
+  {
+   "from": "f9321f81-aef5-5a6e-951b-4dfa598305b8",
+   "to": "c19de0da-a5a2-5502-a085-a75cfeea341f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['survival_records']": "from['survival_records']"
+    }
+   }
+  },
+  {
+   "from": "c19de0da-a5a2-5502-a085-a75cfeea341f",
+   "to": "dce6762b-7b04-576d-91e5-45308261ef74",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "062de129-c11b-5e25-82d0-20e99818c6f3",
+   "to": "c19de0da-a5a2-5502-a085-a75cfeea341f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

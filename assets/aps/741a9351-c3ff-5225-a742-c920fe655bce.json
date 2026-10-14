@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "741a9351-c3ff-5225-a742-c920fe655bce",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Foreign Audio Citation Context Extractor",
+    "description": "Selects transcript fragments that are not in the target language and returns the bibliographic citations they contain with surrounding context.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "fdda9280-79a1-5a62-989e-0cff50108408",
+   "labels": [
+    "Language_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_identifier",
+    "description": "Detects the spoken language for each audio segment. Returns language identification records with ISO language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5b15138e-a045-54ca-9fae-91ecb4585dde",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "language_records"
+   }
+  },
+  {
+   "id": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6ff3ad3a-5b4f-5ecb-aa68-cd5581510239",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "541c3f65-3d0c-5331-af1c-4ba54d16cf54",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "741a9351-c3ff-5225-a742-c920fe655bce",
+   "to": "fdda9280-79a1-5a62-989e-0cff50108408",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fdda9280-79a1-5a62-989e-0cff50108408",
+   "to": "5b15138e-a045-54ca-9fae-91ecb4585dde",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['language_records']": "from['outputs']['language_records']"
+    }
+   }
+  },
+  {
+   "from": "5b15138e-a045-54ca-9fae-91ecb4585dde",
+   "to": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['language_records']": "from['language_records']"
+    }
+   }
+  },
+  {
+   "from": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "to": "fdda9280-79a1-5a62-989e-0cff50108408",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "741a9351-c3ff-5225-a742-c920fe655bce",
+   "to": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "to": "6ff3ad3a-5b4f-5ecb-aa68-cd5581510239",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "6ff3ad3a-5b4f-5ecb-aa68-cd5581510239",
+   "to": "541c3f65-3d0c-5331-af1c-4ba54d16cf54",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "541c3f65-3d0c-5331-af1c-4ba54d16cf54",
+   "to": "fbf87bee-d66b-543f-ba61-d6b74a5c192b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "741a9351-c3ff-5225-a742-c920fe655bce",
+   "to": "541c3f65-3d0c-5331-af1c-4ba54d16cf54",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

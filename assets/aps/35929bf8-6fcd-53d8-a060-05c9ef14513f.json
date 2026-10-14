@@ -1,0 +1,293 @@
+{
+ "nodes": [
+  {
+   "id": "35929bf8-6fcd-53d8-a060-05c9ef14513f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Provenance Checked SQL Results",
+    "description": "Audits an SQL query's data sources and derivations, blocks execution when required provenance is missing, and returns the query result rows only when compliant.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "4113fd22-a93e-5f04-a4d3-a20e3d48ce19",
+   "labels": [
+    "SQL_Provenance_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Provenance",
+    "description": "Analyzes an SQL query and returns provenance information describing the data sources, transformations, and execution plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "cfd7cc03-07fc-5ca3-8c73-d9d6c6793616",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "provenance"
+   }
+  },
+  {
+   "id": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fb644cad-f78f-5592-bcf1-50d4e97cc0dd",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "21526d8f-cd07-5dd6-936d-0c4900deb6de",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "dab4c216-9fce-5d0a-8430-92ea44efc82d",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "35929bf8-6fcd-53d8-a060-05c9ef14513f",
+   "to": "4113fd22-a93e-5f04-a4d3-a20e3d48ce19",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4113fd22-a93e-5f04-a4d3-a20e3d48ce19",
+   "to": "cfd7cc03-07fc-5ca3-8c73-d9d6c6793616",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['provenance']": "from['outputs']['provenance']"
+    }
+   }
+  },
+  {
+   "from": "cfd7cc03-07fc-5ca3-8c73-d9d6c6793616",
+   "to": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['provenance']": "from['provenance']"
+    }
+   }
+  },
+  {
+   "from": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "to": "4113fd22-a93e-5f04-a4d3-a20e3d48ce19",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "35929bf8-6fcd-53d8-a060-05c9ef14513f",
+   "to": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "to": "fb644cad-f78f-5592-bcf1-50d4e97cc0dd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "fb644cad-f78f-5592-bcf1-50d4e97cc0dd",
+   "to": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "to": "71db4aa2-2246-5c51-8159-46cc235c26bb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "35929bf8-6fcd-53d8-a060-05c9ef14513f",
+   "to": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "to": "21526d8f-cd07-5dd6-936d-0c4900deb6de",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "21526d8f-cd07-5dd6-936d-0c4900deb6de",
+   "to": "dab4c216-9fce-5d0a-8430-92ea44efc82d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "dab4c216-9fce-5d0a-8430-92ea44efc82d",
+   "to": "73efc724-3633-54e3-b7a6-e088282e8b2c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "35929bf8-6fcd-53d8-a060-05c9ef14513f",
+   "to": "dab4c216-9fce-5d0a-8430-92ea44efc82d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

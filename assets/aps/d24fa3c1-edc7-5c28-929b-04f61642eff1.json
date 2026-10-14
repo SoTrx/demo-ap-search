@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "d24fa3c1-edc7-5c28-929b-04f61642eff1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Period Comparison Chart",
+    "description": "Turns a baseline-and-target period comparison into a chart specification and adds a short note with emphasis hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "8191055a-f357-5f6d-993a-f266daafd9fa",
+   "labels": [
+    "Period_Comparison_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_comparison_chart_builder",
+    "description": "Turns a period comparison report into a chart specification that contrasts baseline and target values for each period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2de64d08-3fee-585d-b034-9c2e289d7f1c",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "a4a00d89-74b9-5325-81a4-ebe058b5a83d",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d24fa3c1-edc7-5c28-929b-04f61642eff1",
+   "to": "8191055a-f357-5f6d-993a-f266daafd9fa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8191055a-f357-5f6d-993a-f266daafd9fa",
+   "to": "2de64d08-3fee-585d-b034-9c2e289d7f1c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "2de64d08-3fee-585d-b034-9c2e289d7f1c",
+   "to": "a4a00d89-74b9-5325-81a4-ebe058b5a83d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "a4a00d89-74b9-5325-81a4-ebe058b5a83d",
+   "to": "8191055a-f357-5f6d-993a-f266daafd9fa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d24fa3c1-edc7-5c28-929b-04f61642eff1",
+   "to": "a4a00d89-74b9-5325-81a4-ebe058b5a83d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

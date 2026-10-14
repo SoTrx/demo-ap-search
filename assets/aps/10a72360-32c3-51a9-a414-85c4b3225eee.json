@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "10a72360-32c3-51a9-a414-85c4b3225eee",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Graph Record Enrichment",
+    "description": "Enriches query result rows by attaching matching graph-derived fields from entity link records.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "f7201bc6-cf5c-5e4f-8e05-ff6230763e9c",
+   "labels": [
+    "Graph_Enrichment_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_enrichment_joiner",
+    "description": "Joins query result rows to entity link records to add graph-derived fields to each entity record. Returns enriched entity records without changing unrelated fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "enriched_entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "10a72360-32c3-51a9-a414-85c4b3225eee",
+   "to": "f7201bc6-cf5c-5e4f-8e05-ff6230763e9c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

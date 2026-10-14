@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "22468adb-850d-5b38-8a10-d996172c4ae8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Student Topic Proficiency",
+    "description": "Executes a supplied student-assessment SQL query, summarizes assessment rows into a performance profile, and returns the estimated proficiency level for the requested topic.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "2c867268-ebb0-5d35-a449-a30dac0295fd",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "b13e88f2-7398-5077-86c0-9add7f14aed6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "28302ef3-4f3a-59b0-8f40-92796ea9b9e8",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "performance_profile"
+   }
+  },
+  {
+   "id": "c651db88-d4a2-53fa-9a0b-7aeb38d23b4f",
+   "labels": [
+    "Student_Proficiency_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_proficiency_estimator",
+    "description": "Estimates a student's proficiency level for a topic from the student performance profile. Uses only the profile and the requested topic.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "22468adb-850d-5b38-8a10-d996172c4ae8",
+   "to": "2c867268-ebb0-5d35-a449-a30dac0295fd",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2c867268-ebb0-5d35-a449-a30dac0295fd",
+   "to": "b13e88f2-7398-5077-86c0-9add7f14aed6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "b13e88f2-7398-5077-86c0-9add7f14aed6",
+   "to": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "to": "2c867268-ebb0-5d35-a449-a30dac0295fd",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "22468adb-850d-5b38-8a10-d996172c4ae8",
+   "to": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "to": "28302ef3-4f3a-59b0-8f40-92796ea9b9e8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['performance_profile']": "from['outputs']['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "28302ef3-4f3a-59b0-8f40-92796ea9b9e8",
+   "to": "c651db88-d4a2-53fa-9a0b-7aeb38d23b4f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['performance_profile']": "from['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "c651db88-d4a2-53fa-9a0b-7aeb38d23b4f",
+   "to": "594b785e-dfc3-5900-8d1e-506bb32f26d2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "22468adb-850d-5b38-8a10-d996172c4ae8",
+   "to": "c651db88-d4a2-53fa-9a0b-7aeb38d23b4f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

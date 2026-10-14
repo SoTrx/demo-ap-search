@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "8e62ff89-10c0-50d4-97d7-bde570c035e3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Point Polygon Matching",
+    "description": "This AP matches every point geometry in the input arrays to its nearest polygon geometry and returns the resulting point-to-polygon matches.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "5b90f8e9-35be-5cdf-be9c-a8316666cd6a",
+   "labels": [
+    "Match_Nearest_Polygon_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "match_nearest_polygon",
+    "description": "Assigns each point geometry to its closest polygon and returns point-to-polygon matches.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matches",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8e62ff89-10c0-50d4-97d7-bde570c035e3",
+   "to": "5b90f8e9-35be-5cdf-be9c-a8316666cd6a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

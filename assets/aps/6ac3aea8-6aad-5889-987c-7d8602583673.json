@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "6ac3aea8-6aad-5889-987c-7d8602583673",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Provenance Report Generator",
+    "description": "Analyzes a supplied SQL query to extract data sources, transformations, and execution details, then formats them into a structured provenance report.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "b095f73c-8f9a-5296-a7d3-7bfec65b9481",
+   "labels": [
+    "SQL_Provenance_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Provenance",
+    "description": "Analyzes an SQL query and returns provenance information describing the data sources, transformations, and execution plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "cde7427e-86b9-5012-9d3d-b633b1ee1744",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "provenance"
+   }
+  },
+  {
+   "id": "43121eb8-40fc-53f0-a327-199c57fe3740",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6ac3aea8-6aad-5889-987c-7d8602583673",
+   "to": "b095f73c-8f9a-5296-a7d3-7bfec65b9481",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b095f73c-8f9a-5296-a7d3-7bfec65b9481",
+   "to": "cde7427e-86b9-5012-9d3d-b633b1ee1744",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['provenance']": "from['outputs']['provenance']"
+    }
+   }
+  },
+  {
+   "from": "cde7427e-86b9-5012-9d3d-b633b1ee1744",
+   "to": "43121eb8-40fc-53f0-a327-199c57fe3740",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['provenance']": "from['provenance']"
+    }
+   }
+  },
+  {
+   "from": "43121eb8-40fc-53f0-a327-199c57fe3740",
+   "to": "b095f73c-8f9a-5296-a7d3-7bfec65b9481",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6ac3aea8-6aad-5889-987c-7d8602583673",
+   "to": "43121eb8-40fc-53f0-a327-199c57fe3740",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

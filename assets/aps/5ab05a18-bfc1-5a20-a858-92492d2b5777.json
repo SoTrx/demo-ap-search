@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "5ab05a18-bfc1-5a20-a858-92492d2b5777",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Graph Node Linker",
+    "description": "Matches input entity records to candidate graph nodes according to a supplied graph schema and returns candidate links with confidence scores.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "b098561c-86db-5e07-8ead-51a0c03e6d06",
+   "labels": [
+    "Entity_Record_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_record_linker",
+    "description": "Links entity records to candidate graph nodes using a graph schema. Returns link records that include node candidates and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5ab05a18-bfc1-5a20-a858-92492d2b5777",
+   "to": "b098561c-86db-5e07-8ead-51a0c03e6d06",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

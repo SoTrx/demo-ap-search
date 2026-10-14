@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "9770f2f6-003b-50ec-ac1e-4113611c75ab",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Chart Collection Builder",
+    "description": "Builds a bar chart from tabular rows and a field mapping, then assembles it with two supplied charts into an ordered dashboard chart collection.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "f891a05b-d796-5555-80e3-85a3fffe4344",
+   "labels": [
+    "Bar_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bar_chart_builder",
+    "description": "Builds a bar chart specification from tabular rows and a column mapping that identifies the categorical field and numeric value field.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a15b8336-f574-5ab7-bc41-3af8cfc3dae2",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "ea4348de-c1ab-537d-a7e1-3bbb3a4ac285",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9770f2f6-003b-50ec-ac1e-4113611c75ab",
+   "to": "f891a05b-d796-5555-80e3-85a3fffe4344",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f891a05b-d796-5555-80e3-85a3fffe4344",
+   "to": "a15b8336-f574-5ab7-bc41-3af8cfc3dae2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "a15b8336-f574-5ab7-bc41-3af8cfc3dae2",
+   "to": "ea4348de-c1ab-537d-a7e1-3bbb3a4ac285",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "ea4348de-c1ab-537d-a7e1-3bbb3a4ac285",
+   "to": "f891a05b-d796-5555-80e3-85a3fffe4344",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9770f2f6-003b-50ec-ac1e-4113611c75ab",
+   "to": "ea4348de-c1ab-537d-a7e1-3bbb3a4ac285",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

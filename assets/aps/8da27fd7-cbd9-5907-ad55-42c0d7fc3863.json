@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "8da27fd7-cbd9-5907-ad55-42c0d7fc3863",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupation Weighted Survey Records",
+    "description": "Applies an occupation weight plan to coded survey response records, adding a numeric weight field to each record and returning the weighted records without altering the original responses.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "a687c941-787b-5f9b-be7a-40e95b4d1a7b",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8da27fd7-cbd9-5907-ad55-42c0d7fc3863",
+   "to": "a687c941-787b-5f9b-be7a-40e95b4d1a7b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

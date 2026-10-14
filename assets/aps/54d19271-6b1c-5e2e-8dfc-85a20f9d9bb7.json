@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "54d19271-6b1c-5e2e-8dfc-85a20f9d9bb7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema to Validation Rules",
+    "description": "Converts a database schema string into a validation rule specification with per-column type, allowed-value, numeric-range, and format constraints.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "56d01531-b35b-5296-89bb-c2dd80635df8",
+   "labels": [
+    "Validation_Rule_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "validation_rule_builder",
+    "description": "Builds a validation rule specification from a database schema string. Returns rule constraints for column types, allowed values, numeric ranges, and regex formats.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rules",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "54d19271-6b1c-5e2e-8dfc-85a20f9d9bb7",
+   "to": "56d01531-b35b-5296-89bb-c2dd80635df8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

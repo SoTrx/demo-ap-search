@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "0d37107c-f0ac-5192-bf5a-d19eb6494f9a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Survival Risk Prediction Intervals",
+    "description": "Fits a survival regression from historical event records and a column mapping and predicts new-row event-risk values with alpha-controlled uncertainty intervals.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "23ee928c-0f5d-5af1-b501-3b8873b259e2",
+   "labels": [
+    "Cox_Proportional_Hazards_Fitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cox_hazard_fitter",
+    "description": "Fits a Cox proportional hazards model to survival records using covariates named in the column mapping. The output is a regression fit containing hazard ratios and model diagnostics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "regression_fit",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c7bae416-45de-57ad-9f27-30719f77030f",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "regression_fit"
+   }
+  },
+  {
+   "id": "4eba8971-be5a-5206-b796-10953ac00611",
+   "labels": [
+    "Regression_Prediction_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regression_prediction_interval",
+    "description": "Applies a fitted regression model to new table rows to produce predicted values with prediction intervals. The threshold value controls the width of the intervals.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "new_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0d37107c-f0ac-5192-bf5a-d19eb6494f9a",
+   "to": "23ee928c-0f5d-5af1-b501-3b8873b259e2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "23ee928c-0f5d-5af1-b501-3b8873b259e2",
+   "to": "c7bae416-45de-57ad-9f27-30719f77030f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['regression_fit']": "from['outputs']['regression_fit']"
+    }
+   }
+  },
+  {
+   "from": "c7bae416-45de-57ad-9f27-30719f77030f",
+   "to": "4eba8971-be5a-5206-b796-10953ac00611",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['regression_fit']"
+    }
+   }
+  },
+  {
+   "from": "4eba8971-be5a-5206-b796-10953ac00611",
+   "to": "23ee928c-0f5d-5af1-b501-3b8873b259e2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0d37107c-f0ac-5192-bf5a-d19eb6494f9a",
+   "to": "4eba8971-be5a-5206-b796-10953ac00611",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

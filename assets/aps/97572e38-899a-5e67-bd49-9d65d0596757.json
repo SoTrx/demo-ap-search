@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "97572e38-899a-5e67-bd49-9d65d0596757",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Metadata Profile Builder",
+    "description": "Summarises a dataset from its catalogue entry into a profile containing column names, column types, row count, and provenance information.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "670128f8-6a01-5fd3-8f22-29132c341f81",
+   "labels": [
+    "DatasetMetadataProfiler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "profile_dataset_metadata",
+    "description": "Builds a metadata profile for a dataset from its catalogue entry. It records available column names, column types, row counts, and provenance fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dataset",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "97572e38-899a-5e67-bd49-9d65d0596757",
+   "to": "670128f8-6a01-5fd3-8f22-29132c341f81",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

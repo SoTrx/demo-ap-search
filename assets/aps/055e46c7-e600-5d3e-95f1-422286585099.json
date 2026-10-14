@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "055e46c7-e600-5d3e-95f1-422286585099",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema Question Generator",
+    "description": "Creates a limited set of recommended analytic questions from a supplied database schema.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "15a1d8b9-12ee-53a6-994d-07ffbe724b07",
+   "labels": [
+    "Schema_Question_Suggester_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Question Suggester",
+    "description": "Generates analytic questions that can be asked about a database schema and returns them as recommended question JSON.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "055e46c7-e600-5d3e-95f1-422286585099",
+   "to": "15a1d8b9-12ee-53a6-994d-07ffbe724b07",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

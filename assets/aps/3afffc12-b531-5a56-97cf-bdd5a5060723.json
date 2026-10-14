@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "3afffc12-b531-5a56-97cf-bdd5a5060723",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "PDF to Normalized Image Batch",
+    "description": "Converts a PDF or scanned document into ordered page images and returns a standardized image batch with consistent size, orientation, and color format.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "d3d0cf98-f603-55e3-8b53-0467dc8c9e94",
+   "labels": [
+    "Document_To_Page_Images_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_to_page_images",
+    "description": "Converts a PDF or scanned document into an ordered array of page images.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "document_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "62c314e2-8233-5fea-b93a-c469015f1fc4",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "page_images"
+   }
+  },
+  {
+   "id": "a6ea6b98-aa24-571c-8085-cef96c7fb228",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3afffc12-b531-5a56-97cf-bdd5a5060723",
+   "to": "d3d0cf98-f603-55e3-8b53-0467dc8c9e94",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d3d0cf98-f603-55e3-8b53-0467dc8c9e94",
+   "to": "62c314e2-8233-5fea-b93a-c469015f1fc4",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['page_images']": "from['outputs']['page_images']"
+    }
+   }
+  },
+  {
+   "from": "62c314e2-8233-5fea-b93a-c469015f1fc4",
+   "to": "a6ea6b98-aa24-571c-8085-cef96c7fb228",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['page_images']": "from['page_images']"
+    }
+   }
+  },
+  {
+   "from": "a6ea6b98-aa24-571c-8085-cef96c7fb228",
+   "to": "d3d0cf98-f603-55e3-8b53-0467dc8c9e94",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3afffc12-b531-5a56-97cf-bdd5a5060723",
+   "to": "a6ea6b98-aa24-571c-8085-cef96c7fb228",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

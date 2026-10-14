@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "db65e63a-9739-50ca-a025-e3704c23ebaa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cross-Source Entity Candidate Matching",
+    "description": "Extracts named entities from text chunks and produces possible cross-source matches to another entity set using mapped attributes.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "bfa5e0bc-8b6d-54b1-941a-09aca27e30f7",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "be15a189-4f3e-5c4f-b307-849dfa7c26a3",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entities"
+   }
+  },
+  {
+   "id": "8df86d0f-58a6-5ed0-a46e-9ccec7947518",
+   "labels": [
+    "Entity_Match_Candidate_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_match_candidate_generator",
+    "description": "Generates candidate cross-source matches between two entity record sets using mapped attributes. It returns candidate pairs before clustering.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "db65e63a-9739-50ca-a025-e3704c23ebaa",
+   "to": "bfa5e0bc-8b6d-54b1-941a-09aca27e30f7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bfa5e0bc-8b6d-54b1-941a-09aca27e30f7",
+   "to": "be15a189-4f3e-5c4f-b307-849dfa7c26a3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entities']": "from['outputs']['entities']"
+    }
+   }
+  },
+  {
+   "from": "be15a189-4f3e-5c4f-b307-849dfa7c26a3",
+   "to": "8df86d0f-58a6-5ed0-a46e-9ccec7947518",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_entities']": "from['entities']"
+    }
+   }
+  },
+  {
+   "from": "8df86d0f-58a6-5ed0-a46e-9ccec7947518",
+   "to": "bfa5e0bc-8b6d-54b1-941a-09aca27e30f7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "db65e63a-9739-50ca-a025-e3704c23ebaa",
+   "to": "8df86d0f-58a6-5ed0-a46e-9ccec7947518",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

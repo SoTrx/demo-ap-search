@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "d1bbce26-342b-550f-adff-607893e70dbf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Query-Based Passage Relevance Reranking",
+    "description": "Reorders candidate text chunks by their relevance to a supplied query and returns the ordered passages.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "1e918147-8a8b-5f8f-a4b6-2f021ba39187",
+   "labels": [
+    "Passage_Reranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "passage_reranker",
+    "description": "Reranks candidate text chunks by relevance to the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "candidate_passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d1bbce26-342b-550f-adff-607893e70dbf",
+   "to": "1e918147-8a8b-5f8f-a4b6-2f021ba39187",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

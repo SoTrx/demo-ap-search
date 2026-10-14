@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "466c16ea-c85a-53c9-a381-90339ee406b0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cleaned Translation Chunk Reconstructor",
+    "description": "Reassembles accepted aligned translated chunks into a translated text, re-chunks it, and cleans the translated chunks against the source while preserving placeholders.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "6c776d34-f65d-56f4-90d6-c05ccfef6600",
+   "labels": [
+    "Multilingual_Text_Recomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "multilingual_text_recomposer",
+    "description": "Reassembles accepted aligned translated chunks into a full translated text, using original source chunks as fallback for unaligned content.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ba701e24-401e-5582-bf50-7b6b571a1368",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "translated_text"
+   }
+  },
+  {
+   "id": "f7936843-4038-5e7b-9021-54058f97989c",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "589c9a7c-ce79-52a1-9270-5aa0e40c1aab",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "c2929d59-3f9f-548b-8b13-985d2be8c64f",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "466c16ea-c85a-53c9-a381-90339ee406b0",
+   "to": "6c776d34-f65d-56f4-90d6-c05ccfef6600",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6c776d34-f65d-56f4-90d6-c05ccfef6600",
+   "to": "ba701e24-401e-5582-bf50-7b6b571a1368",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['translated_text']": "from['outputs']['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "ba701e24-401e-5582-bf50-7b6b571a1368",
+   "to": "f7936843-4038-5e7b-9021-54058f97989c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text']": "from['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "f7936843-4038-5e7b-9021-54058f97989c",
+   "to": "6c776d34-f65d-56f4-90d6-c05ccfef6600",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "466c16ea-c85a-53c9-a381-90339ee406b0",
+   "to": "f7936843-4038-5e7b-9021-54058f97989c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f7936843-4038-5e7b-9021-54058f97989c",
+   "to": "589c9a7c-ce79-52a1-9270-5aa0e40c1aab",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "589c9a7c-ce79-52a1-9270-5aa0e40c1aab",
+   "to": "c2929d59-3f9f-548b-8b13-985d2be8c64f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "c2929d59-3f9f-548b-8b13-985d2be8c64f",
+   "to": "f7936843-4038-5e7b-9021-54058f97989c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "466c16ea-c85a-53c9-a381-90339ee406b0",
+   "to": "c2929d59-3f9f-548b-8b13-985d2be8c64f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3ec77283-a99d-58c7-b194-9b9d7afe5bcf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Confidence-Filtered Image Detections",
+    "description": "Runs an object detector over a batch of images and returns only detected objects whose confidence meets a specified threshold.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "0cc32a72-1089-55a9-a921-88384fbd52c4",
+   "labels": [
+    "Object_Detection_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "object_detection_predictor",
+    "description": "Applies an object detection model to an image batch and returns detected objects with class labels, bounding boxes, and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9ec88a67-fb16-52b6-979d-ba9fb56a50f8",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "detections"
+   }
+  },
+  {
+   "id": "a84ae8cd-9a04-5b90-87d0-fda189d5de11",
+   "labels": [
+    "Detection_Score_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detection_score_filter",
+    "description": "Keeps only object detections whose confidence score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3ec77283-a99d-58c7-b194-9b9d7afe5bcf",
+   "to": "0cc32a72-1089-55a9-a921-88384fbd52c4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0cc32a72-1089-55a9-a921-88384fbd52c4",
+   "to": "9ec88a67-fb16-52b6-979d-ba9fb56a50f8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['detections']": "from['outputs']['detections']"
+    }
+   }
+  },
+  {
+   "from": "9ec88a67-fb16-52b6-979d-ba9fb56a50f8",
+   "to": "a84ae8cd-9a04-5b90-87d0-fda189d5de11",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['detections']": "from['detections']"
+    }
+   }
+  },
+  {
+   "from": "a84ae8cd-9a04-5b90-87d0-fda189d5de11",
+   "to": "0cc32a72-1089-55a9-a921-88384fbd52c4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3ec77283-a99d-58c7-b194-9b9d7afe5bcf",
+   "to": "a84ae8cd-9a04-5b90-87d0-fda189d5de11",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "0f10dd12-161b-52a5-a677-6a97682307d3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Card Composer",
+    "description": "Converts an array of table rows into a plain-text dataset card summarizing its size, key columns, and coverage.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "52db9fb7-8915-5c5d-8286-2383c36e1f9d",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8efb0e32-9a86-5c03-b4cd-91d44b9c0638",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "f912a993-74a8-544f-860e-d7b38a381fc6",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0f10dd12-161b-52a5-a677-6a97682307d3",
+   "to": "52db9fb7-8915-5c5d-8286-2383c36e1f9d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "52db9fb7-8915-5c5d-8286-2383c36e1f9d",
+   "to": "8efb0e32-9a86-5c03-b4cd-91d44b9c0638",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "8efb0e32-9a86-5c03-b4cd-91d44b9c0638",
+   "to": "f912a993-74a8-544f-860e-d7b38a381fc6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "f912a993-74a8-544f-860e-d7b38a381fc6",
+   "to": "52db9fb7-8915-5c5d-8286-2383c36e1f9d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0f10dd12-161b-52a5-a677-6a97682307d3",
+   "to": "f912a993-74a8-544f-860e-d7b38a381fc6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "13df00c6-380e-52dc-8cb0-1ab5751957ea",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Resampled Line Charts",
+    "description": "Resamples a time series to a chosen granularity, builds a line chart for the selected metric, and adds a short note with highlighting hints to the chart specification.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "e47daf89-3c3e-549a-87c3-41852a5b6d5f",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "bc58426b-78eb-53b1-ad14-8a8613ef0339",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "70b3e5af-ac8b-5e4a-aef1-f5c00d772fa7",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "a08c5d56-b742-57c4-a1dd-b983fa62083e",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "13df00c6-380e-52dc-8cb0-1ab5751957ea",
+   "to": "e47daf89-3c3e-549a-87c3-41852a5b6d5f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e47daf89-3c3e-549a-87c3-41852a5b6d5f",
+   "to": "bc58426b-78eb-53b1-ad14-8a8613ef0339",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "bc58426b-78eb-53b1-ad14-8a8613ef0339",
+   "to": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "to": "e47daf89-3c3e-549a-87c3-41852a5b6d5f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "13df00c6-380e-52dc-8cb0-1ab5751957ea",
+   "to": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "to": "70b3e5af-ac8b-5e4a-aef1-f5c00d772fa7",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "70b3e5af-ac8b-5e4a-aef1-f5c00d772fa7",
+   "to": "a08c5d56-b742-57c4-a1dd-b983fa62083e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "a08c5d56-b742-57c4-a1dd-b983fa62083e",
+   "to": "80c5d8f4-b99e-5b15-ae15-5ba1a056a0ba",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "13df00c6-380e-52dc-8cb0-1ab5751957ea",
+   "to": "a08c5d56-b742-57c4-a1dd-b983fa62083e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

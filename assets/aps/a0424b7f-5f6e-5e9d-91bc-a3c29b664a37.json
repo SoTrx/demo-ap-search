@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "a0424b7f-5f6e-5e9d-91bc-a3c29b664a37",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Fit Classification Model With Mapping",
+    "description": "Fits a classification model from a set of feature rows, using the target column identified in the supplied column mapping, and returns the trained model.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "5052e3fa-0bfe-5eeb-b62c-4b0e592c90ac",
+   "labels": [
+    "Train_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "train_classifier",
+    "description": "Fits a classification model from feature rows and the target column identified in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a0424b7f-5f6e-5e9d-91bc-a3c29b664a37",
+   "to": "5052e3fa-0bfe-5eeb-b62c-4b0e592c90ac",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "ccc9e6a5-f283-565a-af67-c8872604f096",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Student Graph Performance Profile",
+    "description": "Runs a supplied graph query plan over assessment graph triples and aggregates the returned rows into one student's performance profile with scores by topic, accuracy, and recent trend.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "7f5abcee-bfa3-5d0c-9594-dff27fda62c8",
+   "labels": [
+    "Graph_Query_Executor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_executor",
+    "description": "Runs a graph query plan over graph triples and returns matching result rows. It returns only query results, without adding or removing graph triples.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "579c4d68-24d5-59e8-ae8e-264eec3b0da9",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "fd22edde-c1ef-5d06-bf16-df4ad8301e60",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ccc9e6a5-f283-565a-af67-c8872604f096",
+   "to": "7f5abcee-bfa3-5d0c-9594-dff27fda62c8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7f5abcee-bfa3-5d0c-9594-dff27fda62c8",
+   "to": "579c4d68-24d5-59e8-ae8e-264eec3b0da9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "579c4d68-24d5-59e8-ae8e-264eec3b0da9",
+   "to": "fd22edde-c1ef-5d06-bf16-df4ad8301e60",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "fd22edde-c1ef-5d06-bf16-df4ad8301e60",
+   "to": "7f5abcee-bfa3-5d0c-9594-dff27fda62c8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ccc9e6a5-f283-565a-af67-c8872604f096",
+   "to": "fd22edde-c1ef-5d06-bf16-df4ad8301e60",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

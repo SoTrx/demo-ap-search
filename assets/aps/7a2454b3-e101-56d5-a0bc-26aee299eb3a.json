@@ -1,0 +1,257 @@
+{
+ "nodes": [
+  {
+   "id": "7a2454b3-e101-56d5-a0bc-26aee299eb3a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weakest Topic Proficiency Estimator",
+    "description": "Aggregates a student's assessment result rows into a performance profile, identifies the weakest topic, and outputs that topic's estimated proficiency level as a number.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a4822a13-1c10-5d9e-8449-b5598c8d805e",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "performance_profile"
+   }
+  },
+  {
+   "id": "9686c418-e614-5881-be35-02c6a88fd407",
+   "labels": [
+    "Topic_Gap_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "topic_gap_identifier",
+    "description": "Identifies the weakest subject topic from a student performance profile and returns it as a single topic string. Returns only the topic, not a remediation plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weakest_topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a2a149c4-739a-5a5f-834f-ac5565638e72",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "weakest_topic"
+   }
+  },
+  {
+   "id": "36fa4d2d-edd3-57f9-9ea7-0fc10ffed67a",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "performance_profile"
+   }
+  },
+  {
+   "id": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "labels": [
+    "Student_Proficiency_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_proficiency_estimator",
+    "description": "Estimates a student's proficiency level for a topic from the student performance profile. Uses only the profile and the requested topic.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7a2454b3-e101-56d5-a0bc-26aee299eb3a",
+   "to": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "to": "a4822a13-1c10-5d9e-8449-b5598c8d805e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['performance_profile']": "from['outputs']['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "a4822a13-1c10-5d9e-8449-b5598c8d805e",
+   "to": "9686c418-e614-5881-be35-02c6a88fd407",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['performance_profile']": "from['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "9686c418-e614-5881-be35-02c6a88fd407",
+   "to": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7a2454b3-e101-56d5-a0bc-26aee299eb3a",
+   "to": "9686c418-e614-5881-be35-02c6a88fd407",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9686c418-e614-5881-be35-02c6a88fd407",
+   "to": "a2a149c4-739a-5a5f-834f-ac5565638e72",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weakest_topic']": "from['outputs']['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "a2a149c4-739a-5a5f-834f-ac5565638e72",
+   "to": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['topic']": "from['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "to": "36fa4d2d-edd3-57f9-9ea7-0fc10ffed67a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['performance_profile']": "from['outputs']['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "36fa4d2d-edd3-57f9-9ea7-0fc10ffed67a",
+   "to": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['performance_profile']": "from['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "to": "9686c418-e614-5881-be35-02c6a88fd407",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "to": "5bb06b71-0913-5860-b795-8c1b8db5bdcc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7a2454b3-e101-56d5-a0bc-26aee299eb3a",
+   "to": "ac1722c2-c433-50e3-9b32-a35f0a38b2c1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

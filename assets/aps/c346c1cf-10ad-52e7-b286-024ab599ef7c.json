@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "c346c1cf-10ad-52e7-b286-024ab599ef7c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Attributed Transcript Alignment",
+    "description": "Aligns speaker assignments from audio segments with transcript text by segment and time overlap to produce unified transcript records containing speaker, text, timing, and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "9d4e3b5f-8f40-5d0f-af56-59c1d7747ef4",
+   "labels": [
+    "Speaker_Separator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_separator",
+    "description": "Separates speakers within audio segments and assigns speaker labels to speech portions. Returns speaker assignment records with segment references, labels, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4b4a3b07-d919-5579-8962-f5ef1439d5cc",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "assignments"
+   }
+  },
+  {
+   "id": "58a71ea5-3b16-51e1-a7e0-678b01b73b38",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c346c1cf-10ad-52e7-b286-024ab599ef7c",
+   "to": "9d4e3b5f-8f40-5d0f-af56-59c1d7747ef4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9d4e3b5f-8f40-5d0f-af56-59c1d7747ef4",
+   "to": "4b4a3b07-d919-5579-8962-f5ef1439d5cc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['assignments']": "from['outputs']['assignments']"
+    }
+   }
+  },
+  {
+   "from": "4b4a3b07-d919-5579-8962-f5ef1439d5cc",
+   "to": "58a71ea5-3b16-51e1-a7e0-678b01b73b38",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assignments']": "from['assignments']"
+    }
+   }
+  },
+  {
+   "from": "58a71ea5-3b16-51e1-a7e0-678b01b73b38",
+   "to": "9d4e3b5f-8f40-5d0f-af56-59c1d7747ef4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c346c1cf-10ad-52e7-b286-024ab599ef7c",
+   "to": "58a71ea5-3b16-51e1-a7e0-678b01b73b38",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

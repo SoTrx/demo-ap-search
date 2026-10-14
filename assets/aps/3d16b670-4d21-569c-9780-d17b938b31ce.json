@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "3d16b670-4d21-569c-9780-d17b938b31ce",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Text Chunk Entity Extraction",
+    "description": "Extract named entities and their surrounding context from an array of text chunks, returning an array of entity records.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "91bd66f6-c232-5c17-aa19-2d803a246e60",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3d16b670-4d21-569c-9780-d17b938b31ce",
+   "to": "91bd66f6-c232-5c17-aa19-2d803a246e60",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

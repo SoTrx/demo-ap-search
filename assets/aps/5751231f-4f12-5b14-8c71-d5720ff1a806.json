@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "5751231f-4f12-5b14-8c71-d5720ff1a806",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema-Aware Graph Triple Builder",
+    "description": "Links supplied entity records to schema-defined nodes, infers relation candidates from text chunks, and validates them into schema-conforming graph triples.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "f223a724-27dd-5939-b325-a7e2aec93298",
+   "labels": [
+    "Entity_Record_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_record_linker",
+    "description": "Links entity records to candidate graph nodes using a graph schema. Returns link records that include node candidates and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7b16f35b-bc28-51ca-92e4-9293ad16d2cf",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entity_link_records"
+   }
+  },
+  {
+   "id": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "labels": [
+    "Relation_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "relation_extractor",
+    "description": "Extracts typed relation candidates from text chunks for pairs of linked entities. The graph schema guides relation classes and expected argument types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "996567d9-af09-5956-94cc-36281b0c124f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "relation_triples"
+   }
+  },
+  {
+   "id": "c1abd69b-fcf6-53fa-adae-2b48b794d91c",
+   "labels": [
+    "Graph_Triple_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_triple_builder",
+    "description": "Converts relation candidates into graph triples that conform to the graph schema. Invalid relation classes or mismatched entity types are dropped.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5751231f-4f12-5b14-8c71-d5720ff1a806",
+   "to": "f223a724-27dd-5939-b325-a7e2aec93298",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f223a724-27dd-5939-b325-a7e2aec93298",
+   "to": "7b16f35b-bc28-51ca-92e4-9293ad16d2cf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entity_link_records']": "from['outputs']['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "7b16f35b-bc28-51ca-92e4-9293ad16d2cf",
+   "to": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_link_records']": "from['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "to": "f223a724-27dd-5939-b325-a7e2aec93298",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5751231f-4f12-5b14-8c71-d5720ff1a806",
+   "to": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "to": "996567d9-af09-5956-94cc-36281b0c124f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['relation_triples']": "from['outputs']['relation_triples']"
+    }
+   }
+  },
+  {
+   "from": "996567d9-af09-5956-94cc-36281b0c124f",
+   "to": "c1abd69b-fcf6-53fa-adae-2b48b794d91c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['relation_triples']": "from['relation_triples']"
+    }
+   }
+  },
+  {
+   "from": "c1abd69b-fcf6-53fa-adae-2b48b794d91c",
+   "to": "709c58d6-9076-58a8-814b-bd5dcfc92794",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5751231f-4f12-5b14-8c71-d5720ff1a806",
+   "to": "c1abd69b-fcf6-53fa-adae-2b48b794d91c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

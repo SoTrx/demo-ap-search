@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "1aa071f6-51be-5b02-8649-7d88b93e1090",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Page Image Layout Block Segmentation",
+    "description": "Segments an array of page images into typed layout blocks such as paragraphs, headings, figures, and tables.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "e87654bc-6951-5f0b-83b3-e64736fae748",
+   "labels": [
+    "Layout_Block_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detect_layout_blocks",
+    "description": "Segments page images into layout blocks such as paragraphs, headings, figures, and tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1aa071f6-51be-5b02-8649-7d88b93e1090",
+   "to": "e87654bc-6951-5f0b-83b3-e64736fae748",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

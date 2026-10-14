@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "03b82d50-8995-50f3-9e6d-79151e7e7292",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Occupation Coding",
+    "description": "From raw occupation-coding candidates and survey responses, choose one ISCO code per response above a confidence cutoff and add the corresponding survey weight, leaving response values unchanged.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "881a370d-f9ba-5096-b446-d0d6c9994426",
+   "labels": [
+    "ISCO_Code_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_code_selector",
+    "description": "Assigns one ISCO code to each survey response by selecting the highest confidence candidate that meets the threshold. It returns coded response records with the original response fields and the selected occupation code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "93ed2798-f5b8-59e7-9909-e063fd59e1c2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "coded_occupation_records"
+   }
+  },
+  {
+   "id": "49820551-a28c-548b-ae57-f8f39f924e70",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "03b82d50-8995-50f3-9e6d-79151e7e7292",
+   "to": "881a370d-f9ba-5096-b446-d0d6c9994426",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "881a370d-f9ba-5096-b446-d0d6c9994426",
+   "to": "93ed2798-f5b8-59e7-9909-e063fd59e1c2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['coded_occupation_records']": "from['outputs']['coded_occupation_records']"
+    }
+   }
+  },
+  {
+   "from": "93ed2798-f5b8-59e7-9909-e063fd59e1c2",
+   "to": "49820551-a28c-548b-ae57-f8f39f924e70",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['coded_occupation_records']": "from['coded_occupation_records']"
+    }
+   }
+  },
+  {
+   "from": "49820551-a28c-548b-ae57-f8f39f924e70",
+   "to": "881a370d-f9ba-5096-b446-d0d6c9994426",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "03b82d50-8995-50f3-9e6d-79151e7e7292",
+   "to": "49820551-a28c-548b-ae57-f8f39f924e70",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

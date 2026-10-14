@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "ecd7eaa9-d970-5987-94e9-ee8117afa702",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Transcript Alignment Filter",
+    "description": "The AP filters transcript segments by a language identification confidence threshold and merges the accepted segments with speaker assignment records using segment identifiers and time overlap to return aligned speaker transcript records.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "c5da8ece-de09-508c-8793-b59bd9b799bc",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "71240a73-abfe-59f3-b996-dfc59d0d8c77",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filtered_transcripts"
+   }
+  },
+  {
+   "id": "5e06c057-170f-5560-96b5-78820615d372",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ecd7eaa9-d970-5987-94e9-ee8117afa702",
+   "to": "c5da8ece-de09-508c-8793-b59bd9b799bc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c5da8ece-de09-508c-8793-b59bd9b799bc",
+   "to": "71240a73-abfe-59f3-b996-dfc59d0d8c77",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filtered_transcripts']": "from['outputs']['filtered_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "71240a73-abfe-59f3-b996-dfc59d0d8c77",
+   "to": "5e06c057-170f-5560-96b5-78820615d372",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['filtered_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "5e06c057-170f-5560-96b5-78820615d372",
+   "to": "c5da8ece-de09-508c-8793-b59bd9b799bc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ecd7eaa9-d970-5987-94e9-ee8117afa702",
+   "to": "5e06c057-170f-5560-96b5-78820615d372",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

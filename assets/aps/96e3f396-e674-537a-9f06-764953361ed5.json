@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "96e3f396-e674-537a-9f06-764953361ed5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Address to Point Distances",
+    "description": "Converts an array of textual addresses into points and computes geodesic distances between each converted address point and every point in a supplied point array.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "38d9ec1f-7a62-5b73-b39f-3702d72204c8",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "09dc98bc-0366-50d2-89b1-f57fecae7d93",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "9612a957-1e00-5b82-a0de-6b9cb4d7e2e7",
+   "labels": [
+    "Compute_Geodesic_Distance_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "compute_distance_matrix",
+    "description": "Computes pairwise geodesic distances between two sets of point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "distances",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "96e3f396-e674-537a-9f06-764953361ed5",
+   "to": "38d9ec1f-7a62-5b73-b39f-3702d72204c8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "38d9ec1f-7a62-5b73-b39f-3702d72204c8",
+   "to": "09dc98bc-0366-50d2-89b1-f57fecae7d93",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "09dc98bc-0366-50d2-89b1-f57fecae7d93",
+   "to": "9612a957-1e00-5b82-a0de-6b9cb4d7e2e7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "9612a957-1e00-5b82-a0de-6b9cb4d7e2e7",
+   "to": "38d9ec1f-7a62-5b73-b39f-3702d72204c8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "96e3f396-e674-537a-9f06-764953361ed5",
+   "to": "9612a957-1e00-5b82-a0de-6b9cb4d7e2e7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

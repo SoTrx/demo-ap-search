@@ -1,0 +1,317 @@
+{
+ "nodes": [
+  {
+   "id": "479ec4a2-f4bc-51f3-bb53-ffb03c712f9e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Re-identification Risk from Encoded Data",
+    "description": "It harmonizes records to a target schema, encodes selected categorical columns as flags, and reports quasi-identifier combinations that could uniquely identify records after direct personal fields are excluded.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "30d1b40a-5739-57a2-b37e-87b0d92729a2",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f36d91ee-17e9-5c36-92b2-22e608d87e5b",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "value_mapping"
+   }
+  },
+  {
+   "id": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c9614d2c-48e7-5a15-af2c-6c1ed5c17235",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f8c7b9b2-618e-51d2-926d-4a68baf10138",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "ebe00ab5-b901-5da6-89dc-1db94ee3098d",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "479ec4a2-f4bc-51f3-bb53-ffb03c712f9e",
+   "to": "30d1b40a-5739-57a2-b37e-87b0d92729a2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "30d1b40a-5739-57a2-b37e-87b0d92729a2",
+   "to": "f36d91ee-17e9-5c36-92b2-22e608d87e5b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['value_mapping']": "from['outputs']['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "f36d91ee-17e9-5c36-92b2-22e608d87e5b",
+   "to": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['value_mapping']": "from['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "to": "30d1b40a-5739-57a2-b37e-87b0d92729a2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "479ec4a2-f4bc-51f3-bb53-ffb03c712f9e",
+   "to": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "to": "c9614d2c-48e7-5a15-af2c-6c1ed5c17235",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "c9614d2c-48e7-5a15-af2c-6c1ed5c17235",
+   "to": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "to": "15a0b2da-6180-551b-ae45-3b54f488add0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "479ec4a2-f4bc-51f3-bb53-ffb03c712f9e",
+   "to": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "to": "f8c7b9b2-618e-51d2-926d-4a68baf10138",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "f8c7b9b2-618e-51d2-926d-4a68baf10138",
+   "to": "ebe00ab5-b901-5da6-89dc-1db94ee3098d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "ebe00ab5-b901-5da6-89dc-1db94ee3098d",
+   "to": "976d2d20-5787-53cb-bf01-65de2f6be4de",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "479ec4a2-f4bc-51f3-bb53-ffb03c712f9e",
+   "to": "ebe00ab5-b901-5da6-89dc-1db94ee3098d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

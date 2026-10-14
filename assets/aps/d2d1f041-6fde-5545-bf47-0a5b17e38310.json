@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "d2d1f041-6fde-5545-bf47-0a5b17e38310",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Top-K Image Similarity Ranking",
+    "description": "Given a batch of query images, a visual model, an indexed image collection, and a top_k value, it converts the query images to visual embeddings and returns the closest matching indexed images for each query up to top_k.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "b153ce09-ddca-5e83-8381-fa326658bcd9",
+   "labels": [
+    "Image_Embedding_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_embedding_extractor",
+    "description": "Extracts fixed-length visual embeddings from each image in an image batch.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "96c41c33-794a-53ba-a5ac-fd586e0828fa",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "embeddings"
+   }
+  },
+  {
+   "id": "b850df5a-4999-51eb-949f-858941937546",
+   "labels": [
+    "Image_Similarity_Searcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_searcher",
+    "description": "Returns the closest indexed image embeddings for each query embedding, limited to the requested top-k count.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query_embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "top_k",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rankings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d2d1f041-6fde-5545-bf47-0a5b17e38310",
+   "to": "b153ce09-ddca-5e83-8381-fa326658bcd9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b153ce09-ddca-5e83-8381-fa326658bcd9",
+   "to": "96c41c33-794a-53ba-a5ac-fd586e0828fa",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['embeddings']": "from['outputs']['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "96c41c33-794a-53ba-a5ac-fd586e0828fa",
+   "to": "b850df5a-4999-51eb-949f-858941937546",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query_embeddings']": "from['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "b850df5a-4999-51eb-949f-858941937546",
+   "to": "b153ce09-ddca-5e83-8381-fa326658bcd9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d2d1f041-6fde-5545-bf47-0a5b17e38310",
+   "to": "b850df5a-4999-51eb-949f-858941937546",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

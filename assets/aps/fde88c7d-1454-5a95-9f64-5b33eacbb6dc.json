@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "fde88c7d-1454-5a95-9f64-5b33eacbb6dc",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Profile-Aware Dataset Candidate Ranking",
+    "description": "Extracts weighted key phrases from text chunks, searches an index for a limited set of dataset candidates, and reranks those candidates by compatibility with a reference dataset profile.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "5ffc28fa-e0ff-5726-80c2-918533097123",
+   "labels": [
+    "Chunk_Keyword_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_keyword_extractor",
+    "description": "Extracts weighted key phrases from an array of text chunks and returns keyword records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0f25f791-706c-5923-a624-7197640e1480",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "keywords"
+   }
+  },
+  {
+   "id": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "labels": [
+    "DatasetCatalogueSearcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "search_dataset_catalogue",
+    "description": "Searches a dataset retrieval index using keyword records and returns ranked dataset identifiers. It applies the recommendation limit to the candidate list.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1dc792b1-747c-52c8-8ba1-fed2453f2c4b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "candidates"
+   }
+  },
+  {
+   "id": "0192f42d-c133-5dab-9338-00d166454dd8",
+   "labels": [
+    "DatasetDiscoveryReranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rerank_dataset_candidates",
+    "description": "Reranks candidate dataset identifiers against a reference dataset profile. It puts candidates with more compatible schema and coverage characteristics first.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "reference_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "ranked_candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fde88c7d-1454-5a95-9f64-5b33eacbb6dc",
+   "to": "5ffc28fa-e0ff-5726-80c2-918533097123",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5ffc28fa-e0ff-5726-80c2-918533097123",
+   "to": "0f25f791-706c-5923-a624-7197640e1480",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['keywords']": "from['outputs']['keywords']"
+    }
+   }
+  },
+  {
+   "from": "0f25f791-706c-5923-a624-7197640e1480",
+   "to": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['keywords']": "from['keywords']"
+    }
+   }
+  },
+  {
+   "from": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "to": "5ffc28fa-e0ff-5726-80c2-918533097123",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "fde88c7d-1454-5a95-9f64-5b33eacbb6dc",
+   "to": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "to": "1dc792b1-747c-52c8-8ba1-fed2453f2c4b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['candidates']": "from['outputs']['candidates']"
+    }
+   }
+  },
+  {
+   "from": "1dc792b1-747c-52c8-8ba1-fed2453f2c4b",
+   "to": "0192f42d-c133-5dab-9338-00d166454dd8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['candidates']": "from['candidates']"
+    }
+   }
+  },
+  {
+   "from": "0192f42d-c133-5dab-9338-00d166454dd8",
+   "to": "a681c8dc-b819-52c7-948a-c14f83505ef8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "fde88c7d-1454-5a95-9f64-5b33eacbb6dc",
+   "to": "0192f42d-c133-5dab-9338-00d166454dd8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

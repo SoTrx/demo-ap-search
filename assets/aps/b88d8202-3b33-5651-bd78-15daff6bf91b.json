@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "b88d8202-3b33-5651-bd78-15daff6bf91b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Indicator Profile Estimator",
+    "description": "Estimates a seasonality profile of average seasonal indices for each period from a time-series array and seasonal cycle length.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "32a81223-4d34-5e7d-8bda-050c1b738378",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b88d8202-3b33-5651-bd78-15daff6bf91b",
+   "to": "32a81223-4d34-5e7d-8bda-050c1b738378",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

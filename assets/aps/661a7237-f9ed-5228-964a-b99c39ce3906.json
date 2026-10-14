@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "661a7237-f9ed-5228-964a-b99c39ce3906",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Personal Data Field Report",
+    "description": "Inspects table records and outputs a row-level report identifying direct personal-data fields such as names, identifiers, contacts, and addresses.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "4692559d-9f64-5e91-904b-40716a67726a",
+   "labels": [
+    "Personal_Data_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "personal_data_detector",
+    "description": "Detects direct personal-data fields in table records and returns a row-level detection report. It reports fields such as names, government identifiers, contact details, and addresses.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "661a7237-f9ed-5228-964a-b99c39ce3906",
+   "to": "4692559d-9f64-5e91-904b-40716a67726a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

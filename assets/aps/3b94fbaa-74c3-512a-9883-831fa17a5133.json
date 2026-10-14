@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "3b94fbaa-74c3-512a-9883-831fa17a5133",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation Extraction with Context",
+    "description": "Splits a plain-text document into bounded sections and finds bibliographic citations, returning each citation with surrounding context.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "521ef29d-14e5-5cea-b402-cda09285917d",
+   "labels": [
+    "Plain_Text_Chunk_Splitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "plain_text_chunk_splitter",
+    "description": "Splits a plain-text document into translatable chunks using the maximum chunk size threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "max_chunk_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "aaf134b3-030d-518b-a385-196e0143f780",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "069c6b26-c324-5e45-b3e5-f546c3def8bf",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3b94fbaa-74c3-512a-9883-831fa17a5133",
+   "to": "521ef29d-14e5-5cea-b402-cda09285917d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "521ef29d-14e5-5cea-b402-cda09285917d",
+   "to": "aaf134b3-030d-518b-a385-196e0143f780",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "aaf134b3-030d-518b-a385-196e0143f780",
+   "to": "069c6b26-c324-5e45-b3e5-f546c3def8bf",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "069c6b26-c324-5e45-b3e5-f546c3def8bf",
+   "to": "521ef29d-14e5-5cea-b402-cda09285917d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3b94fbaa-74c3-512a-9883-831fa17a5133",
+   "to": "069c6b26-c324-5e45-b3e5-f546c3def8bf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

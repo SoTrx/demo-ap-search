@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "873e8728-c212-5199-bbfa-73d3b6e02b83",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Column Compatibility Report",
+    "description": "Profiles a sample of table rows and reports columns whose inferred value domains are incompatible with a reference profile.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "31c2cfd1-3ce5-5bb7-b88d-0f01171876de",
+   "labels": [
+    "DatasetColumnProfileBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_column_profile",
+    "description": "Builds a column-level profile from table records. It summarizes observed column names, inferred types, and row counts for catalogue comparison.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8a1685a8-e71a-5cd1-9f9d-14482865fc1d",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "bd46098a-36d2-5266-9b8d-232cc3b622a6",
+   "labels": [
+    "Domain_Comparison_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "domain_comparison_builder",
+    "description": "Compares two dataset profiles and reports columns whose value domains are incompatible. Returns the comparison report without rewriting the datasets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "873e8728-c212-5199-bbfa-73d3b6e02b83",
+   "to": "31c2cfd1-3ce5-5bb7-b88d-0f01171876de",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "31c2cfd1-3ce5-5bb7-b88d-0f01171876de",
+   "to": "8a1685a8-e71a-5cd1-9f9d-14482865fc1d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "8a1685a8-e71a-5cd1-9f9d-14482865fc1d",
+   "to": "bd46098a-36d2-5266-9b8d-232cc3b622a6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "bd46098a-36d2-5266-9b8d-232cc3b622a6",
+   "to": "31c2cfd1-3ce5-5bb7-b88d-0f01171876de",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "873e8728-c212-5199-bbfa-73d3b6e02b83",
+   "to": "bd46098a-36d2-5266-9b8d-232cc3b622a6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "9192da36-c2bd-50e1-8f4c-8f341be31ad6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translation-Ready Occupational Text Cleanup",
+    "description": "The AP filters occupational chunks whose detected language differs from a target language and returns cleaned, normalized source chunks with identifiers preserved.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "a09366ed-b3b6-56f7-8ad9-0a2e779b6343",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "844b0ab7-26f3-5319-8504-7a650a916dd9",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "6d98388c-2bb9-5a39-b4d4-d5c5c93f53ee",
+   "labels": [
+    "Occupation_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_cleaner",
+    "description": "Cleans occupational text chunks by normalizing case, whitespace, punctuation, and common abbreviations. It preserves chunk and response identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9192da36-c2bd-50e1-8f4c-8f341be31ad6",
+   "to": "a09366ed-b3b6-56f7-8ad9-0a2e779b6343",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a09366ed-b3b6-56f7-8ad9-0a2e779b6343",
+   "to": "844b0ab7-26f3-5319-8504-7a650a916dd9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "844b0ab7-26f3-5319-8504-7a650a916dd9",
+   "to": "6d98388c-2bb9-5a39-b4d4-d5c5c93f53ee",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "6d98388c-2bb9-5a39-b4d4-d5c5c93f53ee",
+   "to": "a09366ed-b3b6-56f7-8ad9-0a2e779b6343",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9192da36-c2bd-50e1-8f4c-8f341be31ad6",
+   "to": "6d98388c-2bb9-5a39-b4d4-d5c5c93f53ee",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

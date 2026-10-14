@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "9dac0bfe-3ce7-5cc3-9aeb-36c98495e55b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Patients Enrolled Between Dates",
+    "description": "This AP filters a patient_records array to keep only patients whose enrollment date falls between a start_date and end_date, returning the patient records with normalized date strings.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "18ce7ff7-c4c2-53a6-b96d-7fc9cbbc2484",
+   "labels": [
+    "Enrollment_Date_Window_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "enrollment_date_window_filter",
+    "description": "Keeps patient records whose enrollment date is between the start and end dates. Dates are returned as normalized date strings.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9dac0bfe-3ce7-5cc3-9aeb-36c98495e55b",
+   "to": "18ce7ff7-c4c2-53a6-b96d-7fc9cbbc2484",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

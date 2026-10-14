@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "7b48e0ad-1fc3-5b2f-a9d3-05968decbc15",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate-aware Spearman Significance Test",
+    "description": "Deduplicates tabular records using supplied duplicate groups, computes Spearman correlations for mapped numeric columns, and returns pair-level significance p-values and decisions at a chosen alpha.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "84639d1c-151b-546f-b381-60460acd08dd",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "955dcf27-2268-5ef0-8916-a0bf75da89e2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "deduplicated_rows"
+   }
+  },
+  {
+   "id": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "labels": [
+    "Spearman_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spearman_correlation_matrix",
+    "description": "Computes a Spearman rank correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a37945ff-47de-5f13-8c0c-b96f09f846ce",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "correlations"
+   }
+  },
+  {
+   "id": "f7536371-e766-52a5-b176-d657b3903d3c",
+   "labels": [
+    "Correlation_Significance_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "correlation_significance_test",
+    "description": "Tests whether correlations in a correlation matrix are statistically significant at the supplied threshold. Returns a hypothesis test result with pair-level p-values and decisions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7b48e0ad-1fc3-5b2f-a9d3-05968decbc15",
+   "to": "84639d1c-151b-546f-b381-60460acd08dd",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "84639d1c-151b-546f-b381-60460acd08dd",
+   "to": "955dcf27-2268-5ef0-8916-a0bf75da89e2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['deduplicated_rows']": "from['outputs']['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "955dcf27-2268-5ef0-8916-a0bf75da89e2",
+   "to": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "to": "84639d1c-151b-546f-b381-60460acd08dd",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7b48e0ad-1fc3-5b2f-a9d3-05968decbc15",
+   "to": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "to": "a37945ff-47de-5f13-8c0c-b96f09f846ce",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['correlations']": "from['outputs']['correlations']"
+    }
+   }
+  },
+  {
+   "from": "a37945ff-47de-5f13-8c0c-b96f09f846ce",
+   "to": "f7536371-e766-52a5-b176-d657b3903d3c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['correlations']": "from['correlations']"
+    }
+   }
+  },
+  {
+   "from": "f7536371-e766-52a5-b176-d657b3903d3c",
+   "to": "84aa2525-7012-5cee-9580-c823c3e160d3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7b48e0ad-1fc3-5b2f-a9d3-05968decbc15",
+   "to": "f7536371-e766-52a5-b176-d657b3903d3c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

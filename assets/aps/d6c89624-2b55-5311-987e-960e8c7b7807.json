@@ -1,0 +1,263 @@
+{
+ "nodes": [
+  {
+   "id": "d6c89624-2b55-5311-987e-960e8c7b7807",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Nearest Polygon Address Matching",
+    "description": "Geocodes a list of addresses to points and returns each address paired with its nearest polygon from a supplied polygon set.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "644cecd3-35d9-5357-bc68-a4a8f2654e7b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "labels": [
+    "Spatial_Join_Points_To_Polygons_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spatial_join_points_polygons",
+    "description": "Assigns point geometries to containing polygons and returns polygons with joined point attributes.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9d7eb8fb-b920-5a09-a18e-01d8d95a29e3",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "polygons"
+   }
+  },
+  {
+   "id": "f41b37d1-fc0a-54b5-8681-84d5cd62806d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "labels": [
+    "Match_Nearest_Polygon_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "match_nearest_polygon",
+    "description": "Assigns each point geometry to its closest polygon and returns point-to-polygon matches.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matches",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d6c89624-2b55-5311-987e-960e8c7b7807",
+   "to": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "to": "644cecd3-35d9-5357-bc68-a4a8f2654e7b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "644cecd3-35d9-5357-bc68-a4a8f2654e7b",
+   "to": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "to": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d6c89624-2b55-5311-987e-960e8c7b7807",
+   "to": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "to": "9d7eb8fb-b920-5a09-a18e-01d8d95a29e3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['polygons']": "from['outputs']['polygons']"
+    }
+   }
+  },
+  {
+   "from": "9d7eb8fb-b920-5a09-a18e-01d8d95a29e3",
+   "to": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['polygons']": "from['polygons']"
+    }
+   }
+  },
+  {
+   "from": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "to": "f41b37d1-fc0a-54b5-8681-84d5cd62806d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "f41b37d1-fc0a-54b5-8681-84d5cd62806d",
+   "to": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "to": "c96cf6cc-9f74-5ed8-af4f-ff630d7e4e95",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "to": "c81b68bd-8650-5b19-b99f-1e4482f95dcf",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d6c89624-2b55-5311-987e-960e8c7b7807",
+   "to": "e924cb6c-59e4-5563-ba95-716b4c6f811a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

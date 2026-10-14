@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "bd55bb8c-69a2-554d-90b2-b7948564fcb1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Geodesic Polygon Area Metrics",
+    "description": "Calculates geodesic area metrics for every polygon feature in an input polygons array and returns the corresponding area_metrics array.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "8c5620ac-13cb-50e2-841e-94f906d27cfb",
+   "labels": [
+    "Compute_Polygon_Area_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "compute_polygon_area",
+    "description": "Calculates geodesic area metrics for each polygon feature.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "area_metrics",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "bd55bb8c-69a2-554d-90b2-b7948564fcb1",
+   "to": "8c5620ac-13cb-50e2-841e-94f906d27cfb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

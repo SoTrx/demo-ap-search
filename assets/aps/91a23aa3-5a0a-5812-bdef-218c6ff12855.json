@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "91a23aa3-5a0a-5812-bdef-218c6ff12855",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupation Text Survey Weights",
+    "description": "It converts free-text occupational responses into coded survey records and produces per-response survey weights calibrated to target occupation shares.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "c5528754-ebac-5488-a9bc-b74bac3c6187",
+   "labels": [
+    "ISCO_Candidate_Matcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_candidate_matcher",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns candidate occupation codes with confidence scores. It may return multiple candidates for each text chunk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "occupation_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "faea90e4-a34a-5386-a40a-6577e59c7397",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "occupation_coding_records"
+   }
+  },
+  {
+   "id": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "labels": [
+    "ISCO_Code_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_code_selector",
+    "description": "Assigns one ISCO code to each survey response by selecting the highest confidence candidate that meets the threshold. It returns coded response records with the original response fields and the selected occupation code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b76ce0d2-2369-51d5-ab4a-ea9c6349533c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "coded_occupation_records"
+   }
+  },
+  {
+   "id": "cee25d1b-bf29-5d61-aabf-22f153a02f6f",
+   "labels": [
+    "Survey_Weight_Planner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_weight_planner",
+    "description": "Builds a post-stratification weight plan by comparing observed occupation group frequencies in coded response records with target population shares. It returns per-response weights as a mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "91a23aa3-5a0a-5812-bdef-218c6ff12855",
+   "to": "c5528754-ebac-5488-a9bc-b74bac3c6187",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c5528754-ebac-5488-a9bc-b74bac3c6187",
+   "to": "faea90e4-a34a-5386-a40a-6577e59c7397",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['occupation_coding_records']": "from['outputs']['occupation_coding_records']"
+    }
+   }
+  },
+  {
+   "from": "faea90e4-a34a-5386-a40a-6577e59c7397",
+   "to": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['occupation_coding_records']": "from['occupation_coding_records']"
+    }
+   }
+  },
+  {
+   "from": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "to": "c5528754-ebac-5488-a9bc-b74bac3c6187",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "91a23aa3-5a0a-5812-bdef-218c6ff12855",
+   "to": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "to": "b76ce0d2-2369-51d5-ab4a-ea9c6349533c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['coded_occupation_records']": "from['outputs']['coded_occupation_records']"
+    }
+   }
+  },
+  {
+   "from": "b76ce0d2-2369-51d5-ab4a-ea9c6349533c",
+   "to": "cee25d1b-bf29-5d61-aabf-22f153a02f6f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['coded_occupation_records']": "from['coded_occupation_records']"
+    }
+   }
+  },
+  {
+   "from": "cee25d1b-bf29-5d61-aabf-22f153a02f6f",
+   "to": "d5041464-059a-5744-a10d-07fb5d09f7a1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "91a23aa3-5a0a-5812-bdef-218c6ff12855",
+   "to": "cee25d1b-bf29-5d61-aabf-22f153a02f6f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "868646d5-b392-58e3-8240-041e6e89208d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Extraction From Search Hits",
+    "description": "This AP searches an index for text chunks matching a query and returns the named entities, with their surrounding context, found in those chunks.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "a4f9973c-a2d5-5547-a325-5bfc9ae57dda",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3f858946-278b-5f4d-957a-9a209528b780",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "2f5259ca-77db-5872-91c9-dd926e6c14eb",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "868646d5-b392-58e3-8240-041e6e89208d",
+   "to": "a4f9973c-a2d5-5547-a325-5bfc9ae57dda",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a4f9973c-a2d5-5547-a325-5bfc9ae57dda",
+   "to": "3f858946-278b-5f4d-957a-9a209528b780",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "3f858946-278b-5f4d-957a-9a209528b780",
+   "to": "2f5259ca-77db-5872-91c9-dd926e6c14eb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "2f5259ca-77db-5872-91c9-dd926e6c14eb",
+   "to": "a4f9973c-a2d5-5547-a325-5bfc9ae57dda",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "868646d5-b392-58e3-8240-041e6e89208d",
+   "to": "2f5259ca-77db-5872-91c9-dd926e6c14eb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

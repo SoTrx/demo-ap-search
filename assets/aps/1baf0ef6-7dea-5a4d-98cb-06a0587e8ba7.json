@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "1baf0ef6-7dea-5a4d-98cb-06a0587e8ba7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Summary Chart Annotation",
+    "description": "From a dashboard and a field mapping, it configures filters, writes an executive summary, and returns the input chart annotated with that summary and highlighting hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "7e1cd0cd-c985-5b34-bbd9-82905ef3baa6",
+   "labels": [
+    "Dashboard_Filter_Configurator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_filter_configurator",
+    "description": "Adds interactive filter controls to a dashboard by mapping selectable display fields to source table columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "38c9482c-3c79-5c57-b717-7ed64cc81d61",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "dashboard"
+   }
+  },
+  {
+   "id": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1d21aebf-95ab-5bbd-b05a-f7728e1a0a53",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "76dc2454-fb46-5f2b-9c40-c875deabbd59",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1baf0ef6-7dea-5a4d-98cb-06a0587e8ba7",
+   "to": "7e1cd0cd-c985-5b34-bbd9-82905ef3baa6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7e1cd0cd-c985-5b34-bbd9-82905ef3baa6",
+   "to": "38c9482c-3c79-5c57-b717-7ed64cc81d61",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['dashboard']": "from['outputs']['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "38c9482c-3c79-5c57-b717-7ed64cc81d61",
+   "to": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['dashboard']": "from['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "to": "7e1cd0cd-c985-5b34-bbd9-82905ef3baa6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1baf0ef6-7dea-5a4d-98cb-06a0587e8ba7",
+   "to": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "to": "1d21aebf-95ab-5bbd-b05a-f7728e1a0a53",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "1d21aebf-95ab-5bbd-b05a-f7728e1a0a53",
+   "to": "76dc2454-fb46-5f2b-9c40-c875deabbd59",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "76dc2454-fb46-5f2b-9c40-c875deabbd59",
+   "to": "f9632839-e77c-5f55-b686-3d905d4002b5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1baf0ef6-7dea-5a4d-98cb-06a0587e8ba7",
+   "to": "76dc2454-fb46-5f2b-9c40-c875deabbd59",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

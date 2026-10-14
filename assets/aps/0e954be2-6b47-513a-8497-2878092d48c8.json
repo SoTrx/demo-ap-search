@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "0e954be2-6b47-513a-8497-2878092d48c8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cross-Source Entity Match Groups",
+    "description": "Reconciles two entity sets by generating candidate matches on mapped attributes and clustering them into groups of records that represent the same real-world entity using a threshold.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "497bbb33-8688-5e0e-95a1-0a71e182d2f1",
+   "labels": [
+    "Entity_Match_Candidate_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_match_candidate_generator",
+    "description": "Generates candidate cross-source matches between two entity record sets using mapped attributes. It returns candidate pairs before clustering.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dcb1cf9b-8dce-5fdb-8464-49abf8e12b4b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "candidate_pairs"
+   }
+  },
+  {
+   "id": "a88e4f15-9932-53ef-a114-388283e42dd7",
+   "labels": [
+    "Entity_Cluster_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_cluster_builder",
+    "description": "Groups candidate entity matches into clusters that represent the same real-world entity. It uses the supplied threshold to avoid chaining weak matches together.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0e954be2-6b47-513a-8497-2878092d48c8",
+   "to": "497bbb33-8688-5e0e-95a1-0a71e182d2f1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "497bbb33-8688-5e0e-95a1-0a71e182d2f1",
+   "to": "dcb1cf9b-8dce-5fdb-8464-49abf8e12b4b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['candidate_pairs']": "from['outputs']['candidate_pairs']"
+    }
+   }
+  },
+  {
+   "from": "dcb1cf9b-8dce-5fdb-8464-49abf8e12b4b",
+   "to": "a88e4f15-9932-53ef-a114-388283e42dd7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['candidate_pairs']": "from['candidate_pairs']"
+    }
+   }
+  },
+  {
+   "from": "a88e4f15-9932-53ef-a114-388283e42dd7",
+   "to": "497bbb33-8688-5e0e-95a1-0a71e182d2f1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0e954be2-6b47-513a-8497-2878092d48c8",
+   "to": "a88e4f15-9932-53ef-a114-388283e42dd7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

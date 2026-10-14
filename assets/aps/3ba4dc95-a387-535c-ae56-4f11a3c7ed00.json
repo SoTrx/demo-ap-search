@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3ba4dc95-a387-535c-ae56-4f11a3c7ed00",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Evidence Passage Citation Generator",
+    "description": "Generates a concise answer to a query from supplied passages and returns the passages that support that answer as citation records.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "608de62d-6119-5bc0-9690-9a178f54f751",
+   "labels": [
+    "Answer_Synthesizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_synthesizer",
+    "description": "Generates an answer summary for a query from retrieved text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ebb1c5a3-4917-5038-84d5-ea3c81eb147d",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "answer_summary"
+   }
+  },
+  {
+   "id": "aa5790ee-1008-5663-a06a-89bd9e4c219b",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3ba4dc95-a387-535c-ae56-4f11a3c7ed00",
+   "to": "608de62d-6119-5bc0-9690-9a178f54f751",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "608de62d-6119-5bc0-9690-9a178f54f751",
+   "to": "ebb1c5a3-4917-5038-84d5-ea3c81eb147d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['answer_summary']": "from['outputs']['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "ebb1c5a3-4917-5038-84d5-ea3c81eb147d",
+   "to": "aa5790ee-1008-5663-a06a-89bd9e4c219b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "aa5790ee-1008-5663-a06a-89bd9e4c219b",
+   "to": "608de62d-6119-5bc0-9690-9a178f54f751",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3ba4dc95-a387-535c-ae56-4f11a3c7ed00",
+   "to": "aa5790ee-1008-5663-a06a-89bd9e4c219b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

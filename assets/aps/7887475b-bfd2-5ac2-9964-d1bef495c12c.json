@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "7887475b-bfd2-5ac2-9964-d1bef495c12c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Job Survey Response Summary",
+    "description": "Converts survey response records into a plain-text summary of respondents' job titles, employers, and duty descriptions.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "07a2ec61-c98e-52a3-aea9-561007432634",
+   "labels": [
+    "Occupation_Text_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_extractor",
+    "description": "Extracts free-text job titles, employer names, and duty descriptions from survey response records into text chunks. Each chunk keeps a response identifier.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0c28a925-ea20-5803-aebd-f8a738c89e73",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "ebb4f8e7-e329-59d5-a83a-30e816f97ab5",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7887475b-bfd2-5ac2-9964-d1bef495c12c",
+   "to": "07a2ec61-c98e-52a3-aea9-561007432634",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "07a2ec61-c98e-52a3-aea9-561007432634",
+   "to": "0c28a925-ea20-5803-aebd-f8a738c89e73",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "0c28a925-ea20-5803-aebd-f8a738c89e73",
+   "to": "ebb4f8e7-e329-59d5-a83a-30e816f97ab5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "ebb4f8e7-e329-59d5-a83a-30e816f97ab5",
+   "to": "07a2ec61-c98e-52a3-aea9-561007432634",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7887475b-bfd2-5ac2-9964-d1bef495c12c",
+   "to": "ebb4f8e7-e329-59d5-a83a-30e816f97ab5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

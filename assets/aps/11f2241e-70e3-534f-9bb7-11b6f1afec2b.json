@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "11f2241e-70e3-534f-9bb7-11b6f1afec2b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Survey Employment Answer Language Identification",
+    "description": "This AP takes survey response records, extracts written job-title, employer, and duty answers, and returns language codes and confidence scores for each answer.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "111f8ac4-8f57-5c56-9a91-c61f429554b9",
+   "labels": [
+    "Occupation_Text_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_extractor",
+    "description": "Extracts free-text job titles, employer names, and duty descriptions from survey response records into text chunks. Each chunk keeps a response identifier.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b2ea75c5-4ba0-51f0-96a2-0822146efc1c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "48e51ecf-abe6-5b6c-a3ec-ce532d68df9b",
+   "labels": [
+    "Written_Text_Language_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "written_text_language_detector",
+    "description": "Detects the written language of each text chunk. Returns language identification records with language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "11f2241e-70e3-534f-9bb7-11b6f1afec2b",
+   "to": "111f8ac4-8f57-5c56-9a91-c61f429554b9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "111f8ac4-8f57-5c56-9a91-c61f429554b9",
+   "to": "b2ea75c5-4ba0-51f0-96a2-0822146efc1c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "b2ea75c5-4ba0-51f0-96a2-0822146efc1c",
+   "to": "48e51ecf-abe6-5b6c-a3ec-ce532d68df9b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "48e51ecf-abe6-5b6c-a3ec-ce532d68df9b",
+   "to": "111f8ac4-8f57-5c56-9a91-c61f429554b9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "11f2241e-70e3-534f-9bb7-11b6f1afec2b",
+   "to": "48e51ecf-abe6-5b6c-a3ec-ce532d68df9b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

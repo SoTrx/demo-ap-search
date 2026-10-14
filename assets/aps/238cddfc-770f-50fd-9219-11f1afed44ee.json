@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "238cddfc-770f-50fd-9219-11f1afed44ee",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Regional Weather Summary Diff",
+    "description": "Compares a generated regional weather summary with a supplied regional summary table and returns a region-by-region difference report.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "4ad936ab-da4a-57cc-9fd4-3a5ae3866127",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3e1c86a1-2340-56da-b5c9-3ae083771f47",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "8daf6404-4b0a-5060-bf85-f8c2ea5200fe",
+   "labels": [
+    "Regional_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_summary_comparator",
+    "description": "Compares left and right regional summary tables and returns region-by-region differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "238cddfc-770f-50fd-9219-11f1afed44ee",
+   "to": "4ad936ab-da4a-57cc-9fd4-3a5ae3866127",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4ad936ab-da4a-57cc-9fd4-3a5ae3866127",
+   "to": "3e1c86a1-2340-56da-b5c9-3ae083771f47",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "3e1c86a1-2340-56da-b5c9-3ae083771f47",
+   "to": "8daf6404-4b0a-5060-bf85-f8c2ea5200fe",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "8daf6404-4b0a-5060-bf85-f8c2ea5200fe",
+   "to": "4ad936ab-da4a-57cc-9fd4-3a5ae3866127",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "238cddfc-770f-50fd-9219-11f1afed44ee",
+   "to": "8daf6404-4b0a-5060-bf85-f8c2ea5200fe",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

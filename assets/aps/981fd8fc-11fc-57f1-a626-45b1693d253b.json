@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "981fd8fc-11fc-57f1-a626-45b1693d253b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Patient Enrollment Diagnosis Coder",
+    "description": "Takes raw clinical table records with a field mapping, keeps patient-level rows without missing identifiers in an enrollment date range, and appends standardized diagnosis codes to diagnosis text.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "d48098ba-def8-569a-9df5-48ccfb4d50a5",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9699cac1-fe79-5c97-8aed-c20748fc2f31",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "patient_records"
+   }
+  },
+  {
+   "id": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "labels": [
+    "Enrollment_Date_Window_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "enrollment_date_window_filter",
+    "description": "Keeps patient records whose enrollment date is between the start and end dates. Dates are returned as normalized date strings.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c7ad91da-3ab4-5307-beb1-5687127426a4",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "patient_records"
+   }
+  },
+  {
+   "id": "1c41ae07-82ad-5362-8c06-1d13036c9623",
+   "labels": [
+    "Diagnosis_Term_Code_Mapper_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_coder",
+    "description": "Assigns standard codes to diagnosis text fields using terms and synonyms from the supplied medical code set. It appends coded diagnosis fields without removing source text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "981fd8fc-11fc-57f1-a626-45b1693d253b",
+   "to": "d48098ba-def8-569a-9df5-48ccfb4d50a5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d48098ba-def8-569a-9df5-48ccfb4d50a5",
+   "to": "9699cac1-fe79-5c97-8aed-c20748fc2f31",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['patient_records']": "from['outputs']['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "9699cac1-fe79-5c97-8aed-c20748fc2f31",
+   "to": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['patient_records']": "from['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "to": "d48098ba-def8-569a-9df5-48ccfb4d50a5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "981fd8fc-11fc-57f1-a626-45b1693d253b",
+   "to": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "to": "c7ad91da-3ab4-5307-beb1-5687127426a4",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['patient_records']": "from['outputs']['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "c7ad91da-3ab4-5307-beb1-5687127426a4",
+   "to": "1c41ae07-82ad-5362-8c06-1d13036c9623",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['patient_records']": "from['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "1c41ae07-82ad-5362-8c06-1d13036c9623",
+   "to": "a966b7d2-7032-55fb-a394-3011bb0df9e3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "981fd8fc-11fc-57f1-a626-45b1693d253b",
+   "to": "1c41ae07-82ad-5362-8c06-1d13036c9623",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

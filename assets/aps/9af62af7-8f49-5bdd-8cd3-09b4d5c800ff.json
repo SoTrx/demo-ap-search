@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "9af62af7-8f49-5bdd-8cd3-09b4d5c800ff",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Provenance-Gated SQL Results",
+    "description": "Checks a provenance report for required sources and transformations, and if compliant executes a provided SQL query to return the result rows.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "5c9656f4-84e3-5f75-9a21-bf3bb8af18ad",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9a5922ba-9afa-5c25-acbb-d777d7709458",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "470abc32-f4c2-5326-8f02-1f40477250c5",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9af62af7-8f49-5bdd-8cd3-09b4d5c800ff",
+   "to": "5c9656f4-84e3-5f75-9a21-bf3bb8af18ad",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5c9656f4-84e3-5f75-9a21-bf3bb8af18ad",
+   "to": "9a5922ba-9afa-5c25-acbb-d777d7709458",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "9a5922ba-9afa-5c25-acbb-d777d7709458",
+   "to": "470abc32-f4c2-5326-8f02-1f40477250c5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "470abc32-f4c2-5326-8f02-1f40477250c5",
+   "to": "5c9656f4-84e3-5f75-9a21-bf3bb8af18ad",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9af62af7-8f49-5bdd-8cd3-09b4d5c800ff",
+   "to": "470abc32-f4c2-5326-8f02-1f40477250c5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

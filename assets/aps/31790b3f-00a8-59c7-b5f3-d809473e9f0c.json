@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "31790b3f-00a8-59c7-b5f3-d809473e9f0c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Bar Chart Builder",
+    "description": "Builds a bar chart specification from prepared rows and a category/value mapping, then adds an annotation and highlight hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "3f744ff5-e2e1-5741-afa7-75ed4704d1fc",
+   "labels": [
+    "Bar_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bar_chart_builder",
+    "description": "Builds a bar chart specification from tabular rows and a column mapping that identifies the categorical field and numeric value field.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e98dad37-8bf1-5b8a-90e7-2f3d0b47b4e5",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "43ce1d71-2aef-5943-b1e8-cb7011c95e99",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "31790b3f-00a8-59c7-b5f3-d809473e9f0c",
+   "to": "3f744ff5-e2e1-5741-afa7-75ed4704d1fc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3f744ff5-e2e1-5741-afa7-75ed4704d1fc",
+   "to": "e98dad37-8bf1-5b8a-90e7-2f3d0b47b4e5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "e98dad37-8bf1-5b8a-90e7-2f3d0b47b4e5",
+   "to": "43ce1d71-2aef-5943-b1e8-cb7011c95e99",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "43ce1d71-2aef-5943-b1e8-cb7011c95e99",
+   "to": "3f744ff5-e2e1-5741-afa7-75ed4704d1fc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "31790b3f-00a8-59c7-b5f3-d809473e9f0c",
+   "to": "43ce1d71-2aef-5943-b1e8-cb7011c95e99",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

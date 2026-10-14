@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "feb9b50c-b19a-5cd0-80f0-00e99d248f00",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Natural Language to Safe SQL",
+    "description": "Converts a plain-language request into a safe SQL query.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "9b026d12-c328-55d4-8bd0-21657c50a90b",
+   "labels": [
+    "Text_To_SQL_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Text to SQL",
+    "description": "Translates a natural-language string into a safe SQL query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "nl",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "feb9b50c-b19a-5cd0-80f0-00e99d248f00",
+   "to": "9b026d12-c328-55d4-8bd0-21657c50a90b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

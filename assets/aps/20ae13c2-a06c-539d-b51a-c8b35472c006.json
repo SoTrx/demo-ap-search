@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "20ae13c2-a06c-539d-b51a-c8b35472c006",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Smoothed Time Series VaR",
+    "description": "Smooths a return series with a moving average and returns a historical value-at-risk scalar for the supplied confidence and horizon.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "7b387a4d-f7e5-5d47-a241-aecb91faa1a7",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "644196f3-9ec9-5f87-bb99-bf3edbb3e4fa",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "9c8b208e-2c5b-5541-ab4b-71b8ad0089f3",
+   "labels": [
+    "Value_At_Risk_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_at_risk_calculator",
+    "description": "Estimates historical value at risk from a return series at the supplied confidence level and forecast horizon. It returns a scalar risk measure.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "var",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "20ae13c2-a06c-539d-b51a-c8b35472c006",
+   "to": "7b387a4d-f7e5-5d47-a241-aecb91faa1a7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7b387a4d-f7e5-5d47-a241-aecb91faa1a7",
+   "to": "644196f3-9ec9-5f87-bb99-bf3edbb3e4fa",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "644196f3-9ec9-5f87-bb99-bf3edbb3e4fa",
+   "to": "9c8b208e-2c5b-5541-ab4b-71b8ad0089f3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['returns']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "9c8b208e-2c5b-5541-ab4b-71b8ad0089f3",
+   "to": "7b387a4d-f7e5-5d47-a241-aecb91faa1a7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "20ae13c2-a06c-539d-b51a-c8b35472c006",
+   "to": "9c8b208e-2c5b-5541-ab4b-71b8ad0089f3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

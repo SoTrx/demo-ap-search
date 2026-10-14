@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "9ef5b998-517e-5262-adcf-314470978633",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Filter Control Adder",
+    "description": "Adds interactive filter controls to a dashboard by binding selectable display fields to source table columns.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "922d1c48-0eda-5aa2-9e03-35ea222d67dc",
+   "labels": [
+    "Dashboard_Filter_Configurator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_filter_configurator",
+    "description": "Adds interactive filter controls to a dashboard by mapping selectable display fields to source table columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9ef5b998-517e-5262-adcf-314470978633",
+   "to": "922d1c48-0eda-5aa2-9e03-35ea222d67dc",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

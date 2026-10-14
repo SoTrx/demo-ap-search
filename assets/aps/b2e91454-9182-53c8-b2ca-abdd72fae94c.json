@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "b2e91454-9182-53c8-b2ca-abdd72fae94c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Series Smoothed Baseline",
+    "description": "Decomposes a seasonal time series and returns the smoothed result as a numeric array.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "368d0b38-7e6a-517f-8b01-05b8c4ccb609",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d4c4ea6d-9f64-562d-ad6f-f5534dcbaaff",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "a0d82f07-684a-5e8a-b30c-d0700a0a1743",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b2e91454-9182-53c8-b2ca-abdd72fae94c",
+   "to": "368d0b38-7e6a-517f-8b01-05b8c4ccb609",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "368d0b38-7e6a-517f-8b01-05b8c4ccb609",
+   "to": "d4c4ea6d-9f64-562d-ad6f-f5534dcbaaff",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "d4c4ea6d-9f64-562d-ad6f-f5534dcbaaff",
+   "to": "a0d82f07-684a-5e8a-b30c-d0700a0a1743",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "a0d82f07-684a-5e8a-b30c-d0700a0a1743",
+   "to": "368d0b38-7e6a-517f-8b01-05b8c4ccb609",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b2e91454-9182-53c8-b2ca-abdd72fae94c",
+   "to": "a0d82f07-684a-5e8a-b30c-d0700a0a1743",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

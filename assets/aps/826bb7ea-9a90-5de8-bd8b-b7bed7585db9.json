@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "826bb7ea-9a90-5de8-bd8b-b7bed7585db9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Categorical Encoding Descriptive Stats",
+    "description": "Encodes selected categorical columns into binary indicator columns, then computes overall and mapping-grouped mean, variance, skewness, and kurtosis for numeric columns.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "f1ebd4f5-0f66-50d8-8559-afcc527abb8c",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ed1bfb9f-e5a9-53f3-9f32-676a11e4c1c6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "c3dbba26-068d-5da9-a3f8-ea8a9f7e7073",
+   "labels": [
+    "Descriptive_Statistics_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "descriptive_statistics_calculator",
+    "description": "Computes mean, variance, skewness, and kurtosis for selected numeric columns in table rows. Also computes the same summaries within each group defined by the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "overall",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "grouped",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "826bb7ea-9a90-5de8-bd8b-b7bed7585db9",
+   "to": "f1ebd4f5-0f66-50d8-8559-afcc527abb8c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f1ebd4f5-0f66-50d8-8559-afcc527abb8c",
+   "to": "ed1bfb9f-e5a9-53f3-9f32-676a11e4c1c6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "ed1bfb9f-e5a9-53f3-9f32-676a11e4c1c6",
+   "to": "c3dbba26-068d-5da9-a3f8-ea8a9f7e7073",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "c3dbba26-068d-5da9-a3f8-ea8a9f7e7073",
+   "to": "f1ebd4f5-0f66-50d8-8559-afcc527abb8c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "826bb7ea-9a90-5de8-bd8b-b7bed7585db9",
+   "to": "c3dbba26-068d-5da9-a3f8-ea8a9f7e7073",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

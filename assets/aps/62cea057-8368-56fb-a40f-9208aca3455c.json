@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "62cea057-8368-56fb-a40f-9208aca3455c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Graph Query Entity Enrichment",
+    "description": "Runs a supplied graph query over triples and joins the returned rows into entity link records to produce enriched entity records.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "a9e83ce7-4fb7-5bb9-a06c-6e67a892001c",
+   "labels": [
+    "Graph_Query_Executor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_executor",
+    "description": "Runs a graph query plan over graph triples and returns matching result rows. It returns only query results, without adding or removing graph triples.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6628ed8a-88d6-527e-9506-88a049c4d517",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "4e02c5b7-2448-53d3-9e9f-d197af46b62a",
+   "labels": [
+    "Graph_Enrichment_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_enrichment_joiner",
+    "description": "Joins query result rows to entity link records to add graph-derived fields to each entity record. Returns enriched entity records without changing unrelated fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "enriched_entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "62cea057-8368-56fb-a40f-9208aca3455c",
+   "to": "a9e83ce7-4fb7-5bb9-a06c-6e67a892001c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a9e83ce7-4fb7-5bb9-a06c-6e67a892001c",
+   "to": "6628ed8a-88d6-527e-9506-88a049c4d517",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "6628ed8a-88d6-527e-9506-88a049c4d517",
+   "to": "4e02c5b7-2448-53d3-9e9f-d197af46b62a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['result_rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "4e02c5b7-2448-53d3-9e9f-d197af46b62a",
+   "to": "a9e83ce7-4fb7-5bb9-a06c-6e67a892001c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "62cea057-8368-56fb-a40f-9208aca3455c",
+   "to": "4e02c5b7-2448-53d3-9e9f-d197af46b62a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "eb2a6b2b-f40a-50a4-8caa-279af16d03f5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Threshold Exceedance Events",
+    "description": "Takes weather readings, a threshold, and a comparison direction, and outputs events for readings that exceed the threshold in that direction.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "eaaa87a0-4877-5bde-8317-bad0f92855af",
+   "labels": [
+    "Extreme_Event_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extreme_event_detector",
+    "description": "Detects weather readings that exceed a threshold in the chosen direction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "detection_mode",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "eb2a6b2b-f40a-50a4-8caa-279af16d03f5",
+   "to": "eaaa87a0-4877-5bde-8317-bad0f92855af",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

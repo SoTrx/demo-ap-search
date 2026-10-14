@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "e2aa2b53-5dae-57ba-bc21-d7b4f36a81f6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Translation Chunk Cleanup",
+    "description": "Cleans occupational text chunks and uses the cleaned source to repair translated occupational chunks, returning cleaned_translated_chunks.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "35c454b9-9604-555f-a454-6165c1b6a618",
+   "labels": [
+    "Occupation_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_cleaner",
+    "description": "Cleans occupational text chunks by normalizing case, whitespace, punctuation, and common abbreviations. It preserves chunk and response identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "39ece8dd-4a94-5605-bd9c-7713ef5b22f1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "1d584399-8cda-55ab-93aa-ae0e8e3a53d2",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e2aa2b53-5dae-57ba-bc21-d7b4f36a81f6",
+   "to": "35c454b9-9604-555f-a454-6165c1b6a618",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "35c454b9-9604-555f-a454-6165c1b6a618",
+   "to": "39ece8dd-4a94-5605-bd9c-7713ef5b22f1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "39ece8dd-4a94-5605-bd9c-7713ef5b22f1",
+   "to": "1d584399-8cda-55ab-93aa-ae0e8e3a53d2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "1d584399-8cda-55ab-93aa-ae0e8e3a53d2",
+   "to": "35c454b9-9604-555f-a454-6165c1b6a618",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e2aa2b53-5dae-57ba-bc21-d7b4f36a81f6",
+   "to": "1d584399-8cda-55ab-93aa-ae0e8e3a53d2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

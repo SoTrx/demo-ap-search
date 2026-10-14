@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e3ce827e-2d92-50d8-93f5-16aaa5715d11",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymisation Plan Builder",
+    "description": "Builds a pseudonymisation plan that tokenises direct personal fields while preserving quasi-identifier fields for re-identification checks.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "aa276a3a-dcf8-5cf3-8469-bab18d23e9a9",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a763a38f-b2ff-5aff-8c84-c0a5bc4e5ebf",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "70edd9ca-8f14-5c5a-b7b4-4aa71cd44991",
+   "labels": [
+    "Pseudonymisation_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pseudonymisation_plan_builder",
+    "description": "Builds a pseudonymisation plan from the personal-data and quasi-identifier reports. The plan names direct fields to tokenise and quasi-identifier fields to preserve for re-identification checks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e3ce827e-2d92-50d8-93f5-16aaa5715d11",
+   "to": "aa276a3a-dcf8-5cf3-8469-bab18d23e9a9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "aa276a3a-dcf8-5cf3-8469-bab18d23e9a9",
+   "to": "a763a38f-b2ff-5aff-8c84-c0a5bc4e5ebf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "a763a38f-b2ff-5aff-8c84-c0a5bc4e5ebf",
+   "to": "70edd9ca-8f14-5c5a-b7b4-4aa71cd44991",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['quasi_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "70edd9ca-8f14-5c5a-b7b4-4aa71cd44991",
+   "to": "aa276a3a-dcf8-5cf3-8469-bab18d23e9a9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e3ce827e-2d92-50d8-93f5-16aaa5715d11",
+   "to": "70edd9ca-8f14-5c5a-b7b4-4aa71cd44991",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "7c80373c-09b2-579e-91de-020968192ab3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Question Keyword Expansion",
+    "description": "Expands a raw dataset question with synonyms and related terms, then converts it into searchable keyword records and facets for catalogue discovery.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "0ddac95a-fc75-5ead-b0c4-bd2081ebf5c1",
+   "labels": [
+    "Query_Expansion_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "query_expander",
+    "description": "Expands an information-retrieval query with synonyms, abbreviations, and related terms.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "original_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1543f42f-3893-57ef-b8dc-4049c30e5fd6",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "expanded_query"
+   }
+  },
+  {
+   "id": "789b23fa-25b4-5891-858f-9e0238d11018",
+   "labels": [
+    "DatasetSearchQueryBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_search_query",
+    "description": "Translates a natural-language dataset question into keyword records for catalogue search. It expands each requested topic into searchable terms and facets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "question",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7c80373c-09b2-579e-91de-020968192ab3",
+   "to": "0ddac95a-fc75-5ead-b0c4-bd2081ebf5c1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0ddac95a-fc75-5ead-b0c4-bd2081ebf5c1",
+   "to": "1543f42f-3893-57ef-b8dc-4049c30e5fd6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['expanded_query']": "from['outputs']['expanded_query']"
+    }
+   }
+  },
+  {
+   "from": "1543f42f-3893-57ef-b8dc-4049c30e5fd6",
+   "to": "789b23fa-25b4-5891-858f-9e0238d11018",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['question']": "from['expanded_query']"
+    }
+   }
+  },
+  {
+   "from": "789b23fa-25b4-5891-858f-9e0238d11018",
+   "to": "0ddac95a-fc75-5ead-b0c4-bd2081ebf5c1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7c80373c-09b2-579e-91de-020968192ab3",
+   "to": "789b23fa-25b4-5891-858f-9e0238d11018",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "816e4f77-c3ce-5411-a911-9bd7a9ea8fd3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Rewrite Safety Flag",
+    "description": "Returns a boolean indicating whether the performance-rewritten SQL query references only tables and columns found in the provided schema.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "e2c3923f-658c-5ca6-9415-39a7747c471e",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c6669252-0c4b-553f-b2a6-09f3a1a2e24c",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "7f583991-5b78-5fd0-ab84-b42f81bd8459",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "816e4f77-c3ce-5411-a911-9bd7a9ea8fd3",
+   "to": "e2c3923f-658c-5ca6-9415-39a7747c471e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e2c3923f-658c-5ca6-9415-39a7747c471e",
+   "to": "c6669252-0c4b-553f-b2a6-09f3a1a2e24c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "c6669252-0c4b-553f-b2a6-09f3a1a2e24c",
+   "to": "7f583991-5b78-5fd0-ab84-b42f81bd8459",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "7f583991-5b78-5fd0-ab84-b42f81bd8459",
+   "to": "e2c3923f-658c-5ca6-9415-39a7747c471e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "816e4f77-c3ce-5411-a911-9bd7a9ea8fd3",
+   "to": "7f583991-5b78-5fd0-ab84-b42f81bd8459",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

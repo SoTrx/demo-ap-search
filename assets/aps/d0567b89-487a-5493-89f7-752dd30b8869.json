@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "d0567b89-487a-5493-89f7-752dd30b8869",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Text Chunk Cleaner",
+    "description": "Cleans occupational text chunks by normalizing case, whitespace, punctuation, and common abbreviations while preserving chunk and response identifiers.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "ef349710-6ffd-5865-865c-7b547d8c2798",
+   "labels": [
+    "Occupation_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_cleaner",
+    "description": "Cleans occupational text chunks by normalizing case, whitespace, punctuation, and common abbreviations. It preserves chunk and response identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d0567b89-487a-5493-89f7-752dd30b8869",
+   "to": "ef349710-6ffd-5865-865c-7b547d8c2798",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

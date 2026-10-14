@@ -1,0 +1,239 @@
+{
+ "nodes": [
+  {
+   "id": "92254cc3-446d-5e13-95cc-294e854859e7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Regional Weather Period Difference Report",
+    "description": "Filters weather readings to a date range, computes selected period summaries by region, and compares those with a supplied reference summary to report regional differences.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "dee8cdec-55ba-57d2-9e3b-9ccc5f0a821e",
+   "labels": [
+    "Time_Range_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "time_range_filter",
+    "description": "Keeps weather readings whose timestamps fall between two dates.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4e6c7cd5-b522-5917-8e46-f4051a8ea796",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "305e74ae-599b-5fee-8bef-714fd26d79a8",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "649e912c-f7fc-5f90-ba78-66d686d9c3d6",
+   "labels": [
+    "Regional_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_summary_comparator",
+    "description": "Compares left and right regional summary tables and returns region-by-region differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "92254cc3-446d-5e13-95cc-294e854859e7",
+   "to": "dee8cdec-55ba-57d2-9e3b-9ccc5f0a821e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "dee8cdec-55ba-57d2-9e3b-9ccc5f0a821e",
+   "to": "4e6c7cd5-b522-5917-8e46-f4051a8ea796",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "4e6c7cd5-b522-5917-8e46-f4051a8ea796",
+   "to": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "to": "dee8cdec-55ba-57d2-9e3b-9ccc5f0a821e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "92254cc3-446d-5e13-95cc-294e854859e7",
+   "to": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "to": "305e74ae-599b-5fee-8bef-714fd26d79a8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "305e74ae-599b-5fee-8bef-714fd26d79a8",
+   "to": "649e912c-f7fc-5f90-ba78-66d686d9c3d6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "649e912c-f7fc-5f90-ba78-66d686d9c3d6",
+   "to": "caafa2f0-a0d1-597b-8d3b-436ea285b051",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "92254cc3-446d-5e13-95cc-294e854859e7",
+   "to": "649e912c-f7fc-5f90-ba78-66d686d9c3d6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

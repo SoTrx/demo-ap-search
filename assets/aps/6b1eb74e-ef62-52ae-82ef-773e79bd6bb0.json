@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "6b1eb74e-ef62-52ae-82ef-773e79bd6bb0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema-Compatible Encoded Feature Rows",
+    "description": "It recommends value-level translations for mismatched columns, renames and recodes table rows to the target schema, and one-hot-encodes selected categorical feature columns into binary indicators while removing the original category columns.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "d94c7da7-8242-5286-8725-d56ffeecd0d1",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fad154aa-bcb3-5791-b596-27ffb0dc83f0",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "value_mapping"
+   }
+  },
+  {
+   "id": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8a34b125-d533-529a-92ba-db73439d1995",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "21c9f20d-4346-5157-887d-0eff809e10de",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6b1eb74e-ef62-52ae-82ef-773e79bd6bb0",
+   "to": "d94c7da7-8242-5286-8725-d56ffeecd0d1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d94c7da7-8242-5286-8725-d56ffeecd0d1",
+   "to": "fad154aa-bcb3-5791-b596-27ffb0dc83f0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['value_mapping']": "from['outputs']['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "fad154aa-bcb3-5791-b596-27ffb0dc83f0",
+   "to": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['value_mapping']": "from['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "to": "d94c7da7-8242-5286-8725-d56ffeecd0d1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6b1eb74e-ef62-52ae-82ef-773e79bd6bb0",
+   "to": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "to": "8a34b125-d533-529a-92ba-db73439d1995",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "8a34b125-d533-529a-92ba-db73439d1995",
+   "to": "21c9f20d-4346-5157-887d-0eff809e10de",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "21c9f20d-4346-5157-887d-0eff809e10de",
+   "to": "a04d8d05-e2d0-5c89-8770-86a77e928644",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6b1eb74e-ef62-52ae-82ef-773e79bd6bb0",
+   "to": "21c9f20d-4346-5157-887d-0eff809e10de",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

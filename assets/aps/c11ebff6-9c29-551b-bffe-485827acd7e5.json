@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "c11ebff6-9c29-551b-bffe-485827acd7e5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation-checked Dashboard SQL Results",
+    "description": "It summarizes dashboard panels, filters, and annotations, checks citation support for the query, and returns SQL result rows.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "c74d0c80-51e5-5dd6-8432-eebd0144d0e3",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3788b11c-4f99-5c4f-bb26-5200c94eba2a",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3b2f8a22-bc5f-5851-83af-920a9ea19a0a",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "supported"
+   }
+  },
+  {
+   "id": "24d803ef-aa4c-54c3-b3a5-226661752c3a",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c11ebff6-9c29-551b-bffe-485827acd7e5",
+   "to": "c74d0c80-51e5-5dd6-8432-eebd0144d0e3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c74d0c80-51e5-5dd6-8432-eebd0144d0e3",
+   "to": "3788b11c-4f99-5c4f-bb26-5200c94eba2a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "3788b11c-4f99-5c4f-bb26-5200c94eba2a",
+   "to": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "to": "c74d0c80-51e5-5dd6-8432-eebd0144d0e3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c11ebff6-9c29-551b-bffe-485827acd7e5",
+   "to": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "to": "3b2f8a22-bc5f-5851-83af-920a9ea19a0a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['supported']": "from['outputs']['supported']"
+    }
+   }
+  },
+  {
+   "from": "3b2f8a22-bc5f-5851-83af-920a9ea19a0a",
+   "to": "24d803ef-aa4c-54c3-b3a5-226661752c3a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['supported']"
+    }
+   }
+  },
+  {
+   "from": "24d803ef-aa4c-54c3-b3a5-226661752c3a",
+   "to": "e60a8f49-67da-5184-b536-3f0dbc65e06c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c11ebff6-9c29-551b-bffe-485827acd7e5",
+   "to": "24d803ef-aa4c-54c3-b3a5-226661752c3a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

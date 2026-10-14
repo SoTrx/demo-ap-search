@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "2f7d8924-d0cd-5e0a-b640-b3886687898c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjusted Volatility Chart",
+    "description": "Produces a line-chart specification for rolling volatility computed from a seasonally adjusted input series, using a supplied seasonality profile, rolling window, and metric name.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "56bec4a5-cdcd-51da-ba62-31ba4b1e00cf",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "29ae802a-8d23-55af-b412-f77ca9c53874",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "adjusted_series"
+   }
+  },
+  {
+   "id": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "96f768b4-b28a-5819-8844-0d5151634ddf",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "939c4dd8-5bef-520a-9272-59da16c4f502",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2f7d8924-d0cd-5e0a-b640-b3886687898c",
+   "to": "56bec4a5-cdcd-51da-ba62-31ba4b1e00cf",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "56bec4a5-cdcd-51da-ba62-31ba4b1e00cf",
+   "to": "29ae802a-8d23-55af-b412-f77ca9c53874",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['adjusted_series']": "from['outputs']['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "29ae802a-8d23-55af-b412-f77ca9c53874",
+   "to": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['returns']": "from['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "to": "56bec4a5-cdcd-51da-ba62-31ba4b1e00cf",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "2f7d8924-d0cd-5e0a-b640-b3886687898c",
+   "to": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "to": "96f768b4-b28a-5819-8844-0d5151634ddf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "96f768b4-b28a-5819-8844-0d5151634ddf",
+   "to": "939c4dd8-5bef-520a-9272-59da16c4f502",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "939c4dd8-5bef-520a-9272-59da16c4f502",
+   "to": "27c3bc48-82af-5c12-9796-e1092c2b86d6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "2f7d8924-d0cd-5e0a-b640-b3886687898c",
+   "to": "939c4dd8-5bef-520a-9272-59da16c4f502",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "0c0dda60-092b-5499-8553-a1307e7f5f0e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate Candidate Group Finder",
+    "description": "Groups input table rows into duplicate candidate clusters according to a matching key and returns the groups without deleting rows.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "29e60136-5b2e-5b87-af57-79d1fee47858",
+   "labels": [
+    "Duplicate_Record_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_record_detector",
+    "description": "Groups table rows into duplicate candidate clusters using a duplicate-key specification. Returns duplicate groups without deleting rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0c0dda60-092b-5499-8553-a1307e7f5f0e",
+   "to": "29e60136-5b2e-5b87-af57-79d1fee47858",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

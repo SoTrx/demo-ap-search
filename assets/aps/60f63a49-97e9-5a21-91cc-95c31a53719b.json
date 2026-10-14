@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "60f63a49-97e9-5a21-91cc-95c31a53719b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cross-source Entity Candidate Matching",
+    "description": "Compares two dataset profiles, suggests value translations for mapped fields, and returns candidate cross-source record pairs before grouping.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "9e0e6440-a6f8-53b5-bdbe-471a8a250983",
+   "labels": [
+    "Domain_Comparison_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "domain_comparison_builder",
+    "description": "Compares two dataset profiles and reports columns whose value domains are incompatible. Returns the comparison report without rewriting the datasets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f20a3c7d-aacf-5d47-a195-4349714fc098",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "46a99ac1-f5e1-5122-81ac-58486ea253d5",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "value_mapping"
+   }
+  },
+  {
+   "id": "71c96d16-4b98-5da2-8a05-de82f817d9b1",
+   "labels": [
+    "Entity_Match_Candidate_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_match_candidate_generator",
+    "description": "Generates candidate cross-source matches between two entity record sets using mapped attributes. It returns candidate pairs before clustering.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "60f63a49-97e9-5a21-91cc-95c31a53719b",
+   "to": "9e0e6440-a6f8-53b5-bdbe-471a8a250983",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9e0e6440-a6f8-53b5-bdbe-471a8a250983",
+   "to": "f20a3c7d-aacf-5d47-a195-4349714fc098",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "f20a3c7d-aacf-5d47-a195-4349714fc098",
+   "to": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['comparison_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "to": "9e0e6440-a6f8-53b5-bdbe-471a8a250983",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "60f63a49-97e9-5a21-91cc-95c31a53719b",
+   "to": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "to": "46a99ac1-f5e1-5122-81ac-58486ea253d5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['value_mapping']": "from['outputs']['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "46a99ac1-f5e1-5122-81ac-58486ea253d5",
+   "to": "71c96d16-4b98-5da2-8a05-de82f817d9b1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['value_mapping']": "from['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "71c96d16-4b98-5da2-8a05-de82f817d9b1",
+   "to": "24ef258e-2d61-5330-92e0-00472a829d14",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "60f63a49-97e9-5a21-91cc-95c31a53719b",
+   "to": "71c96d16-4b98-5da2-8a05-de82f817d9b1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

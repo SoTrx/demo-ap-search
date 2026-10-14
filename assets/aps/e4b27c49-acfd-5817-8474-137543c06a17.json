@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "e4b27c49-acfd-5817-8474-137543c06a17",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Spoken Language Identification for Audio Segments",
+    "description": "Identifies the spoken language of each provided audio segment and returns language records with ISO codes and confidence scores.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "21f36958-f6b7-5df7-ba85-c7058c023ded",
+   "labels": [
+    "Language_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_identifier",
+    "description": "Detects the spoken language for each audio segment. Returns language identification records with ISO language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e4b27c49-acfd-5817-8474-137543c06a17",
+   "to": "21f36958-f6b7-5df7-ba85-c7058c023ded",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

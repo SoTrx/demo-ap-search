@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "f5a75ecc-23c4-56d1-9665-db4a40039184",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate Candidate Group Builder",
+    "description": "The AP infers likely duplicate-matching fields from a dataset profile and groups the supplied rows into candidate duplicate clusters.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "a6e82800-6fb1-5434-a78c-271fed8f1a1a",
+   "labels": [
+    "Duplicate_Key_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_key_selector",
+    "description": "Selects candidate duplicate-key columns and matching options from a dataset profile. Returns a duplicate-key specification without grouping rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "bcfc6160-9d98-5193-8741-25bf355ad53e",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "key_spec"
+   }
+  },
+  {
+   "id": "f8200d72-5f01-557d-92f1-7f80db13b199",
+   "labels": [
+    "Duplicate_Record_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_record_detector",
+    "description": "Groups table rows into duplicate candidate clusters using a duplicate-key specification. Returns duplicate groups without deleting rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f5a75ecc-23c4-56d1-9665-db4a40039184",
+   "to": "a6e82800-6fb1-5434-a78c-271fed8f1a1a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a6e82800-6fb1-5434-a78c-271fed8f1a1a",
+   "to": "bcfc6160-9d98-5193-8741-25bf355ad53e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['key_spec']": "from['outputs']['key_spec']"
+    }
+   }
+  },
+  {
+   "from": "bcfc6160-9d98-5193-8741-25bf355ad53e",
+   "to": "f8200d72-5f01-557d-92f1-7f80db13b199",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['key_spec']": "from['key_spec']"
+    }
+   }
+  },
+  {
+   "from": "f8200d72-5f01-557d-92f1-7f80db13b199",
+   "to": "a6e82800-6fb1-5434-a78c-271fed8f1a1a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f5a75ecc-23c4-56d1-9665-db4a40039184",
+   "to": "f8200d72-5f01-557d-92f1-7f80db13b199",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "56719c88-e7cf-5762-aa0c-7a2a3dfe99d0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Text Chunk Language Detection",
+    "description": "Detects the written language of each text chunk and returns language records containing language codes and confidence scores.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "d69ea8ef-c342-53d9-96e7-0c8e89189a62",
+   "labels": [
+    "Written_Text_Language_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "written_text_language_detector",
+    "description": "Detects the written language of each text chunk. Returns language identification records with language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "56719c88-e7cf-5762-aa0c-7a2a3dfe99d0",
+   "to": "d69ea8ef-c342-53d9-96e7-0c8e89189a62",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

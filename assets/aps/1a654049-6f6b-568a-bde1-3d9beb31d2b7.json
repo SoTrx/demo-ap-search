@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "1a654049-6f6b-568a-bde1-3d9beb31d2b7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Correlation Significance Hypothesis Testing",
+    "description": "Evaluates a supplied correlation matrix against a significance threshold and returns pair-level p-values and significant/not significant decisions.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "39ebf0e2-3bcc-5a69-b8b9-0bd2a5e95f77",
+   "labels": [
+    "Correlation_Significance_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "correlation_significance_test",
+    "description": "Tests whether correlations in a correlation matrix are statistically significant at the supplied threshold. Returns a hypothesis test result with pair-level p-values and decisions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1a654049-6f6b-568a-bde1-3d9beb31d2b7",
+   "to": "39ebf0e2-3bcc-5a69-b8b9-0bd2a5e95f77",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

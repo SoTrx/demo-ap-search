@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "bfae4939-3592-5876-9600-5b6314ac1904",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Class Predictions with Probabilities",
+    "description": "Runs a trained model over supplied feature rows and returns one result row per input row with its predicted class and class probabilities.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "42781f30-6ce3-5b25-800d-6cfc7a5946ee",
+   "labels": [
+    "Predict_With_Classifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "predict_with_classifier",
+    "description": "Applies the trained classifier to feature rows and returns result rows containing predicted classes and class probabilities.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "bfae4939-3592-5876-9600-5b6314ac1904",
+   "to": "42781f30-6ce3-5b25-800d-6cfc7a5946ee",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

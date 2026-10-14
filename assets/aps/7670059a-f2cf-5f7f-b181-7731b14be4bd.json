@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "7670059a-f2cf-5f7f-b181-7731b14be4bd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Natural Language SQL Explanation",
+    "description": "This pattern turns a natural-language request and schema into a safe SQL query, then explains that query in plain language.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "84b88ae4-13ad-5008-9f35-cb81aebb4f6d",
+   "labels": [
+    "Text_To_SQL_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Text to SQL",
+    "description": "Translates a natural-language string into a safe SQL query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "nl",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "88754c63-c484-52c2-a845-c3ab6b75116c",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "a240697e-e005-52e8-a597-7b608f929dcc",
+   "labels": [
+    "SQL_With_Context_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL With Context",
+    "description": "Produces a plain-language explanation of an SQL query given the target schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "explanation",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7670059a-f2cf-5f7f-b181-7731b14be4bd",
+   "to": "84b88ae4-13ad-5008-9f35-cb81aebb4f6d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "84b88ae4-13ad-5008-9f35-cb81aebb4f6d",
+   "to": "88754c63-c484-52c2-a845-c3ab6b75116c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "88754c63-c484-52c2-a845-c3ab6b75116c",
+   "to": "a240697e-e005-52e8-a597-7b608f929dcc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "a240697e-e005-52e8-a597-7b608f929dcc",
+   "to": "84b88ae4-13ad-5008-9f35-cb81aebb4f6d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7670059a-f2cf-5f7f-b181-7731b14be4bd",
+   "to": "a240697e-e005-52e8-a597-7b608f929dcc",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

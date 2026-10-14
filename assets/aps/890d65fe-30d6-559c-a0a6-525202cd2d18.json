@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "890d65fe-30d6-559c-a0a6-525202cd2d18",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing Value Rule Violations",
+    "description": "It fills missing values in selected feature columns and returns row-level validation violations for the completed rows.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "a5c7d208-1dd2-58c4-8993-a71c10a88eff",
+   "labels": [
+    "Impute_Missing_Values_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "impute_missing_values",
+    "description": "Fills missing values in selected feature columns of table rows using a mean for numeric columns and a mode for categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "af80377e-4b36-5e08-9644-d60d2c5f8919",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filled_rows"
+   }
+  },
+  {
+   "id": "85dbfae0-159b-5e80-9db5-ed3b32c4d52d",
+   "labels": [
+    "Table_Rule_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "table_rule_validator",
+    "description": "Validates table rows against a validation rule specification and returns row-level violations. Returns only violations, without modifying the rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rules",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "890d65fe-30d6-559c-a0a6-525202cd2d18",
+   "to": "a5c7d208-1dd2-58c4-8993-a71c10a88eff",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a5c7d208-1dd2-58c4-8993-a71c10a88eff",
+   "to": "af80377e-4b36-5e08-9644-d60d2c5f8919",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filled_rows']": "from['outputs']['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "af80377e-4b36-5e08-9644-d60d2c5f8919",
+   "to": "85dbfae0-159b-5e80-9db5-ed3b32c4d52d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "85dbfae0-159b-5e80-9db5-ed3b32c4d52d",
+   "to": "a5c7d208-1dd2-58c4-8993-a71c10a88eff",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "890d65fe-30d6-559c-a0a6-525202cd2d18",
+   "to": "85dbfae0-159b-5e80-9db5-ed3b32c4d52d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

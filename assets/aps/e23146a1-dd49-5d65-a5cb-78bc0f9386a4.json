@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "e23146a1-dd49-5d65-a5cb-78bc0f9386a4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupation Survey Weight Plan",
+    "description": "Creates per-response survey weights from coded occupation records and occupation group mappings so the observed occupation mix matches target population shares.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "a45b7679-fa65-53c7-9cbf-2d6d773f25e1",
+   "labels": [
+    "Survey_Weight_Planner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_weight_planner",
+    "description": "Builds a post-stratification weight plan by comparing observed occupation group frequencies in coded response records with target population shares. It returns per-response weights as a mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e23146a1-dd49-5d65-a5cb-78bc0f9386a4",
+   "to": "a45b7679-fa65-53c7-9cbf-2d6d773f25e1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "d31c984a-4673-5296-9afd-c4abe5be5fa4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Volatility Profile",
+    "description": "Computes rolling volatility from a return series and outputs a seasonal profile of that volatility by period.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "89f02ab9-f583-59f5-a99d-3544f7314c2f",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "71d1dd4d-a16a-5e6a-9638-c9a8ca512e39",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "040d7a5e-727b-541f-8f37-d7f89e1e33b9",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d31c984a-4673-5296-9afd-c4abe5be5fa4",
+   "to": "89f02ab9-f583-59f5-a99d-3544f7314c2f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "89f02ab9-f583-59f5-a99d-3544f7314c2f",
+   "to": "71d1dd4d-a16a-5e6a-9638-c9a8ca512e39",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "71d1dd4d-a16a-5e6a-9638-c9a8ca512e39",
+   "to": "040d7a5e-727b-541f-8f37-d7f89e1e33b9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "040d7a5e-727b-541f-8f37-d7f89e1e33b9",
+   "to": "89f02ab9-f583-59f5-a99d-3544f7314c2f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d31c984a-4673-5296-9afd-c4abe5be5fa4",
+   "to": "040d7a5e-727b-541f-8f37-d7f89e1e33b9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

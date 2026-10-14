@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "97813f0a-ebd4-5049-a380-478a2501c08d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Lexical BM25 Passage Search",
+    "description": "Searches an existing text index with a query string and returns matching passages in relevance order.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "5f4bbfba-3039-57cd-8572-b9ce558e7045",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "97813f0a-ebd4-5049-a380-478a2501c08d",
+   "to": "5f4bbfba-3039-57cd-8572-b9ce558e7045",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

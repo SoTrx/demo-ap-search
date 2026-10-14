@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "d0555b26-dc74-5093-aba2-24e988511d5b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Regression Prediction with Intervals",
+    "description": "Applies a fitted regression model to new rows and returns each prediction together with lower and upper prediction intervals controlled by alpha.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "9198d712-cbf6-518d-a21f-4807f65d658f",
+   "labels": [
+    "Regression_Prediction_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regression_prediction_interval",
+    "description": "Applies a fitted regression model to new table rows to produce predicted values with prediction intervals. The threshold value controls the width of the intervals.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "new_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d0555b26-dc74-5093-aba2-24e988511d5b",
+   "to": "9198d712-cbf6-518d-a21f-4807f65d658f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

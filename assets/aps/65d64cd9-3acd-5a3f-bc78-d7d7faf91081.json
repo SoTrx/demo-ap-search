@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "65d64cd9-3acd-5a3f-bc78-d7d7faf91081",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Survey Response Imputation Extractor",
+    "description": "Imputes missing numeric and categorical feature values in raw table records and returns only response-identified survey records with columns selected by mapping.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "31f79ddb-49a1-5401-a049-cc9d646d95c5",
+   "labels": [
+    "Impute_Missing_Values_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "impute_missing_values",
+    "description": "Fills missing values in selected feature columns of table rows using a mean for numeric columns and a mode for categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9af58f3b-edaa-588a-9976-90a2585e9d32",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filled_rows"
+   }
+  },
+  {
+   "id": "73328c56-2f25-53eb-8d23-1d635327a93b",
+   "labels": [
+    "Survey_Response_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_response_extractor",
+    "description": "Extracts survey response rows from table records and keeps only the columns named in the mapping. Rows without a response identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "65d64cd9-3acd-5a3f-bc78-d7d7faf91081",
+   "to": "31f79ddb-49a1-5401-a049-cc9d646d95c5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "31f79ddb-49a1-5401-a049-cc9d646d95c5",
+   "to": "9af58f3b-edaa-588a-9976-90a2585e9d32",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filled_rows']": "from['outputs']['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "9af58f3b-edaa-588a-9976-90a2585e9d32",
+   "to": "73328c56-2f25-53eb-8d23-1d635327a93b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_records']": "from['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "73328c56-2f25-53eb-8d23-1d635327a93b",
+   "to": "31f79ddb-49a1-5401-a049-cc9d646d95c5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "65d64cd9-3acd-5a3f-bc78-d7d7faf91081",
+   "to": "73328c56-2f25-53eb-8d23-1d635327a93b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

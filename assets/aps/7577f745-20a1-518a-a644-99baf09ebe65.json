@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "7577f745-20a1-518a-a644-99baf09ebe65",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Natural Language Weather Graph Readings",
+    "description": "Given a natural-language graph question, schema, triples, and variable name, it generates a query, executes it over the triples, and returns normalized weather reading records.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "fb949e96-2406-5f44-8188-80969896b2e0",
+   "labels": [
+    "Graph_Query_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_builder",
+    "description": "Translates a natural-language graph question into an executable graph query plan. The graph schema is used to resolve query entities, relation names, and property paths.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "natural_language_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "052a1503-a0b9-55a5-9fae-72b67bc91f58",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "graph_query_plan"
+   }
+  },
+  {
+   "id": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "labels": [
+    "Graph_Query_Executor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_executor",
+    "description": "Runs a graph query plan over graph triples and returns matching result rows. It returns only query results, without adding or removing graph triples.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0c05d7cd-9509-597f-b550-177beb148983",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "68d153ac-915a-56e8-887e-31baa90468dd",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7577f745-20a1-518a-a644-99baf09ebe65",
+   "to": "fb949e96-2406-5f44-8188-80969896b2e0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fb949e96-2406-5f44-8188-80969896b2e0",
+   "to": "052a1503-a0b9-55a5-9fae-72b67bc91f58",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_query_plan']": "from['outputs']['graph_query_plan']"
+    }
+   }
+  },
+  {
+   "from": "052a1503-a0b9-55a5-9fae-72b67bc91f58",
+   "to": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['graph_query_plan']": "from['graph_query_plan']"
+    }
+   }
+  },
+  {
+   "from": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "to": "fb949e96-2406-5f44-8188-80969896b2e0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7577f745-20a1-518a-a644-99baf09ebe65",
+   "to": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "to": "0c05d7cd-9509-597f-b550-177beb148983",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "0c05d7cd-9509-597f-b550-177beb148983",
+   "to": "68d153ac-915a-56e8-887e-31baa90468dd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "68d153ac-915a-56e8-887e-31baa90468dd",
+   "to": "63aa8cc5-6c9a-577f-a3ee-577da704fdef",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7577f745-20a1-518a-a644-99baf09ebe65",
+   "to": "68d153ac-915a-56e8-887e-31baa90468dd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

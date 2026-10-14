@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "3f5eb32e-cd22-5c9c-ad61-18d07b67bfee",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Level Series Percentage Returns",
+    "description": "Transforms a level time-series array into a time-series array of period-over-period percentage returns at the specified granularity.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "ed1b209f-0475-5aca-88aa-11354fec6789",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3f5eb32e-cd22-5c9c-ad61-18d07b67bfee",
+   "to": "ed1b209f-0475-5aca-88aa-11354fec6789",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

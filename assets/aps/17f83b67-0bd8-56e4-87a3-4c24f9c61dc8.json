@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "17f83b67-0bd8-56e4-87a3-4c24f9c61dc8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Query Answer Summary Generator",
+    "description": "Generates a concise answer summary for a query by synthesizing retrieved text passages.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "cd8d9b95-90c2-57b4-b798-306ff993cefe",
+   "labels": [
+    "Answer_Synthesizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_synthesizer",
+    "description": "Generates an answer summary for a query from retrieved text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "17f83b67-0bd8-56e4-87a3-4c24f9c61dc8",
+   "to": "cd8d9b95-90c2-57b4-b798-306ff993cefe",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

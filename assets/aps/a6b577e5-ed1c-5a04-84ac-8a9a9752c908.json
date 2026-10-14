@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "a6b577e5-ed1c-5a04-84ac-8a9a9752c908",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Change Point Finder",
+    "description": "Filters weather readings to a date range, extracts a chosen variable as an ordered time series, and detects abrupt level or trend changes using a sensitivity threshold.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "722dde71-334c-50b6-99b7-505097e78f5a",
+   "labels": [
+    "Time_Range_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "time_range_filter",
+    "description": "Keeps weather readings whose timestamps fall between two dates.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6e0124f7-e4e0-5061-9d71-5bc052f4eceb",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c9e7430a-6697-5b23-abaa-cb9b1d15a7dc",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "62cd1159-8a5a-547a-b53e-233d40e008b7",
+   "labels": [
+    "Time_Series_Change_Point_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Change Point Detector",
+    "description": "Detects abrupt level or trend changes in a time series using a sensitivity threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "change_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a6b577e5-ed1c-5a04-84ac-8a9a9752c908",
+   "to": "722dde71-334c-50b6-99b7-505097e78f5a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "722dde71-334c-50b6-99b7-505097e78f5a",
+   "to": "6e0124f7-e4e0-5061-9d71-5bc052f4eceb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "6e0124f7-e4e0-5061-9d71-5bc052f4eceb",
+   "to": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "to": "722dde71-334c-50b6-99b7-505097e78f5a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a6b577e5-ed1c-5a04-84ac-8a9a9752c908",
+   "to": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "to": "c9e7430a-6697-5b23-abaa-cb9b1d15a7dc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "c9e7430a-6697-5b23-abaa-cb9b1d15a7dc",
+   "to": "62cd1159-8a5a-547a-b53e-233d40e008b7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "62cd1159-8a5a-547a-b53e-233d40e008b7",
+   "to": "ec3b1bcc-4d51-56e5-a727-ff08fd5d5fa2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a6b577e5-ed1c-5a04-84ac-8a9a9752c908",
+   "to": "62cd1159-8a5a-547a-b53e-233d40e008b7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

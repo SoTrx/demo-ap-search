@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "dc01705a-7b1f-5beb-a5b5-0fe62d36a57d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Unique Row Prediction Scoring",
+    "description": "Removes duplicate table records by group, encodes selected categorical columns as binary indicators, and applies a trained classifier to produce predicted classes and probabilities.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "f2645929-7faa-51b5-9bdf-7f713c4dce25",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "370319ef-3e8f-5e86-bc0c-f5568f5ce884",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "deduplicated_rows"
+   }
+  },
+  {
+   "id": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3710aac8-53e0-513e-ac79-81d18a626235",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "ddd21702-2c08-5322-984c-586ea892d59e",
+   "labels": [
+    "Predict_With_Classifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "predict_with_classifier",
+    "description": "Applies the trained classifier to feature rows and returns result rows containing predicted classes and class probabilities.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dc01705a-7b1f-5beb-a5b5-0fe62d36a57d",
+   "to": "f2645929-7faa-51b5-9bdf-7f713c4dce25",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f2645929-7faa-51b5-9bdf-7f713c4dce25",
+   "to": "370319ef-3e8f-5e86-bc0c-f5568f5ce884",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['deduplicated_rows']": "from['outputs']['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "370319ef-3e8f-5e86-bc0c-f5568f5ce884",
+   "to": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "to": "f2645929-7faa-51b5-9bdf-7f713c4dce25",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc01705a-7b1f-5beb-a5b5-0fe62d36a57d",
+   "to": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "to": "3710aac8-53e0-513e-ac79-81d18a626235",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "3710aac8-53e0-513e-ac79-81d18a626235",
+   "to": "ddd21702-2c08-5322-984c-586ea892d59e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "ddd21702-2c08-5322-984c-586ea892d59e",
+   "to": "173fa8ce-0477-509d-9b3a-3788dda735e7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc01705a-7b1f-5beb-a5b5-0fe62d36a57d",
+   "to": "ddd21702-2c08-5322-984c-586ea892d59e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

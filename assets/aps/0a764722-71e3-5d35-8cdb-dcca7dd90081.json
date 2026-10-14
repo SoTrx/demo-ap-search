@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "0a764722-71e3-5d35-8cdb-dcca7dd90081",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Parse Citations From Text Chunks",
+    "description": "Detects references inside supplied text chunks and returns them as structured records with author, title, venue, and year.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "83744472-0f1f-55e1-afc2-07beb26a2514",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b934da6a-4989-56c2-9069-996a5bf5532a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citation_records"
+   }
+  },
+  {
+   "id": "9b5e5366-6b0e-56ca-83d8-3730adadb61b",
+   "labels": [
+    "Citation_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_citations",
+    "description": "Parses citation records into consistent fields such as authors, title, venue, and year.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0a764722-71e3-5d35-8cdb-dcca7dd90081",
+   "to": "83744472-0f1f-55e1-afc2-07beb26a2514",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "83744472-0f1f-55e1-afc2-07beb26a2514",
+   "to": "b934da6a-4989-56c2-9069-996a5bf5532a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citation_records']": "from['outputs']['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "b934da6a-4989-56c2-9069-996a5bf5532a",
+   "to": "9b5e5366-6b0e-56ca-83d8-3730adadb61b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citation_records']": "from['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "9b5e5366-6b0e-56ca-83d8-3730adadb61b",
+   "to": "83744472-0f1f-55e1-afc2-07beb26a2514",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0a764722-71e3-5d35-8cdb-dcca7dd90081",
+   "to": "9b5e5366-6b0e-56ca-83d8-3730adadb61b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

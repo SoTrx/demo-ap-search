@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e31d6e6c-89c2-532a-87af-aa9f2362013c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Economic Price Anomaly Finder",
+    "description": "Builds an ordered economic indicator or price series from rows and a column mapping, then flags observations whose deviation exceeds a numeric threshold.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "9802a565-028b-5b7d-9673-e09b90fbb0cc",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "25deafde-db37-53ad-8f40-8b7d2848d0ae",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "ca41cdf0-e7bd-5382-bee6-8bc0ea71ecbd",
+   "labels": [
+    "Time_Series_Anomaly_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Anomaly Detector",
+    "description": "Flags observations in a time series whose deviation exceeds a numeric threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "anomalies",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e31d6e6c-89c2-532a-87af-aa9f2362013c",
+   "to": "9802a565-028b-5b7d-9673-e09b90fbb0cc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9802a565-028b-5b7d-9673-e09b90fbb0cc",
+   "to": "25deafde-db37-53ad-8f40-8b7d2848d0ae",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "25deafde-db37-53ad-8f40-8b7d2848d0ae",
+   "to": "ca41cdf0-e7bd-5382-bee6-8bc0ea71ecbd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "ca41cdf0-e7bd-5382-bee6-8bc0ea71ecbd",
+   "to": "9802a565-028b-5b7d-9673-e09b90fbb0cc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e31d6e6c-89c2-532a-87af-aa9f2362013c",
+   "to": "ca41cdf0-e7bd-5382-bee6-8bc0ea71ecbd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

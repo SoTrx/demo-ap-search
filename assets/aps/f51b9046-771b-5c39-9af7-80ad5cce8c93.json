@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "f51b9046-771b-5c39-9af7-80ad5cce8c93",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Audio Speech Segment Extractor",
+    "description": "Splits an audio file into speech segment records with identifiers, start times, and end times by applying silence and energy thresholds.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "8e654bab-79ff-5c91-902d-9fc67e6ba5c2",
+   "labels": [
+    "Audio_Segmenter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "audio_segmenter",
+    "description": "Splits an audio file into speech segments using silence and energy thresholds. Returns segment records with identifiers, start times, and end times.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "audio_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "silence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f51b9046-771b-5c39-9af7-80ad5cce8c93",
+   "to": "8e654bab-79ff-5c91-902d-9fc67e6ba5c2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

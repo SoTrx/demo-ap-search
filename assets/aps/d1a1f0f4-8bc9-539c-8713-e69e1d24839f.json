@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "d1a1f0f4-8bc9-539c-8713-e69e1d24839f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Survey Job Text Chunk Extractor",
+    "description": "Extracts job-title, employer-name, and duty-description text chunks from survey table records selected by a column mapping, keeping response identifiers.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "b44a842d-c666-5bb8-a169-16450e76cc3a",
+   "labels": [
+    "Survey_Response_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_response_extractor",
+    "description": "Extracts survey response rows from table records and keeps only the columns named in the mapping. Rows without a response identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "bf5b4bb3-122d-554c-a16b-b17fbd942bf9",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "survey_response_records"
+   }
+  },
+  {
+   "id": "b11113cf-12e8-5827-a6a6-6252397dce54",
+   "labels": [
+    "Occupation_Text_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_extractor",
+    "description": "Extracts free-text job titles, employer names, and duty descriptions from survey response records into text chunks. Each chunk keeps a response identifier.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d1a1f0f4-8bc9-539c-8713-e69e1d24839f",
+   "to": "b44a842d-c666-5bb8-a169-16450e76cc3a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b44a842d-c666-5bb8-a169-16450e76cc3a",
+   "to": "bf5b4bb3-122d-554c-a16b-b17fbd942bf9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['survey_response_records']": "from['outputs']['survey_response_records']"
+    }
+   }
+  },
+  {
+   "from": "bf5b4bb3-122d-554c-a16b-b17fbd942bf9",
+   "to": "b11113cf-12e8-5827-a6a6-6252397dce54",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['survey_response_records']": "from['survey_response_records']"
+    }
+   }
+  },
+  {
+   "from": "b11113cf-12e8-5827-a6a6-6252397dce54",
+   "to": "b44a842d-c666-5bb8-a169-16450e76cc3a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d1a1f0f4-8bc9-539c-8713-e69e1d24839f",
+   "to": "b11113cf-12e8-5827-a6a6-6252397dce54",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

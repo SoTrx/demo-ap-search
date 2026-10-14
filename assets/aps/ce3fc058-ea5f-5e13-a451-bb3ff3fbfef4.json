@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "ce3fc058-ea5f-5e13-a451-bb3ff3fbfef4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Standardized Page Image Batch",
+    "description": "Takes an ordered array of scanned page images and produces a standardized image batch with uniform dimensions, upright pages, and consistent color format.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "e77f8bfe-1bec-5b39-a00a-151af7226811",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ce3fc058-ea5f-5e13-a451-bb3ff3fbfef4",
+   "to": "e77f8bfe-1bec-5b39-a00a-151af7226811",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

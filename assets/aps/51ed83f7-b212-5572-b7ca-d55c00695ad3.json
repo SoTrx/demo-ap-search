@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "51ed83f7-b212-5572-b7ca-d55c00695ad3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation Record Normalization",
+    "description": "This pattern takes an array of citation records and returns citation records in which each item has been parsed into consistent authors, title, venue, and year fields.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "f15344d3-6643-55b4-b66a-98e1b56b9193",
+   "labels": [
+    "Citation_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_citations",
+    "description": "Parses citation records into consistent fields such as authors, title, venue, and year.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "51ed83f7-b212-5572-b7ca-d55c00695ad3",
+   "to": "f15344d3-6643-55b4-b66a-98e1b56b9193",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "0dbe58ea-014e-55d1-b864-b6aff3743aca",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Question Difficulty Score Estimator",
+    "description": "Estimates a student's proficiency in a topic from a performance profile and produces difficulty scores for a supplied set of questions.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "acefbc9c-7a9b-5475-a0ca-9542218c4ba5",
+   "labels": [
+    "Student_Proficiency_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_proficiency_estimator",
+    "description": "Estimates a student's proficiency level for a topic from the student performance profile. Uses only the profile and the requested topic.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a6ba994e-0989-529c-939e-bbad35a36e85",
+   "labels": [
+    "ResultType",
+    "number"
+   ],
+   "properties": {
+    "name": "proficiency_level"
+   }
+  },
+  {
+   "id": "d2bfbc3e-ddc4-574d-8d9a-60489775c959",
+   "labels": [
+    "Question_Difficulty_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "question_difficulty_estimator",
+    "description": "Estimates a difficulty score for each recommended question using the question JSON and the student's proficiency level. Returns scores only, without re-ranking or rewriting the questions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "difficulty_scores",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0dbe58ea-014e-55d1-b864-b6aff3743aca",
+   "to": "acefbc9c-7a9b-5475-a0ca-9542218c4ba5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "acefbc9c-7a9b-5475-a0ca-9542218c4ba5",
+   "to": "a6ba994e-0989-529c-939e-bbad35a36e85",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['proficiency_level']": "from['outputs']['proficiency_level']"
+    }
+   }
+  },
+  {
+   "from": "a6ba994e-0989-529c-939e-bbad35a36e85",
+   "to": "d2bfbc3e-ddc4-574d-8d9a-60489775c959",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['proficiency_level']": "from['proficiency_level']"
+    }
+   }
+  },
+  {
+   "from": "d2bfbc3e-ddc4-574d-8d9a-60489775c959",
+   "to": "acefbc9c-7a9b-5475-a0ca-9542218c4ba5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0dbe58ea-014e-55d1-b864-b6aff3743aca",
+   "to": "d2bfbc3e-ddc4-574d-8d9a-60489775c959",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

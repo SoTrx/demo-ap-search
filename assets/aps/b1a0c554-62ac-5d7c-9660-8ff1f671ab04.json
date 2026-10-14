@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "b1a0c554-62ac-5d7c-9660-8ff1f671ab04",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Chart Annotation Highlight Hints",
+    "description": "This AP takes an existing chart specification and a short note, and returns the chart with a concise annotation and highlighting hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "77cf07a7-6054-5eac-9480-7c6cfdfa8836",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b1a0c554-62ac-5d7c-9660-8ff1f671ab04",
+   "to": "77cf07a7-6054-5eac-9480-7c6cfdfa8836",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

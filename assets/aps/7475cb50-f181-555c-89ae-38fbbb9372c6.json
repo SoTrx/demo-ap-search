@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "7475cb50-f181-555c-89ae-38fbbb9372c6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Numeric Result Summary Aggregator",
+    "description": "The AP takes an array of result rows, turns the numeric columns into compact summary rows, and returns those aggregate rows.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "ef11e714-9296-53c7-82d7-045e414ce3d2",
+   "labels": [
+    "Result_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Aggregator",
+    "description": "Aggregates numeric columns in a result-row array into compact summary rows and returns the aggregate rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7475cb50-f181-555c-89ae-38fbbb9372c6",
+   "to": "ef11e714-9296-53c7-82d7-045e414ce3d2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

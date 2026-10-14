@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "a32a8d5d-057b-594d-b74a-ed20a386b00a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Baseline Target Period Chart",
+    "description": "Creates a chart specification that contrasts baseline and target values for each period in a period comparison report.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "a2e68a51-8199-5369-90a4-fd3b1f5f3e96",
+   "labels": [
+    "Period_Comparison_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_comparison_chart_builder",
+    "description": "Turns a period comparison report into a chart specification that contrasts baseline and target values for each period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a32a8d5d-057b-594d-b74a-ed20a386b00a",
+   "to": "a2e68a51-8199-5369-90a4-fd3b1f5f3e96",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

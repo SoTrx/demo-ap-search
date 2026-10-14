@@ -1,0 +1,155 @@
+{
+ "nodes": [
+  {
+   "id": "a0715569-effc-5990-aa20-3144057f0feb",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Date Bounded Weather Threshold Events",
+    "description": "Filters weather readings to a date range and emits event records for readings that cross the configured threshold in the selected direction.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "660553d1-56d3-5b7c-a346-5b8e30afdf5e",
+   "labels": [
+    "Time_Range_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "time_range_filter",
+    "description": "Keeps weather readings whose timestamps fall between two dates.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e39b00c3-b9fc-5552-b4c8-b9b237624bb8",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "ef1c0e20-ccf9-569e-887a-0f4e5ac1abee",
+   "labels": [
+    "Extreme_Event_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extreme_event_detector",
+    "description": "Detects weather readings that exceed a threshold in the chosen direction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "detection_mode",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a0715569-effc-5990-aa20-3144057f0feb",
+   "to": "660553d1-56d3-5b7c-a346-5b8e30afdf5e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "660553d1-56d3-5b7c-a346-5b8e30afdf5e",
+   "to": "e39b00c3-b9fc-5552-b4c8-b9b237624bb8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "e39b00c3-b9fc-5552-b4c8-b9b237624bb8",
+   "to": "ef1c0e20-ccf9-569e-887a-0f4e5ac1abee",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "ef1c0e20-ccf9-569e-887a-0f4e5ac1abee",
+   "to": "660553d1-56d3-5b7c-a346-5b8e30afdf5e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a0715569-effc-5990-aa20-3144057f0feb",
+   "to": "ef1c0e20-ccf9-569e-887a-0f4e5ac1abee",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

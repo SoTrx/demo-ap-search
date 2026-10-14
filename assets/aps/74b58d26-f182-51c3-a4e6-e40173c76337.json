@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "74b58d26-f182-51c3-a4e6-e40173c76337",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Abrupt Return Change Finder",
+    "description": "Converts a level series into period-over-period percentage returns and returns the points where those returns show abrupt level or trend changes.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "8b74f549-e629-54e6-adfd-2e2e2c452c64",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b34fdc86-4147-5565-9243-85712ea07efa",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "returns"
+   }
+  },
+  {
+   "id": "5eb5332a-7bf5-59bf-bdff-e36397a0c1f7",
+   "labels": [
+    "Time_Series_Change_Point_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Change Point Detector",
+    "description": "Detects abrupt level or trend changes in a time series using a sensitivity threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "change_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "74b58d26-f182-51c3-a4e6-e40173c76337",
+   "to": "8b74f549-e629-54e6-adfd-2e2e2c452c64",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8b74f549-e629-54e6-adfd-2e2e2c452c64",
+   "to": "b34fdc86-4147-5565-9243-85712ea07efa",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['returns']": "from['outputs']['returns']"
+    }
+   }
+  },
+  {
+   "from": "b34fdc86-4147-5565-9243-85712ea07efa",
+   "to": "5eb5332a-7bf5-59bf-bdff-e36397a0c1f7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['returns']"
+    }
+   }
+  },
+  {
+   "from": "5eb5332a-7bf5-59bf-bdff-e36397a0c1f7",
+   "to": "8b74f549-e629-54e6-adfd-2e2e2c452c64",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "74b58d26-f182-51c3-a4e6-e40173c76337",
+   "to": "5eb5332a-7bf5-59bf-bdff-e36397a0c1f7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

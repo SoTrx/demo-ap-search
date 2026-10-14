@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "1c1c623c-ffbf-5c14-b965-f9d98b2a86e6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate Key Spec Generator",
+    "description": "From record rows and feature metadata, it generates a duplicate-key specification by preparing categorical fields, profiling the table, and selecting candidate key columns and matching options.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "726835fe-c296-5b5d-b992-f1058ae6900b",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a29c4287-2258-57b5-9ce2-ccc6b8b1e8e2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8ce06ae3-c1bd-519b-95fc-b69e6b4ae47d",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "0dba46ad-e7e9-5c33-b59e-717dd8fa6182",
+   "labels": [
+    "Duplicate_Key_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_key_selector",
+    "description": "Selects candidate duplicate-key columns and matching options from a dataset profile. Returns a duplicate-key specification without grouping rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1c1c623c-ffbf-5c14-b965-f9d98b2a86e6",
+   "to": "726835fe-c296-5b5d-b992-f1058ae6900b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "726835fe-c296-5b5d-b992-f1058ae6900b",
+   "to": "a29c4287-2258-57b5-9ce2-ccc6b8b1e8e2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "a29c4287-2258-57b5-9ce2-ccc6b8b1e8e2",
+   "to": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "to": "726835fe-c296-5b5d-b992-f1058ae6900b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1c1c623c-ffbf-5c14-b965-f9d98b2a86e6",
+   "to": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "to": "8ce06ae3-c1bd-519b-95fc-b69e6b4ae47d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "8ce06ae3-c1bd-519b-95fc-b69e6b4ae47d",
+   "to": "0dba46ad-e7e9-5c33-b59e-717dd8fa6182",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "0dba46ad-e7e9-5c33-b59e-717dd8fa6182",
+   "to": "5cc5c70d-d8ca-51a1-a8bc-8ed3d51d7a48",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1c1c623c-ffbf-5c14-b965-f9d98b2a86e6",
+   "to": "0dba46ad-e7e9-5c33-b59e-717dd8fa6182",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

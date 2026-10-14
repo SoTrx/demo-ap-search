@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "b34ae7ee-e7b1-525d-8ac1-346ec51998c2",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Scanned Document Text Extraction",
+    "description": "Converts a PDF or scanned document into an ordered array of text chunks by first obtaining page images and then recognizing the text on each page.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "02b70baf-941e-5278-9f7d-9a799c25d5cd",
+   "labels": [
+    "Document_To_Page_Images_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_to_page_images",
+    "description": "Converts a PDF or scanned document into an ordered array of page images.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "document_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "61109269-2bd4-501d-bdd4-8780a2e64a3d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "page_images"
+   }
+  },
+  {
+   "id": "4ea019d2-94db-512a-b0d3-c10e45c1d198",
+   "labels": [
+    "Page_Image_Ocr_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "page_image_ocr",
+    "description": "Runs OCR on each page image and returns recognized page text as ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b34ae7ee-e7b1-525d-8ac1-346ec51998c2",
+   "to": "02b70baf-941e-5278-9f7d-9a799c25d5cd",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "02b70baf-941e-5278-9f7d-9a799c25d5cd",
+   "to": "61109269-2bd4-501d-bdd4-8780a2e64a3d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['page_images']": "from['outputs']['page_images']"
+    }
+   }
+  },
+  {
+   "from": "61109269-2bd4-501d-bdd4-8780a2e64a3d",
+   "to": "4ea019d2-94db-512a-b0d3-c10e45c1d198",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['page_images']": "from['page_images']"
+    }
+   }
+  },
+  {
+   "from": "4ea019d2-94db-512a-b0d3-c10e45c1d198",
+   "to": "02b70baf-941e-5278-9f7d-9a799c25d5cd",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b34ae7ee-e7b1-525d-8ac1-346ec51998c2",
+   "to": "4ea019d2-94db-512a-b0d3-c10e45c1d198",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

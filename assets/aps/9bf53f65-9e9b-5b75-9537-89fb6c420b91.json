@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "9bf53f65-9e9b-5b75-9537-89fb6c420b91",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Occupation Prediction Explanations",
+    "description": "Applies a survey weight plan to coded occupation records, builds weighted cross-tabulated rows from mapped variables, and returns row-level feature attribution scores for predicted occupational classes.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "1291c28a-59e3-5b4f-b0eb-8d45694524d6",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d2d4f8f5-6f35-5a0e-a17b-ecd86d9096f1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "weighted_survey_records"
+   }
+  },
+  {
+   "id": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6c6a8e84-f44e-5e15-a81d-180b5f5597c0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "102bea10-6a88-51d1-b6b4-30deed715995",
+   "labels": [
+    "Explain_Classifier_Predictions_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "explain_classifier_predictions",
+    "description": "Attributes the predicted class for each input row to the model feature columns and returns row-level attribution scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "feature_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "attributions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9bf53f65-9e9b-5b75-9537-89fb6c420b91",
+   "to": "1291c28a-59e3-5b4f-b0eb-8d45694524d6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1291c28a-59e3-5b4f-b0eb-8d45694524d6",
+   "to": "d2d4f8f5-6f35-5a0e-a17b-ecd86d9096f1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weighted_survey_records']": "from['outputs']['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "d2d4f8f5-6f35-5a0e-a17b-ecd86d9096f1",
+   "to": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['weighted_survey_records']": "from['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "to": "1291c28a-59e3-5b4f-b0eb-8d45694524d6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9bf53f65-9e9b-5b75-9537-89fb6c420b91",
+   "to": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "to": "6c6a8e84-f44e-5e15-a81d-180b5f5597c0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "6c6a8e84-f44e-5e15-a81d-180b5f5597c0",
+   "to": "102bea10-6a88-51d1-b6b4-30deed715995",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "102bea10-6a88-51d1-b6b4-30deed715995",
+   "to": "41356882-38f9-5e3d-b684-21f0c346fe25",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9bf53f65-9e9b-5b75-9537-89fb6c420b91",
+   "to": "102bea10-6a88-51d1-b6b4-30deed715995",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

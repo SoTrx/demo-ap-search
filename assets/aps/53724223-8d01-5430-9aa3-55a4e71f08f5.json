@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "53724223-8d01-5430-9aa3-55a4e71f08f5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Assign Addresses to Polygons",
+    "description": "Converts textual addresses to locations and returns polygons enriched with the attributes of the address records that fall inside them.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "ddfd39fb-e788-5858-94d9-8de38a778b5e",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5f648230-7565-5698-afa2-d55e0b3a946a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "1a66a870-bf1a-5d82-8b2d-9e441b21b07e",
+   "labels": [
+    "Spatial_Join_Points_To_Polygons_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spatial_join_points_polygons",
+    "description": "Assigns point geometries to containing polygons and returns polygons with joined point attributes.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "53724223-8d01-5430-9aa3-55a4e71f08f5",
+   "to": "ddfd39fb-e788-5858-94d9-8de38a778b5e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ddfd39fb-e788-5858-94d9-8de38a778b5e",
+   "to": "5f648230-7565-5698-afa2-d55e0b3a946a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "5f648230-7565-5698-afa2-d55e0b3a946a",
+   "to": "1a66a870-bf1a-5d82-8b2d-9e441b21b07e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "1a66a870-bf1a-5d82-8b2d-9e441b21b07e",
+   "to": "ddfd39fb-e788-5858-94d9-8de38a778b5e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "53724223-8d01-5430-9aa3-55a4e71f08f5",
+   "to": "1a66a870-bf1a-5d82-8b2d-9e441b21b07e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

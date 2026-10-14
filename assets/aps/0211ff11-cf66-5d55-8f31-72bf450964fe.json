@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "0211ff11-cf66-5d55-8f31-72bf450964fe",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Page Image Embedding Extraction",
+    "description": "Normalizes an ordered array of page images into a consistent image batch and uses a model to extract fixed-length visual embeddings for each page.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "9646ae45-a880-543f-b14f-1c8138734320",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "eb246e2b-b47d-57df-bf49-95cda7990b3f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "images"
+   }
+  },
+  {
+   "id": "9a12a087-ed09-56a9-8f26-6c97db7a0a45",
+   "labels": [
+    "Image_Embedding_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_embedding_extractor",
+    "description": "Extracts fixed-length visual embeddings from each image in an image batch.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0211ff11-cf66-5d55-8f31-72bf450964fe",
+   "to": "9646ae45-a880-543f-b14f-1c8138734320",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9646ae45-a880-543f-b14f-1c8138734320",
+   "to": "eb246e2b-b47d-57df-bf49-95cda7990b3f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['images']": "from['outputs']['images']"
+    }
+   }
+  },
+  {
+   "from": "eb246e2b-b47d-57df-bf49-95cda7990b3f",
+   "to": "9a12a087-ed09-56a9-8f26-6c97db7a0a45",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['images']": "from['images']"
+    }
+   }
+  },
+  {
+   "from": "9a12a087-ed09-56a9-8f26-6c97db7a0a45",
+   "to": "9646ae45-a880-543f-b14f-1c8138734320",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0211ff11-cf66-5d55-8f31-72bf450964fe",
+   "to": "9a12a087-ed09-56a9-8f26-6c97db7a0a45",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

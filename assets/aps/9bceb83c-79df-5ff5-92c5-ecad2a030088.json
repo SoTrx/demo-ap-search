@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "9bceb83c-79df-5ff5-92c5-ecad2a030088",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Search-Driven Table Extraction",
+    "description": "Searches a text index with a query and converts the matching OCR table regions into structured records containing headers and cell values.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "6d66f5de-e363-5c4d-9624-aaa3c674f219",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1f2567f4-38b5-520f-8dfb-fbb9cae87aeb",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "7da1e82f-ef79-53db-afd2-6bddeeedfc84",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9bceb83c-79df-5ff5-92c5-ecad2a030088",
+   "to": "6d66f5de-e363-5c4d-9624-aaa3c674f219",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6d66f5de-e363-5c4d-9624-aaa3c674f219",
+   "to": "1f2567f4-38b5-520f-8dfb-fbb9cae87aeb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "1f2567f4-38b5-520f-8dfb-fbb9cae87aeb",
+   "to": "7da1e82f-ef79-53db-afd2-6bddeeedfc84",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "7da1e82f-ef79-53db-afd2-6bddeeedfc84",
+   "to": "6d66f5de-e363-5c4d-9624-aaa3c674f219",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9bceb83c-79df-5ff5-92c5-ecad2a030088",
+   "to": "7da1e82f-ef79-53db-afd2-6bddeeedfc84",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

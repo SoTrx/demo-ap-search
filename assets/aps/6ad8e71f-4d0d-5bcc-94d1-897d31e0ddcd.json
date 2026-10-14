@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "6ad8e71f-4d0d-5bcc-94d1-897d31e0ddcd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Rolling Realized Volatility Series",
+    "description": "Given an array of returns and a window size, computes and returns an array of rolling realized volatility values over successive windows.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "2ba25027-5196-5386-9590-253702eb38b5",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6ad8e71f-4d0d-5bcc-94d1-897d31e0ddcd",
+   "to": "2ba25027-5196-5386-9590-253702eb38b5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

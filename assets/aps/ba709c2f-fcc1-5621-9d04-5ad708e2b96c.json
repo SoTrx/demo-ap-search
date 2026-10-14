@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "ba709c2f-fcc1-5621-9d04-5ad708e2b96c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Profile Generator",
+    "description": "Smooths a supplied numeric series over a rolling window and returns a seasonality profile with indices for the requested cycle length.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "5d818f9f-8281-5d41-a6c5-a693f8792e98",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dc1c17e6-1a7f-5efc-8e00-9c86fb4be238",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "827dfe80-c20e-5024-a701-32be75975b25",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ba709c2f-fcc1-5621-9d04-5ad708e2b96c",
+   "to": "5d818f9f-8281-5d41-a6c5-a693f8792e98",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5d818f9f-8281-5d41-a6c5-a693f8792e98",
+   "to": "dc1c17e6-1a7f-5efc-8e00-9c86fb4be238",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "dc1c17e6-1a7f-5efc-8e00-9c86fb4be238",
+   "to": "827dfe80-c20e-5024-a701-32be75975b25",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "827dfe80-c20e-5024-a701-32be75975b25",
+   "to": "5d818f9f-8281-5d41-a6c5-a693f8792e98",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ba709c2f-fcc1-5621-9d04-5ad708e2b96c",
+   "to": "827dfe80-c20e-5024-a701-32be75975b25",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

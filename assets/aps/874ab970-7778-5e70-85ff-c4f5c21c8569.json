@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "874ab970-7778-5e70-85ff-c4f5c21c8569",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Forecast Accuracy Scorer",
+    "description": "Turns raw weather measurement rows into a normalized time series and scores a supplied forecast against the observed tail, returning one accuracy number.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "d2429340-68ab-5555-bcd0-17dc0ad2c224",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "154ce5fd-3ecb-54e3-88e9-63267b5806f3",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "85e1feda-78d8-5b8e-b8b4-741d6df876ec",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "1dca8e32-aab5-5e03-b022-c21ab839a653",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "874ab970-7778-5e70-85ff-c4f5c21c8569",
+   "to": "d2429340-68ab-5555-bcd0-17dc0ad2c224",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d2429340-68ab-5555-bcd0-17dc0ad2c224",
+   "to": "154ce5fd-3ecb-54e3-88e9-63267b5806f3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "154ce5fd-3ecb-54e3-88e9-63267b5806f3",
+   "to": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "to": "d2429340-68ab-5555-bcd0-17dc0ad2c224",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "874ab970-7778-5e70-85ff-c4f5c21c8569",
+   "to": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "to": "85e1feda-78d8-5b8e-b8b4-741d6df876ec",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "85e1feda-78d8-5b8e-b8b4-741d6df876ec",
+   "to": "1dca8e32-aab5-5e03-b022-c21ab839a653",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "1dca8e32-aab5-5e03-b022-c21ab839a653",
+   "to": "e0b0d9fc-6f9f-5a20-915e-8c94601b37f3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "874ab970-7778-5e70-85ff-c4f5c21c8569",
+   "to": "1dca8e32-aab5-5e03-b022-c21ab839a653",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

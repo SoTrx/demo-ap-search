@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "6d0c35bd-0423-568d-a686-82f85c4b63f4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Profile Generator",
+    "description": "Profiles an array of table rows into a dataset profile with record count, per-column missing rates, unique counts, inferred types, and numeric ranges.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "1df5f329-70a4-5261-8da4-346ae2ecdfac",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6d0c35bd-0423-568d-a686-82f85c4b63f4",
+   "to": "1df5f329-70a4-5261-8da4-346ae2ecdfac",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

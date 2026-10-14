@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "98d1cf86-0246-541c-b2c9-4d48042d06ce",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Personalized Study Plan Builder",
+    "description": "Builds a personalized study plan from assessment rows by creating a topic-level performance picture and then returning an ordered JSON plan that mixes recommended materials and practice questions.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "93ce3b07-c431-538f-b55a-481c7a0c4642",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9cadd55f-e207-5351-a532-603b1d9c5890",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "performance_profile"
+   }
+  },
+  {
+   "id": "9f5f2f14-fc78-5479-ad35-301474498b5a",
+   "labels": [
+    "Study_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_plan_builder",
+    "description": "Builds a study-plan JSON that interleaves recommended material and recommended questions into a practice sequence. Returns the plan only, without execution instructions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "study_plan",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "98d1cf86-0246-541c-b2c9-4d48042d06ce",
+   "to": "93ce3b07-c431-538f-b55a-481c7a0c4642",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "93ce3b07-c431-538f-b55a-481c7a0c4642",
+   "to": "9cadd55f-e207-5351-a532-603b1d9c5890",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['performance_profile']": "from['outputs']['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "9cadd55f-e207-5351-a532-603b1d9c5890",
+   "to": "9f5f2f14-fc78-5479-ad35-301474498b5a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['performance_profile']": "from['performance_profile']"
+    }
+   }
+  },
+  {
+   "from": "9f5f2f14-fc78-5479-ad35-301474498b5a",
+   "to": "93ce3b07-c431-538f-b55a-481c7a0c4642",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "98d1cf86-0246-541c-b2c9-4d48042d06ce",
+   "to": "9f5f2f14-fc78-5479-ad35-301474498b5a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

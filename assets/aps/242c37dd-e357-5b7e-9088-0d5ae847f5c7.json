@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "242c37dd-e357-5b7e-9088-0d5ae847f5c7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "PDF Layout Block Extraction",
+    "description": "Converts a PDF or scanned document into ordered page images and segments those images into paragraphs, headings, figures, and tables.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "019d5872-4a10-5144-a2b4-5f1390b4adb5",
+   "labels": [
+    "Document_To_Page_Images_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_to_page_images",
+    "description": "Converts a PDF or scanned document into an ordered array of page images.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "document_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "df9ad446-c1d8-50f9-bd49-56daf29b5394",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "page_images"
+   }
+  },
+  {
+   "id": "a37255fc-35fe-5800-8898-2fd33b39982d",
+   "labels": [
+    "Layout_Block_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detect_layout_blocks",
+    "description": "Segments page images into layout blocks such as paragraphs, headings, figures, and tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "242c37dd-e357-5b7e-9088-0d5ae847f5c7",
+   "to": "019d5872-4a10-5144-a2b4-5f1390b4adb5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "019d5872-4a10-5144-a2b4-5f1390b4adb5",
+   "to": "df9ad446-c1d8-50f9-bd49-56daf29b5394",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['page_images']": "from['outputs']['page_images']"
+    }
+   }
+  },
+  {
+   "from": "df9ad446-c1d8-50f9-bd49-56daf29b5394",
+   "to": "a37255fc-35fe-5800-8898-2fd33b39982d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['page_images']": "from['page_images']"
+    }
+   }
+  },
+  {
+   "from": "a37255fc-35fe-5800-8898-2fd33b39982d",
+   "to": "019d5872-4a10-5144-a2b4-5f1390b4adb5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "242c37dd-e357-5b7e-9088-0d5ae847f5c7",
+   "to": "a37255fc-35fe-5800-8898-2fd33b39982d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

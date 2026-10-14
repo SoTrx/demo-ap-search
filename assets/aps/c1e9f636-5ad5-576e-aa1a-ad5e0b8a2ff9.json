@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "c1e9f636-5ad5-576e-aa1a-ad5e0b8a2ff9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Volatility Chart",
+    "description": "Creates an annotated line chart from a return series by computing rolling volatility, resampling the volatility to a target granularity, and adding a note.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "49bd7b1e-4a9f-50a4-9fa2-4bf2c3b61e14",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9ae2d447-0907-594d-a008-edeac06005d2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8ebb7432-91d4-5abb-a041-7f623dbdc427",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "941c25ce-e142-5801-b822-e28797b17126",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "352d430d-abbc-5e29-80a2-89098cab10ee",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "43ffe4b5-dd03-5060-a27c-2f7112788c0d",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c1e9f636-5ad5-576e-aa1a-ad5e0b8a2ff9",
+   "to": "49bd7b1e-4a9f-50a4-9fa2-4bf2c3b61e14",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "49bd7b1e-4a9f-50a4-9fa2-4bf2c3b61e14",
+   "to": "9ae2d447-0907-594d-a008-edeac06005d2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "9ae2d447-0907-594d-a008-edeac06005d2",
+   "to": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "to": "49bd7b1e-4a9f-50a4-9fa2-4bf2c3b61e14",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c1e9f636-5ad5-576e-aa1a-ad5e0b8a2ff9",
+   "to": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "to": "8ebb7432-91d4-5abb-a041-7f623dbdc427",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "8ebb7432-91d4-5abb-a041-7f623dbdc427",
+   "to": "941c25ce-e142-5801-b822-e28797b17126",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "941c25ce-e142-5801-b822-e28797b17126",
+   "to": "b15c9fbf-a815-5d00-8182-2c5e6f3f89f4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c1e9f636-5ad5-576e-aa1a-ad5e0b8a2ff9",
+   "to": "941c25ce-e142-5801-b822-e28797b17126",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "941c25ce-e142-5801-b822-e28797b17126",
+   "to": "352d430d-abbc-5e29-80a2-89098cab10ee",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "352d430d-abbc-5e29-80a2-89098cab10ee",
+   "to": "43ffe4b5-dd03-5060-a27c-2f7112788c0d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "43ffe4b5-dd03-5060-a27c-2f7112788c0d",
+   "to": "941c25ce-e142-5801-b822-e28797b17126",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c1e9f636-5ad5-576e-aa1a-ad5e0b8a2ff9",
+   "to": "43ffe4b5-dd03-5060-a27c-2f7112788c0d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

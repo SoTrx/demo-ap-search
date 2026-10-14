@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "b1acae85-c347-5d8c-846a-df49691a6aa9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Personalized Math Study Plan Generator",
+    "description": "Generates a JSON study plan for a proficiency level, topic, performance profile, and materials by selecting MathE multiple-choice questions and interleaving them with recommended resources.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "940619b0-20da-5b73-9219-7d33d9e26694",
+   "labels": [
+    "Test_Recommendation_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Test Recommendation",
+    "description": "Selects MathE multiple-choice questions (statement, answer options, index of the correct option), returned as JSON text, suited to a student's proficiency level on a MathE topic. Returns the questions only, without any explanation of the answers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "level",
+      "type": "number",
+      "required": true,
+      "default": 0.5
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4f1e0bbd-0309-5058-92e3-2bee15ff059d",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "questions"
+   }
+  },
+  {
+   "id": "57c937c2-7e8b-5267-abb3-45edac89c17f",
+   "labels": [
+    "Study_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_plan_builder",
+    "description": "Builds a study-plan JSON that interleaves recommended material and recommended questions into a practice sequence. Returns the plan only, without execution instructions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "study_plan",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b1acae85-c347-5d8c-846a-df49691a6aa9",
+   "to": "940619b0-20da-5b73-9219-7d33d9e26694",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "940619b0-20da-5b73-9219-7d33d9e26694",
+   "to": "4f1e0bbd-0309-5058-92e3-2bee15ff059d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['questions']": "from['outputs']['questions']"
+    }
+   }
+  },
+  {
+   "from": "4f1e0bbd-0309-5058-92e3-2bee15ff059d",
+   "to": "57c937c2-7e8b-5267-abb3-45edac89c17f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['questions']": "from['questions']"
+    }
+   }
+  },
+  {
+   "from": "57c937c2-7e8b-5267-abb3-45edac89c17f",
+   "to": "940619b0-20da-5b73-9219-7d33d9e26694",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b1acae85-c347-5d8c-846a-df49691a6aa9",
+   "to": "57c937c2-7e8b-5267-abb3-45edac89c17f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

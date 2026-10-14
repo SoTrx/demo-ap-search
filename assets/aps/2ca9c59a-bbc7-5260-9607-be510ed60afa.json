@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "2ca9c59a-bbc7-5260-9607-be510ed60afa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjust Economic Indicator",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile and returns a seasonally adjusted series.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "ebe427b3-1902-54a9-8b6a-29ab2b38a6b4",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2ca9c59a-bbc7-5260-9607-be510ed60afa",
+   "to": "ebe427b3-1902-54a9-8b6a-29ab2b38a6b4",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

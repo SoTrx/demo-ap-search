@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "c26647f4-8a37-5913-be1e-8559fdc7ee1a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Smooth Time Series",
+    "description": "Smooths a numeric time series by replacing values with averaged neighboring points over a specified span and returns the smoothed series as an array.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "982cb875-035c-517a-b165-ad4a03f5771f",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c26647f4-8a37-5913-be1e-8559fdc7ee1a",
+   "to": "982cb875-035c-517a-b165-ad4a03f5771f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

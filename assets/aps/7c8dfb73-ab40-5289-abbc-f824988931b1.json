@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "7c8dfb73-ab40-5289-abbc-f824988931b1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Optimized SQL Query Explainer",
+    "description": "Rewrites a supplied SQL query for better performance using its schema and then explains the optimized query in plain language.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "32adeb7b-579f-5816-a6da-002b5e47a225",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a22e59da-8fb2-57de-8813-2dded8d9b56d",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "6c734f39-a68e-5f67-8871-f01d35f2a751",
+   "labels": [
+    "SQL_With_Context_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL With Context",
+    "description": "Produces a plain-language explanation of an SQL query given the target schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "explanation",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7c8dfb73-ab40-5289-abbc-f824988931b1",
+   "to": "32adeb7b-579f-5816-a6da-002b5e47a225",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "32adeb7b-579f-5816-a6da-002b5e47a225",
+   "to": "a22e59da-8fb2-57de-8813-2dded8d9b56d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "a22e59da-8fb2-57de-8813-2dded8d9b56d",
+   "to": "6c734f39-a68e-5f67-8871-f01d35f2a751",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "6c734f39-a68e-5f67-8871-f01d35f2a751",
+   "to": "32adeb7b-579f-5816-a6da-002b5e47a225",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7c8dfb73-ab40-5289-abbc-f824988931b1",
+   "to": "6c734f39-a68e-5f67-8871-f01d35f2a751",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

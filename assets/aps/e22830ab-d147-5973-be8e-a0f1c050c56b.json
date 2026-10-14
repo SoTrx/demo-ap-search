@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e22830ab-d147-5973-be8e-a0f1c050c56b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Quasi-Identifier Privacy Groups",
+    "description": "From raw records and a direct-identifier report, detect quasi-identifier combinations and group pseudonymised records into equivalence classes.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "fed3edc2-3b17-5c4f-ab0f-ed4774f210c9",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9bbd4991-dc18-550e-81a8-f1d752abfa53",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "7b93e295-91c2-5894-90bf-f43108483270",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e22830ab-d147-5973-be8e-a0f1c050c56b",
+   "to": "fed3edc2-3b17-5c4f-ab0f-ed4774f210c9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fed3edc2-3b17-5c4f-ab0f-ed4774f210c9",
+   "to": "9bbd4991-dc18-550e-81a8-f1d752abfa53",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "9bbd4991-dc18-550e-81a8-f1d752abfa53",
+   "to": "7b93e295-91c2-5894-90bf-f43108483270",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['quasi_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "7b93e295-91c2-5894-90bf-f43108483270",
+   "to": "fed3edc2-3b17-5c4f-ab0f-ed4774f210c9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e22830ab-d147-5973-be8e-a0f1c050c56b",
+   "to": "7b93e295-91c2-5894-90bf-f43108483270",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "e7b1bcaf-e939-5fcf-aba7-fdd8bedc4c90",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Question Difficulty Scoring by Proficiency",
+    "description": "Estimates a difficulty score for each provided question from the question JSON and a student proficiency level, returning the scores without reranking or rewriting the questions.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "063e7502-b12a-5713-b0e0-a1387e60d227",
+   "labels": [
+    "Question_Difficulty_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "question_difficulty_estimator",
+    "description": "Estimates a difficulty score for each recommended question using the question JSON and the student's proficiency level. Returns scores only, without re-ranking or rewriting the questions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "difficulty_scores",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e7b1bcaf-e939-5fcf-aba7-fdd8bedc4c90",
+   "to": "063e7502-b12a-5713-b0e0-a1387e60d227",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

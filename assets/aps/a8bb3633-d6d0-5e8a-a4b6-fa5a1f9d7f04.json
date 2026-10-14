@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "a8bb3633-d6d0-5e8a-a4b6-fa5a1f9d7f04",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Time Series Forecast Accuracy",
+    "description": "Forecasts a requested number of future observations from a numeric time series and returns a single accuracy score for that forecast.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "ad5856bf-4b7c-5419-b0c6-55c84113438d",
+   "labels": [
+    "Time_Series_Forecaster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Forecaster",
+    "description": "Forecasts the next requested number of observations from a time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "937d2aa5-7660-5d19-96bd-8167ed95b83c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "forecast"
+   }
+  },
+  {
+   "id": "2318220c-86de-58c4-bc2f-ebf2fe1de2dc",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a8bb3633-d6d0-5e8a-a4b6-fa5a1f9d7f04",
+   "to": "ad5856bf-4b7c-5419-b0c6-55c84113438d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ad5856bf-4b7c-5419-b0c6-55c84113438d",
+   "to": "937d2aa5-7660-5d19-96bd-8167ed95b83c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['forecast']": "from['outputs']['forecast']"
+    }
+   }
+  },
+  {
+   "from": "937d2aa5-7660-5d19-96bd-8167ed95b83c",
+   "to": "2318220c-86de-58c4-bc2f-ebf2fe1de2dc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['forecast']": "from['forecast']"
+    }
+   }
+  },
+  {
+   "from": "2318220c-86de-58c4-bc2f-ebf2fe1de2dc",
+   "to": "ad5856bf-4b7c-5419-b0c6-55c84113438d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a8bb3633-d6d0-5e8a-a4b6-fa5a1f9d7f04",
+   "to": "2318220c-86de-58c4-bc2f-ebf2fe1de2dc",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

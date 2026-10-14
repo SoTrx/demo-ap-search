@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "39a4195f-a59a-53e2-be2f-25724b264425",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Spearman Correlations After Table Harmonization",
+    "description": "Harmonizes a table's field names and coded values and returns a Spearman correlation matrix for the chosen numeric columns.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "982f8542-cf26-57a6-bdc0-9352d7397540",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5232928d-5d3c-5b85-8fd2-27749686c7f5",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "3a8e828d-0884-5750-a639-24d3b7511dc0",
+   "labels": [
+    "Spearman_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spearman_correlation_matrix",
+    "description": "Computes a Spearman rank correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "39a4195f-a59a-53e2-be2f-25724b264425",
+   "to": "982f8542-cf26-57a6-bdc0-9352d7397540",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "982f8542-cf26-57a6-bdc0-9352d7397540",
+   "to": "5232928d-5d3c-5b85-8fd2-27749686c7f5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "5232928d-5d3c-5b85-8fd2-27749686c7f5",
+   "to": "3a8e828d-0884-5750-a639-24d3b7511dc0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "3a8e828d-0884-5750-a639-24d3b7511dc0",
+   "to": "982f8542-cf26-57a6-bdc0-9352d7397540",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "39a4195f-a59a-53e2-be2f-25724b264425",
+   "to": "3a8e828d-0884-5750-a639-24d3b7511dc0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

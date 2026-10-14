@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "101eb9c1-74be-5e03-8110-fbc963e3af42",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Records from Blocks and Text",
+    "description": "Converts layout blocks and OCR text chunks into structured table records by isolating table areas and extracting their headers and cell values.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "692cd198-137c-5f6e-96e7-41db99c615f8",
+   "labels": [
+    "Table_Region_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_regions",
+    "description": "Selects table layout blocks and converts them into bounding table regions ready for cell extraction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "53ef92f2-eae1-5685-a69a-306de45da0b0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_regions"
+   }
+  },
+  {
+   "id": "2e7568fd-2573-55b7-982c-d663c70f92c1",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "101eb9c1-74be-5e03-8110-fbc963e3af42",
+   "to": "692cd198-137c-5f6e-96e7-41db99c615f8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "692cd198-137c-5f6e-96e7-41db99c615f8",
+   "to": "53ef92f2-eae1-5685-a69a-306de45da0b0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_regions']": "from['outputs']['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "53ef92f2-eae1-5685-a69a-306de45da0b0",
+   "to": "2e7568fd-2573-55b7-982c-d663c70f92c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_regions']": "from['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "2e7568fd-2573-55b7-982c-d663c70f92c1",
+   "to": "692cd198-137c-5f6e-96e7-41db99c615f8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "101eb9c1-74be-5e03-8110-fbc963e3af42",
+   "to": "2e7568fd-2573-55b7-982c-d663c70f92c1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

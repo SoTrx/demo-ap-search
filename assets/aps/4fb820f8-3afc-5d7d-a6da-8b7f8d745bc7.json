@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "4fb820f8-3afc-5d7d-a6da-8b7f8d745bc7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Answer Summary Citation Support",
+    "description": "It detects languages in audio segments, keeps text chunks that need translation, extracts citation context from them, and returns whether an answer summary is supported for the query.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "9a748d9f-b72e-5130-928a-b4c339e2ff11",
+   "labels": [
+    "Language_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_identifier",
+    "description": "Detects the spoken language for each audio segment. Returns language identification records with ISO language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f59e380b-997b-5d14-89eb-6cf3b76d55c5",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "language_records"
+   }
+  },
+  {
+   "id": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a49209c2-2a40-5e74-9cb6-fe0f75429d7e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "35fe68ed-2e2b-5e1b-888b-3639f60145df",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citation_records"
+   }
+  },
+  {
+   "id": "db7ba72e-a617-5679-b950-6b5bfa9d002e",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "4fb820f8-3afc-5d7d-a6da-8b7f8d745bc7",
+   "to": "9a748d9f-b72e-5130-928a-b4c339e2ff11",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9a748d9f-b72e-5130-928a-b4c339e2ff11",
+   "to": "f59e380b-997b-5d14-89eb-6cf3b76d55c5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['language_records']": "from['outputs']['language_records']"
+    }
+   }
+  },
+  {
+   "from": "f59e380b-997b-5d14-89eb-6cf3b76d55c5",
+   "to": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['language_records']": "from['language_records']"
+    }
+   }
+  },
+  {
+   "from": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "to": "9a748d9f-b72e-5130-928a-b4c339e2ff11",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4fb820f8-3afc-5d7d-a6da-8b7f8d745bc7",
+   "to": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "to": "a49209c2-2a40-5e74-9cb6-fe0f75429d7e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "a49209c2-2a40-5e74-9cb6-fe0f75429d7e",
+   "to": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "to": "595c5ae1-0242-563b-8917-74f2f3d6a6d6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4fb820f8-3afc-5d7d-a6da-8b7f8d745bc7",
+   "to": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "to": "35fe68ed-2e2b-5e1b-888b-3639f60145df",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citation_records']": "from['outputs']['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "35fe68ed-2e2b-5e1b-888b-3639f60145df",
+   "to": "db7ba72e-a617-5679-b950-6b5bfa9d002e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citations']": "from['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "db7ba72e-a617-5679-b950-6b5bfa9d002e",
+   "to": "bc706e29-6548-5b91-ad93-800ca91e23d2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4fb820f8-3afc-5d7d-a6da-8b7f8d745bc7",
+   "to": "db7ba72e-a617-5679-b950-6b5bfa9d002e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

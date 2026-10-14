@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "a79c097d-255b-52bd-85b6-d7f9f0b7be93",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Provenance-Checked Weather Summaries",
+    "description": "Validates a provenance report, executes a supplied SQL weather query, normalizes one measured variable, and returns period-grouped summary metrics.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "74091e0b-7881-5e46-8aa8-4deef7bd8d08",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5ee6b92f-d646-5d34-a4ce-26d04d3f0066",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "03ba7411-b12c-546d-95cf-aef17d89bc5b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d93a5d1b-09a9-5155-9cc9-de735cae6453",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "34416f2d-fb73-563b-a738-3c6316a48519",
+   "labels": [
+    "Period_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_aggregator",
+    "description": "Groups weather readings by time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a79c097d-255b-52bd-85b6-d7f9f0b7be93",
+   "to": "74091e0b-7881-5e46-8aa8-4deef7bd8d08",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "74091e0b-7881-5e46-8aa8-4deef7bd8d08",
+   "to": "5ee6b92f-d646-5d34-a4ce-26d04d3f0066",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "5ee6b92f-d646-5d34-a4ce-26d04d3f0066",
+   "to": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "to": "74091e0b-7881-5e46-8aa8-4deef7bd8d08",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a79c097d-255b-52bd-85b6-d7f9f0b7be93",
+   "to": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "to": "03ba7411-b12c-546d-95cf-aef17d89bc5b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "03ba7411-b12c-546d-95cf-aef17d89bc5b",
+   "to": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "to": "94e01d2c-8daf-5a1a-94bb-e82b8e650869",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a79c097d-255b-52bd-85b6-d7f9f0b7be93",
+   "to": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "to": "d93a5d1b-09a9-5155-9cc9-de735cae6453",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "d93a5d1b-09a9-5155-9cc9-de735cae6453",
+   "to": "34416f2d-fb73-563b-a738-3c6316a48519",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "34416f2d-fb73-563b-a738-3c6316a48519",
+   "to": "cd9e7d18-e945-5c3f-8aa3-4e39ad04edc5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a79c097d-255b-52bd-85b6-d7f9f0b7be93",
+   "to": "34416f2d-fb73-563b-a738-3c6316a48519",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

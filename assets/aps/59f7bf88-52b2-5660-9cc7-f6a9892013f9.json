@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "59f7bf88-52b2-5660-9cc7-f6a9892013f9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Scanned Page Summary",
+    "description": "Converts an array of page images into a concise plain-text summary of the recognized page content.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "948d2a28-4306-5074-bb3a-a16185393feb",
+   "labels": [
+    "Page_Image_Ocr_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "page_image_ocr",
+    "description": "Runs OCR on each page image and returns recognized page text as ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "59019382-4407-5e33-ac65-3aba1a85ab77",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "dcd2bb49-a0a9-5046-9c69-1fba3bb6016d",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "59f7bf88-52b2-5660-9cc7-f6a9892013f9",
+   "to": "948d2a28-4306-5074-bb3a-a16185393feb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "948d2a28-4306-5074-bb3a-a16185393feb",
+   "to": "59019382-4407-5e33-ac65-3aba1a85ab77",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "59019382-4407-5e33-ac65-3aba1a85ab77",
+   "to": "dcd2bb49-a0a9-5046-9c69-1fba3bb6016d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "dcd2bb49-a0a9-5046-9c69-1fba3bb6016d",
+   "to": "948d2a28-4306-5074-bb3a-a16185393feb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "59f7bf88-52b2-5660-9cc7-f6a9892013f9",
+   "to": "dcd2bb49-a0a9-5046-9c69-1fba3bb6016d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

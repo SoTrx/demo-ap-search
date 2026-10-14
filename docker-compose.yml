@@ -1,0 +1,106 @@
+services:
+
+  app:
+    build: .
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.demo-search.rule=PathPrefix(`/demo-search`)
+    - traefik.http.services.demo-search.loadbalancer.server.port=8501
+    - traefik.http.routers.demo-search.entrypoints=web
+    # ports:
+    #   - "8501:8501"
+    environment:
+      - MOMA_OLD_URL=http://moma-old:5000
+      - MOMA_NEW_URL=http://moma-new:5000
+      - STREAMLIT_SERVER_BASE_URL_PATH=${APP_BASE_URL_PATH:-}
+    restart: always
+    depends_on:
+      moma-old:
+        condition: service_healthy
+      moma-new:
+        condition: service_healthy
+    networks:
+      - traefik
+      - internal
+
+  # Today's search: MiniLM on each AP's own root description.
+  moma-old:
+    image: ghcr.io/datagems-eosc/datagems-eosc/moma-management:v2.13.0
+    labels:
+      - traefik.enable=false
+    environment:
+      - NEO4J_URI=bolt://neo4j-old:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=momademo
+      # No trace collector in this demo.
+      - OTEL_SDK_DISABLED=true
+      # PyTorch takes one thread per core by default; on a busy machine they fight and an
+      # embedding takes seconds instead of milliseconds.
+      - OMP_NUM_THREADS=8
+    restart: always
+    healthcheck: &moma-health
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    depends_on:
+      neo4j-old:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # The new search: the fine-tuned EmbeddingGemma 2 on the description forged from the operators.
+  moma-new:
+    image: ghcr.io/datagems-eosc/datagems-eosc/moma-management:v2.14.0
+    labels:
+      - traefik.enable=false
+    environment:
+      - NEO4J_URI=bolt://neo4j-new:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=momademo
+      # No trace collector in this demo.
+      - OTEL_SDK_DISABLED=true
+      # PyTorch takes one thread per core by default; on a busy machine they fight and an
+      # embedding takes seconds instead of milliseconds.
+      - OMP_NUM_THREADS=8
+      - EMBEDDER_MODEL=SoTrxII/analytical-pattern-embedder:v2
+    volumes:
+      # The model is downloaded once (about 550 MB).
+      - hf-cache:/root/.cache/huggingface
+    restart: always
+    healthcheck:
+      <<: *moma-health
+      # The first start downloads the model before the service answers.
+      start_period: 600s
+    depends_on:
+      neo4j-new:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # One Neo4j per search: both use the same vector index name.
+  neo4j-old: &neo4j
+    image: neo4j:5.26
+    labels:
+      - traefik.enable=false
+    environment:
+      - NEO4J_AUTH=neo4j/momademo
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+    networks:
+      - internal
+
+  neo4j-new: *neo4j
+
+volumes:
+  hf-cache:
+
+networks:
+  traefik:
+    external: true
+  internal:
+    driver: bridge

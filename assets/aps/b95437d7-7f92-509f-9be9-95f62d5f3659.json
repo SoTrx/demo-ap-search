@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "b95437d7-7f92-509f-9be9-95f62d5f3659",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Summary Chart Annotation",
+    "description": "Summarizes a dashboard and annotates a chart with that summary as a short note and highlighting hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "7b5aeb7a-bd41-5f1f-b03e-690048b89c55",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "42e60e7c-90fb-5a62-9593-0f5428479458",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "2f180b61-eb13-58d9-8fcd-1553bea85159",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b95437d7-7f92-509f-9be9-95f62d5f3659",
+   "to": "7b5aeb7a-bd41-5f1f-b03e-690048b89c55",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7b5aeb7a-bd41-5f1f-b03e-690048b89c55",
+   "to": "42e60e7c-90fb-5a62-9593-0f5428479458",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "42e60e7c-90fb-5a62-9593-0f5428479458",
+   "to": "2f180b61-eb13-58d9-8fcd-1553bea85159",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "2f180b61-eb13-58d9-8fcd-1553bea85159",
+   "to": "7b5aeb7a-bd41-5f1f-b03e-690048b89c55",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b95437d7-7f92-509f-9be9-95f62d5f3659",
+   "to": "2f180b61-eb13-58d9-8fcd-1553bea85159",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

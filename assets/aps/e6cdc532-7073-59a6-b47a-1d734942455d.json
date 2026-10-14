@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "e6cdc532-7073-59a6-b47a-1d734942455d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Trend and Seasonal Series Profile",
+    "description": "Splits a fixed-period time series into a long-term trend array and a repeating seasonal profile object.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "c4052999-fdef-5143-8732-ecaa363b5775",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e6cdc532-7073-59a6-b47a-1d734942455d",
+   "to": "c4052999-fdef-5143-8732-ecaa363b5775",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

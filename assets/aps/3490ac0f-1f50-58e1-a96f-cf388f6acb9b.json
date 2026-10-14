@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "3490ac0f-1f50-58e1-a96f-cf388f6acb9b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Residual Quasi-Identifier Risk Report",
+    "description": "Harmonizes and encodes tabular records, then reports columns and combinations that could uniquely identify individuals after direct personal fields are excluded.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "4ee3adc9-6b22-53e8-8ba8-a554b50fab04",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dba827a0-670c-541e-8391-b71c1bd00550",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e6b6fcc6-23c5-5849-a0ee-53bb4a32575f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "c5660403-2b46-5b12-8708-c65ef3fc8940",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3490ac0f-1f50-58e1-a96f-cf388f6acb9b",
+   "to": "4ee3adc9-6b22-53e8-8ba8-a554b50fab04",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4ee3adc9-6b22-53e8-8ba8-a554b50fab04",
+   "to": "dba827a0-670c-541e-8391-b71c1bd00550",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "dba827a0-670c-541e-8391-b71c1bd00550",
+   "to": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "to": "4ee3adc9-6b22-53e8-8ba8-a554b50fab04",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3490ac0f-1f50-58e1-a96f-cf388f6acb9b",
+   "to": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "to": "e6b6fcc6-23c5-5849-a0ee-53bb4a32575f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "e6b6fcc6-23c5-5849-a0ee-53bb4a32575f",
+   "to": "c5660403-2b46-5b12-8708-c65ef3fc8940",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "c5660403-2b46-5b12-8708-c65ef3fc8940",
+   "to": "d0099a3c-e479-552c-bb7f-821ec9bcec2f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3490ac0f-1f50-58e1-a96f-cf388f6acb9b",
+   "to": "c5660403-2b46-5b12-8708-c65ef3fc8940",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

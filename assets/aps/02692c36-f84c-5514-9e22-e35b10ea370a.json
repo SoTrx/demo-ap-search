@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "02692c36-f84c-5514-9e22-e35b10ea370a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Forecast Accuracy",
+    "description": "Builds a weighted survey cross-tabulation, normalizes the selected variable as weather readings, orders them into a numeric time series, and scores a supplied forecast against the observed tail to return accuracy.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "41f20e6c-e53d-532f-8c67-1dfd9e756e62",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "09e1bbca-8991-5d6b-933e-d2134b466d1d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "65f32b30-0f8a-5939-8c0e-7f0414b881c1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "eecf7596-9caa-54aa-a3df-25a07587db97",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "7addfeb6-eeb2-505d-9f22-8e9451ec309a",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "02692c36-f84c-5514-9e22-e35b10ea370a",
+   "to": "41f20e6c-e53d-532f-8c67-1dfd9e756e62",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "41f20e6c-e53d-532f-8c67-1dfd9e756e62",
+   "to": "09e1bbca-8991-5d6b-933e-d2134b466d1d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "09e1bbca-8991-5d6b-933e-d2134b466d1d",
+   "to": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "to": "41f20e6c-e53d-532f-8c67-1dfd9e756e62",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02692c36-f84c-5514-9e22-e35b10ea370a",
+   "to": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "to": "65f32b30-0f8a-5939-8c0e-7f0414b881c1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "65f32b30-0f8a-5939-8c0e-7f0414b881c1",
+   "to": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "to": "4e639f76-a7c6-5acc-8335-6e4868561747",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02692c36-f84c-5514-9e22-e35b10ea370a",
+   "to": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "to": "eecf7596-9caa-54aa-a3df-25a07587db97",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "eecf7596-9caa-54aa-a3df-25a07587db97",
+   "to": "7addfeb6-eeb2-505d-9f22-8e9451ec309a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "7addfeb6-eeb2-505d-9f22-8e9451ec309a",
+   "to": "31c90b14-69f0-5115-bd35-4a1e899fa0dc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02692c36-f84c-5514-9e22-e35b10ea370a",
+   "to": "7addfeb6-eeb2-505d-9f22-8e9451ec309a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

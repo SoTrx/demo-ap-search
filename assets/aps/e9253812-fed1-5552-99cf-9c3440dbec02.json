@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "e9253812-fed1-5552-99cf-9c3440dbec02",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Profile Incompatibility Report",
+    "description": "Compares two dataset profiles and returns a report of columns whose value domains are incompatible.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "02352b05-8e9b-50c0-9042-b09914efcbe8",
+   "labels": [
+    "Domain_Comparison_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "domain_comparison_builder",
+    "description": "Compares two dataset profiles and reports columns whose value domains are incompatible. Returns the comparison report without rewriting the datasets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e9253812-fed1-5552-99cf-9c3440dbec02",
+   "to": "02352b05-8e9b-50c0-9042-b09914efcbe8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

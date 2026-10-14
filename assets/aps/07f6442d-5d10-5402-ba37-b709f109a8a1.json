@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "07f6442d-5d10-5402-ba37-b709f109a8a1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Quasi-Identification Risk Report",
+    "description": "Detects direct personal-data fields and reports the quasi-identifier columns and combinations that could re-identify records after those fields are removed.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "f54f15b5-ca1f-5765-86e1-c8a989092c74",
+   "labels": [
+    "Personal_Data_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "personal_data_detector",
+    "description": "Detects direct personal-data fields in table records and returns a row-level detection report. It reports fields such as names, government identifiers, contact details, and addresses.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "90dbbf00-a52c-5fef-889f-370fc8d19b7f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "5c6290fa-3e8e-52af-b9f7-efe1a398aaa0",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "07f6442d-5d10-5402-ba37-b709f109a8a1",
+   "to": "f54f15b5-ca1f-5765-86e1-c8a989092c74",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f54f15b5-ca1f-5765-86e1-c8a989092c74",
+   "to": "90dbbf00-a52c-5fef-889f-370fc8d19b7f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "90dbbf00-a52c-5fef-889f-370fc8d19b7f",
+   "to": "5c6290fa-3e8e-52af-b9f7-efe1a398aaa0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['personal_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "5c6290fa-3e8e-52af-b9f7-efe1a398aaa0",
+   "to": "f54f15b5-ca1f-5765-86e1-c8a989092c74",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "07f6442d-5d10-5402-ba37-b709f109a8a1",
+   "to": "5c6290fa-3e8e-52af-b9f7-efe1a398aaa0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

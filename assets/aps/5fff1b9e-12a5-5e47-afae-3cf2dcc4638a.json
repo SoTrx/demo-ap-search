@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "5fff1b9e-12a5-5e47-afae-3cf2dcc4638a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy From Level Data",
+    "description": "Derives period percentage changes from a level series and returns a numeric score for how well a forecast matches them.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "b6042bde-f146-5b87-ae3f-1f96585d5766",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7ba29655-a5c0-55bf-be6d-227adea2c8de",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "returns"
+   }
+  },
+  {
+   "id": "22033008-ac57-59bb-80fa-57ff999e0f71",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5fff1b9e-12a5-5e47-afae-3cf2dcc4638a",
+   "to": "b6042bde-f146-5b87-ae3f-1f96585d5766",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b6042bde-f146-5b87-ae3f-1f96585d5766",
+   "to": "7ba29655-a5c0-55bf-be6d-227adea2c8de",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['returns']": "from['outputs']['returns']"
+    }
+   }
+  },
+  {
+   "from": "7ba29655-a5c0-55bf-be6d-227adea2c8de",
+   "to": "22033008-ac57-59bb-80fa-57ff999e0f71",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['returns']"
+    }
+   }
+  },
+  {
+   "from": "22033008-ac57-59bb-80fa-57ff999e0f71",
+   "to": "b6042bde-f146-5b87-ae3f-1f96585d5766",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5fff1b9e-12a5-5e47-afae-3cf2dcc4638a",
+   "to": "22033008-ac57-59bb-80fa-57ff999e0f71",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

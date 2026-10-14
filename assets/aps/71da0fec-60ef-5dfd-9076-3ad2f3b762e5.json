@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "71da0fec-60ef-5dfd-9076-3ad2f3b762e5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Find Weakest Student Topic",
+    "description": "Given a student's performance profile, identifies and returns only the weakest subject topic as a single topic string.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "6d5f2d4f-d0a0-5652-bbfa-5cc6db695b26",
+   "labels": [
+    "Topic_Gap_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "topic_gap_identifier",
+    "description": "Identifies the weakest subject topic from a student performance profile and returns it as a single topic string. Returns only the topic, not a remediation plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weakest_topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "71da0fec-60ef-5dfd-9076-3ad2f3b762e5",
+   "to": "6d5f2d4f-d0a0-5652-bbfa-5cc6db695b26",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "f7e9e7b6-e0c7-510d-9034-b5690aa51a14",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "ISCO Occupation Coding",
+    "description": "Turns raw survey response rows into occupation-coded records by selecting one ISCO code above a confidence threshold.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "5128841c-c5be-503d-a707-d0a07e546aa4",
+   "labels": [
+    "Survey_Response_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_response_extractor",
+    "description": "Extracts survey response rows from table records and keeps only the columns named in the mapping. Rows without a response identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3a27abbb-eb22-526c-b3da-cb5c17736d88",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "survey_response_records"
+   }
+  },
+  {
+   "id": "fdb4729d-3f7b-5cc9-b7f6-fe2252b9cb09",
+   "labels": [
+    "ISCO_Code_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_code_selector",
+    "description": "Assigns one ISCO code to each survey response by selecting the highest confidence candidate that meets the threshold. It returns coded response records with the original response fields and the selected occupation code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f7e9e7b6-e0c7-510d-9034-b5690aa51a14",
+   "to": "5128841c-c5be-503d-a707-d0a07e546aa4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5128841c-c5be-503d-a707-d0a07e546aa4",
+   "to": "3a27abbb-eb22-526c-b3da-cb5c17736d88",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['survey_response_records']": "from['outputs']['survey_response_records']"
+    }
+   }
+  },
+  {
+   "from": "3a27abbb-eb22-526c-b3da-cb5c17736d88",
+   "to": "fdb4729d-3f7b-5cc9-b7f6-fe2252b9cb09",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['survey_response_records']": "from['survey_response_records']"
+    }
+   }
+  },
+  {
+   "from": "fdb4729d-3f7b-5cc9-b7f6-fe2252b9cb09",
+   "to": "5128841c-c5be-503d-a707-d0a07e546aa4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f7e9e7b6-e0c7-510d-9034-b5690aa51a14",
+   "to": "fdb4729d-3f7b-5cc9-b7f6-fe2252b9cb09",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

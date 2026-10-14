@@ -1,0 +1,305 @@
+{
+ "nodes": [
+  {
+   "id": "94c0dde4-07b9-5479-9b58-7112ae84bc41",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filtered Image Detections From Tables",
+    "description": "Normalizes raw table records, learns from the mapped target column, detects objects in the supplied images, and returns only detections whose confidence score meets the threshold.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "2879cf74-877a-5ca8-8dcb-a45d4bccf786",
+   "labels": [
+    "Table_Record_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_table_records",
+    "description": "Normalizes table headers and cell values in extracted table records for consistent tabular analysis.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "060b24d3-cd0f-5b47-8d77-4dd97f21c875",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "71a792ef-b558-5109-a4a3-da081d807738",
+   "labels": [
+    "Train_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "train_classifier",
+    "description": "Fits a classification model from feature rows and the target column identified in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9e42700c-8709-512b-946d-720a944294db",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "model"
+   }
+  },
+  {
+   "id": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "labels": [
+    "Object_Detection_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "object_detection_predictor",
+    "description": "Applies an object detection model to an image batch and returns detected objects with class labels, bounding boxes, and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f88d5976-5434-5492-ad2e-3c4dc76450d2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "detections"
+   }
+  },
+  {
+   "id": "132bd199-7ec5-5964-bc9e-8431a4053773",
+   "labels": [
+    "Detection_Score_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detection_score_filter",
+    "description": "Keeps only object detections whose confidence score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "94c0dde4-07b9-5479-9b58-7112ae84bc41",
+   "to": "2879cf74-877a-5ca8-8dcb-a45d4bccf786",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2879cf74-877a-5ca8-8dcb-a45d4bccf786",
+   "to": "060b24d3-cd0f-5b47-8d77-4dd97f21c875",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "060b24d3-cd0f-5b47-8d77-4dd97f21c875",
+   "to": "71a792ef-b558-5109-a4a3-da081d807738",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "71a792ef-b558-5109-a4a3-da081d807738",
+   "to": "2879cf74-877a-5ca8-8dcb-a45d4bccf786",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "94c0dde4-07b9-5479-9b58-7112ae84bc41",
+   "to": "71a792ef-b558-5109-a4a3-da081d807738",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "71a792ef-b558-5109-a4a3-da081d807738",
+   "to": "9e42700c-8709-512b-946d-720a944294db",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['model']": "from['outputs']['model']"
+    }
+   }
+  },
+  {
+   "from": "9e42700c-8709-512b-946d-720a944294db",
+   "to": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['model']"
+    }
+   }
+  },
+  {
+   "from": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "to": "71a792ef-b558-5109-a4a3-da081d807738",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "94c0dde4-07b9-5479-9b58-7112ae84bc41",
+   "to": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "to": "f88d5976-5434-5492-ad2e-3c4dc76450d2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['detections']": "from['outputs']['detections']"
+    }
+   }
+  },
+  {
+   "from": "f88d5976-5434-5492-ad2e-3c4dc76450d2",
+   "to": "132bd199-7ec5-5964-bc9e-8431a4053773",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['detections']": "from['detections']"
+    }
+   }
+  },
+  {
+   "from": "132bd199-7ec5-5964-bc9e-8431a4053773",
+   "to": "ed1bbeba-fca1-54f4-9626-98db41f9dbfc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "94c0dde4-07b9-5479-9b58-7112ae84bc41",
+   "to": "132bd199-7ec5-5964-bc9e-8431a4053773",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

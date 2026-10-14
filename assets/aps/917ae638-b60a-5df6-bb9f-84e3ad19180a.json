@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "917ae638-b60a-5df6-bb9f-84e3ad19180a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Chart Collection Dashboard Composer",
+    "description": "Converts a collection of charts into a dashboard specification organized into titled panels.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "b5ea4d1c-23ba-5ea4-a019-343692ed20e4",
+   "labels": [
+    "Dashboard_Layout_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_layout_builder",
+    "description": "Arranges a chart collection into a dashboard specification with panels and titles.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "917ae638-b60a-5df6-bb9f-84e3ad19180a",
+   "to": "b5ea4d1c-23ba-5ea4-a019-343692ed20e4",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "cb18256e-9f10-5cef-b3a3-a5f8d17ab4a8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Compliance-gated SQL Result Rows",
+    "description": "Parses raw provenance into a compliance check and returns SQL result rows only when the query can be run.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "ec4a9286-2aad-5cfc-b51a-636ef4fd8928",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0f939b29-b36e-5727-b95c-0134d59b3483",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "21709037-978d-5adc-ba11-e6cd8c46eca7",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "552d434b-b0f4-5cb7-a924-8d6551c6a052",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cb18256e-9f10-5cef-b3a3-a5f8d17ab4a8",
+   "to": "ec4a9286-2aad-5cfc-b51a-636ef4fd8928",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ec4a9286-2aad-5cfc-b51a-636ef4fd8928",
+   "to": "0f939b29-b36e-5727-b95c-0134d59b3483",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "0f939b29-b36e-5727-b95c-0134d59b3483",
+   "to": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "to": "ec4a9286-2aad-5cfc-b51a-636ef4fd8928",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cb18256e-9f10-5cef-b3a3-a5f8d17ab4a8",
+   "to": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "to": "21709037-978d-5adc-ba11-e6cd8c46eca7",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "21709037-978d-5adc-ba11-e6cd8c46eca7",
+   "to": "552d434b-b0f4-5cb7-a924-8d6551c6a052",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "552d434b-b0f4-5cb7-a924-8d6551c6a052",
+   "to": "e7deb44a-8ac1-55ee-9657-c092814a0510",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cb18256e-9f10-5cef-b3a3-a5f8d17ab4a8",
+   "to": "552d434b-b0f4-5cb7-a924-8d6551c6a052",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

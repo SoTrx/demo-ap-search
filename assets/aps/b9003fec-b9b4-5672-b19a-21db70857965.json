@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "b9003fec-b9b4-5672-b19a-21db70857965",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Time Series Anomaly Detection",
+    "description": "Decomposes a numeric time series into trend and seasonal profile for a fixed period, then returns observations whose departure from that profile exceeds a chosen threshold.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "d45966ed-c92f-5a2f-a80c-e59ab0a37214",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "54e615d2-4ad7-52ea-bdad-962604631d8f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "2b20656b-78d1-5f6e-a7ca-b699d00a44c9",
+   "labels": [
+    "Time_Series_Anomaly_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Anomaly Detector",
+    "description": "Flags observations in a time series whose deviation exceeds a numeric threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "anomalies",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b9003fec-b9b4-5672-b19a-21db70857965",
+   "to": "d45966ed-c92f-5a2f-a80c-e59ab0a37214",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d45966ed-c92f-5a2f-a80c-e59ab0a37214",
+   "to": "54e615d2-4ad7-52ea-bdad-962604631d8f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "54e615d2-4ad7-52ea-bdad-962604631d8f",
+   "to": "2b20656b-78d1-5f6e-a7ca-b699d00a44c9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "2b20656b-78d1-5f6e-a7ca-b699d00a44c9",
+   "to": "d45966ed-c92f-5a2f-a80c-e59ab0a37214",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b9003fec-b9b4-5672-b19a-21db70857965",
+   "to": "2b20656b-78d1-5f6e-a7ca-b699d00a44c9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "02125da9-944e-5723-a9f0-2c2e09dbdfbf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Resampled Rolling Volatility",
+    "description": "This AP computes a rolling volatility series from a returns array using a specified window and then resamples the volatility series to the requested period granularity.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "2a5eab09-fcb7-5bdd-abf9-4cc2c03ed1e2",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8993224d-d196-5133-a45a-c55daa3afa12",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "15c96389-fe54-5ed1-ab58-39be56475e88",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "02125da9-944e-5723-a9f0-2c2e09dbdfbf",
+   "to": "2a5eab09-fcb7-5bdd-abf9-4cc2c03ed1e2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2a5eab09-fcb7-5bdd-abf9-4cc2c03ed1e2",
+   "to": "8993224d-d196-5133-a45a-c55daa3afa12",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "8993224d-d196-5133-a45a-c55daa3afa12",
+   "to": "15c96389-fe54-5ed1-ab58-39be56475e88",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "15c96389-fe54-5ed1-ab58-39be56475e88",
+   "to": "2a5eab09-fcb7-5bdd-abf9-4cc2c03ed1e2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02125da9-944e-5723-a9f0-2c2e09dbdfbf",
+   "to": "15c96389-fe54-5ed1-ab58-39be56475e88",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "f2470f4a-2f8f-5e90-961d-ff29eb4efe6e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Period Summary",
+    "description": "Summarizes raw weather result rows for a selected variable into aggregates grouped by day, week, month, or another period.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "45179e4f-996c-5a29-af4d-0ec4b2724354",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1faa3284-28eb-593f-af20-e544673b5f52",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "53fbaae0-e019-5937-8611-219ca0c1f1e6",
+   "labels": [
+    "Period_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_aggregator",
+    "description": "Groups weather readings by time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f2470f4a-2f8f-5e90-961d-ff29eb4efe6e",
+   "to": "45179e4f-996c-5a29-af4d-0ec4b2724354",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "45179e4f-996c-5a29-af4d-0ec4b2724354",
+   "to": "1faa3284-28eb-593f-af20-e544673b5f52",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "1faa3284-28eb-593f-af20-e544673b5f52",
+   "to": "53fbaae0-e019-5937-8611-219ca0c1f1e6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "53fbaae0-e019-5937-8611-219ca0c1f1e6",
+   "to": "45179e4f-996c-5a29-af4d-0ec4b2724354",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f2470f4a-2f8f-5e90-961d-ff29eb4efe6e",
+   "to": "53fbaae0-e019-5937-8611-219ca0c1f1e6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

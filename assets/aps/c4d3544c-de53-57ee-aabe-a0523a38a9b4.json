@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "c4d3544c-de53-57ee-aabe-a0523a38a9b4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Ordered Date-Value Series Builder",
+    "description": "Builds an ordered date-value series from table rows by sorting rows on the mapped date column and pairing each date with its mapped value.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "1dc0315c-befe-5d90-9c7f-85c511f9e2a2",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c4d3544c-de53-57ee-aabe-a0523a38a9b4",
+   "to": "1dc0315c-befe-5d90-9c7f-85c511f9e2a2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

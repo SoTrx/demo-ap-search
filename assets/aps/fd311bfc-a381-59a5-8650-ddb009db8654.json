@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "fd311bfc-a381-59a5-8650-ddb009db8654",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translated Chunk Cleanup",
+    "description": "Cleans translated chunks against their source chunks and returns tidied translated chunks with placeholders and formatting kept intact.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "f692a089-e15f-558c-8445-417c421af76d",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fd311bfc-a381-59a5-8650-ddb009db8654",
+   "to": "f692a089-e15f-558c-8445-417c421af76d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

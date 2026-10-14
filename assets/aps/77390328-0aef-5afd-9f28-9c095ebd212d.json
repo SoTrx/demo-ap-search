@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "77390328-0aef-5afd-9f28-9c095ebd212d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Relevant Dataset Question Keywords",
+    "description": "This pattern converts a natural-language dataset question into searchable catalogue keyword records and returns only those records whose relevance score is at least the supplied threshold.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "eea6372f-ef3c-5f2a-9dc9-e7e8cf273d10",
+   "labels": [
+    "DatasetSearchQueryBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_search_query",
+    "description": "Translates a natural-language dataset question into keyword records for catalogue search. It expands each requested topic into searchable terms and facets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "question",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "16d20e59-8519-5893-8cbe-85c4081f9d76",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "keywords"
+   }
+  },
+  {
+   "id": "4dba1475-c058-5893-9eea-8407a58e55c2",
+   "labels": [
+    "Keyword_Threshold_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "keyword_threshold_filter",
+    "description": "Keeps keyword records whose relevance score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "77390328-0aef-5afd-9f28-9c095ebd212d",
+   "to": "eea6372f-ef3c-5f2a-9dc9-e7e8cf273d10",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "eea6372f-ef3c-5f2a-9dc9-e7e8cf273d10",
+   "to": "16d20e59-8519-5893-8cbe-85c4081f9d76",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['keywords']": "from['outputs']['keywords']"
+    }
+   }
+  },
+  {
+   "from": "16d20e59-8519-5893-8cbe-85c4081f9d76",
+   "to": "4dba1475-c058-5893-9eea-8407a58e55c2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['keywords']": "from['keywords']"
+    }
+   }
+  },
+  {
+   "from": "4dba1475-c058-5893-9eea-8407a58e55c2",
+   "to": "eea6372f-ef3c-5f2a-9dc9-e7e8cf273d10",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "77390328-0aef-5afd-9f28-9c095ebd212d",
+   "to": "4dba1475-c058-5893-9eea-8407a58e55c2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

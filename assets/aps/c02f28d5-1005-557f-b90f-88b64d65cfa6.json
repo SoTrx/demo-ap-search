@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "c02f28d5-1005-557f-b90f-88b64d65cfa6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Query Provenance Explainer",
+    "description": "The AP analyzes an SQL query and returns provenance information describing the data sources, transformations, and execution plan.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "cff035c8-3eb5-59fe-a34f-8f6709274122",
+   "labels": [
+    "SQL_Provenance_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Provenance",
+    "description": "Analyzes an SQL query and returns provenance information describing the data sources, transformations, and execution plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c02f28d5-1005-557f-b90f-88b64d65cfa6",
+   "to": "cff035c8-3eb5-59fe-a34f-8f6709274122",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

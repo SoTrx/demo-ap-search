@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "9096aa32-e093-5942-966b-c5f44e00bccf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Candidate Cross-Source Match Finder",
+    "description": "Generates possible cross-source record pairs from two entity lists using mapped attributes, returning candidate matches before clustering.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "1d5c4591-8fa3-567e-b787-e10085aaf278",
+   "labels": [
+    "Entity_Match_Candidate_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_match_candidate_generator",
+    "description": "Generates candidate cross-source matches between two entity record sets using mapped attributes. It returns candidate pairs before clustering.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9096aa32-e093-5942-966b-c5f44e00bccf",
+   "to": "1d5c4591-8fa3-567e-b787-e10085aaf278",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

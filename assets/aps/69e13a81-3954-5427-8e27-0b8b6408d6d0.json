@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "69e13a81-3954-5427-8e27-0b8b6408d6d0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Foreign Table Record Search",
+    "description": "Finds passages for a query, keeps those outside the target language, and returns structured header and cell table records from related table regions.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "5ce1ca1e-291a-5b9a-b780-d1d5bf1454f9",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e817c72c-9d3c-5a8d-af75-9adea10918d2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d983ac47-5a00-5da8-8054-699f68f50174",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "c42414fd-b77e-5213-8b2e-84a1beeb37a3",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "69e13a81-3954-5427-8e27-0b8b6408d6d0",
+   "to": "5ce1ca1e-291a-5b9a-b780-d1d5bf1454f9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5ce1ca1e-291a-5b9a-b780-d1d5bf1454f9",
+   "to": "e817c72c-9d3c-5a8d-af75-9adea10918d2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "e817c72c-9d3c-5a8d-af75-9adea10918d2",
+   "to": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "to": "5ce1ca1e-291a-5b9a-b780-d1d5bf1454f9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "69e13a81-3954-5427-8e27-0b8b6408d6d0",
+   "to": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "to": "d983ac47-5a00-5da8-8054-699f68f50174",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "d983ac47-5a00-5da8-8054-699f68f50174",
+   "to": "c42414fd-b77e-5213-8b2e-84a1beeb37a3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "c42414fd-b77e-5213-8b2e-84a1beeb37a3",
+   "to": "23aaf79a-6d53-54a9-a553-7ae4297fe9c5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "69e13a81-3954-5427-8e27-0b8b6408d6d0",
+   "to": "c42414fd-b77e-5213-8b2e-84a1beeb37a3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "5423b542-d091-57b6-9b0d-76dab7efba61",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Sample Column Profile",
+    "description": "Creates a column-level profile from sampled table records, reporting observed columns, inferred types, and sample row count.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "8fb1b9e1-a855-5b94-93b4-03b397a95ccf",
+   "labels": [
+    "DatasetColumnProfileBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_column_profile",
+    "description": "Builds a column-level profile from table records. It summarizes observed column names, inferred types, and row counts for catalogue comparison.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5423b542-d091-57b6-9b0d-76dab7efba61",
+   "to": "8fb1b9e1-a855-5b94-93b4-03b397a95ccf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

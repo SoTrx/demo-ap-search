@@ -1,0 +1,269 @@
+{
+ "nodes": [
+  {
+   "id": "7a3174c0-0c04-5b98-845b-628a282c89a4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Bilingual Source Translation Alignment",
+    "description": "Splits a plain-text source document, normalizes translated chunks against the source, and returns source-translated segment pairs with confidence scores filtered by a threshold.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "639dd908-88b0-5184-aaaf-90ea67dbaa88",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0dfacffe-47b5-5a5f-a360-e757e645dabd",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_translated_chunks"
+   }
+  },
+  {
+   "id": "686610e8-08a6-5a9a-b157-5ca207962c8f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "labels": [
+    "Parallel_Segment_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "parallel_segment_aligner",
+    "description": "Aligns source and translated text chunks by length, order, and content cues, returning segment pairs with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "align_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7a3174c0-0c04-5b98-845b-628a282c89a4",
+   "to": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "to": "639dd908-88b0-5184-aaaf-90ea67dbaa88",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "639dd908-88b0-5184-aaaf-90ea67dbaa88",
+   "to": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "to": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7a3174c0-0c04-5b98-845b-628a282c89a4",
+   "to": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "to": "0dfacffe-47b5-5a5f-a360-e757e645dabd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_translated_chunks']": "from['outputs']['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "0dfacffe-47b5-5a5f-a360-e757e645dabd",
+   "to": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['translated_chunks']": "from['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "to": "686610e8-08a6-5a9a-b157-5ca207962c8f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "686610e8-08a6-5a9a-b157-5ca207962c8f",
+   "to": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "to": "8732e970-66c4-5969-9bad-be4a6dcd0363",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "to": "435f8622-9473-5243-8c1e-31d0ae360e73",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7a3174c0-0c04-5b98-845b-628a282c89a4",
+   "to": "3bf5bd08-c20b-5c3c-b876-5dd68c2f828c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

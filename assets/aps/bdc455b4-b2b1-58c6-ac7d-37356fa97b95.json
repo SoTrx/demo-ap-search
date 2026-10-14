@@ -1,0 +1,287 @@
+{
+ "nodes": [
+  {
+   "id": "bdc455b4-b2b1-58c6-ac7d-37356fa97b95",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translation Alignment Validation Report",
+    "description": "Cleans translated chunks against the source chunks, scores likely source-to-translation segment matches, filters them by the acceptance threshold, and returns a validation report plus the accepted segment alignments.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ada7bb43-eb59-5de1-9ed0-77db0986703c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_translated_chunks"
+   }
+  },
+  {
+   "id": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "labels": [
+    "Parallel_Segment_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "parallel_segment_aligner",
+    "description": "Aligns source and translated text chunks by length, order, and content cues, returning segment pairs with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "align_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "648c5ceb-db7c-5bdc-9e84-2e58fe5ffe14",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "segment_alignment"
+   }
+  },
+  {
+   "id": "8b358f64-2748-52f7-a916-1cca4917ad7f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_translated_chunks"
+   }
+  },
+  {
+   "id": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "labels": [
+    "Translation_Alignment_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_alignment_validator",
+    "description": "Reviews segment alignments against a quality threshold and returns a validation report plus the alignments that pass.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accept_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "validation_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "bdc455b4-b2b1-58c6-ac7d-37356fa97b95",
+   "to": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "to": "ada7bb43-eb59-5de1-9ed0-77db0986703c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_translated_chunks']": "from['outputs']['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "ada7bb43-eb59-5de1-9ed0-77db0986703c",
+   "to": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['translated_chunks']": "from['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "to": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "bdc455b4-b2b1-58c6-ac7d-37356fa97b95",
+   "to": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "to": "648c5ceb-db7c-5bdc-9e84-2e58fe5ffe14",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['segment_alignment']": "from['outputs']['segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "648c5ceb-db7c-5bdc-9e84-2e58fe5ffe14",
+   "to": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['segment_alignment']": "from['segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "to": "8b358f64-2748-52f7-a916-1cca4917ad7f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_translated_chunks']": "from['outputs']['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "8b358f64-2748-52f7-a916-1cca4917ad7f",
+   "to": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['translated_chunks']": "from['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "to": "ff570b95-c043-58a9-9631-14e454f2e6fa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "to": "fbcb711a-0b63-51f9-8cc3-cb8f048085d1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "bdc455b4-b2b1-58c6-ac7d-37356fa97b95",
+   "to": "4090da11-b8bf-5131-9144-b68b513c99f1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

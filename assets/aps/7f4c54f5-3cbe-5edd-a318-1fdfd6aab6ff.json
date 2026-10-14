@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "7f4c54f5-3cbe-5edd-a318-1fdfd6aab6ff",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Date-Filtered Mapped Patient Records",
+    "description": "Converts raw patient rows into a date-filtered, patient-level export with only the mapped columns and encoded categorical features.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "5d360c4c-8954-5876-8bd6-443141b65b2b",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5c089a91-4723-51b2-9087-3cffc1273feb",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "76e37ddc-a9ad-559d-900a-d7d62221ce20",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "patient_records"
+   }
+  },
+  {
+   "id": "d8430be1-96f8-5dcc-a95d-a0f72199e63a",
+   "labels": [
+    "Enrollment_Date_Window_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "enrollment_date_window_filter",
+    "description": "Keeps patient records whose enrollment date is between the start and end dates. Dates are returned as normalized date strings.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7f4c54f5-3cbe-5edd-a318-1fdfd6aab6ff",
+   "to": "5d360c4c-8954-5876-8bd6-443141b65b2b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5d360c4c-8954-5876-8bd6-443141b65b2b",
+   "to": "5c089a91-4723-51b2-9087-3cffc1273feb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "5c089a91-4723-51b2-9087-3cffc1273feb",
+   "to": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_records']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "to": "5d360c4c-8954-5876-8bd6-443141b65b2b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7f4c54f5-3cbe-5edd-a318-1fdfd6aab6ff",
+   "to": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "to": "76e37ddc-a9ad-559d-900a-d7d62221ce20",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['patient_records']": "from['outputs']['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "76e37ddc-a9ad-559d-900a-d7d62221ce20",
+   "to": "d8430be1-96f8-5dcc-a95d-a0f72199e63a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['patient_records']": "from['patient_records']"
+    }
+   }
+  },
+  {
+   "from": "d8430be1-96f8-5dcc-a95d-a0f72199e63a",
+   "to": "4662213f-28db-5b54-985d-ad4ab97f026f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7f4c54f5-3cbe-5edd-a318-1fdfd6aab6ff",
+   "to": "d8430be1-96f8-5dcc-a95d-a0f72199e63a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

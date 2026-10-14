@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "63be2967-9ad8-5ff5-a6c5-b38548d5a97d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translated Text Citation Extraction",
+    "description": "Reassembles accepted translation segments with source fallback, splits the full translated text into size-bounded pieces, and detects bibliographic citations with surrounding context as citation records.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "36e38fa1-c070-534d-8d5a-1d0d9abee6cc",
+   "labels": [
+    "Multilingual_Text_Recomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "multilingual_text_recomposer",
+    "description": "Reassembles accepted aligned translated chunks into a full translated text, using original source chunks as fallback for unaligned content.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b11ad6ef-153d-59dc-a5f0-3e405e67ebaf",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "translated_text"
+   }
+  },
+  {
+   "id": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "labels": [
+    "Plain_Text_Chunk_Splitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "plain_text_chunk_splitter",
+    "description": "Splits a plain-text document into translatable chunks using the maximum chunk size threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "max_chunk_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "902393a6-b22f-5aaf-a86e-78a21989300e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "9da33d79-9f3e-5947-89aa-1a6e17e9ccf0",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "63be2967-9ad8-5ff5-a6c5-b38548d5a97d",
+   "to": "36e38fa1-c070-534d-8d5a-1d0d9abee6cc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "36e38fa1-c070-534d-8d5a-1d0d9abee6cc",
+   "to": "b11ad6ef-153d-59dc-a5f0-3e405e67ebaf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['translated_text']": "from['outputs']['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "b11ad6ef-153d-59dc-a5f0-3e405e67ebaf",
+   "to": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text']": "from['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "to": "36e38fa1-c070-534d-8d5a-1d0d9abee6cc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "63be2967-9ad8-5ff5-a6c5-b38548d5a97d",
+   "to": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "to": "902393a6-b22f-5aaf-a86e-78a21989300e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "902393a6-b22f-5aaf-a86e-78a21989300e",
+   "to": "9da33d79-9f3e-5947-89aa-1a6e17e9ccf0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "9da33d79-9f3e-5947-89aa-1a6e17e9ccf0",
+   "to": "8ef05cae-0ca6-5b53-9686-d99e276c3c5b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "63be2967-9ad8-5ff5-a6c5-b38548d5a97d",
+   "to": "9da33d79-9f3e-5947-89aa-1a6e17e9ccf0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

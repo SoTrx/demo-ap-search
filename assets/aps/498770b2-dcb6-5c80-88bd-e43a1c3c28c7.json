@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "498770b2-dcb6-5c80-88bd-e43a1c3c28c7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing Text Cell Report",
+    "description": "Checks table rows for null, blank, whitespace-only, or placeholder values in likely text columns and returns a missing-value report.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "a9a38ff1-9616-5656-b389-81e6a600dea3",
+   "labels": [
+    "Missing_Value_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "missing_value_detector",
+    "description": "Flags null, empty, whitespace, and placeholder cells in table rows, using the profile to identify likely text columns. Returns a missing-value report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "498770b2-dcb6-5c80-88bd-e43a1c3c28c7",
+   "to": "a9a38ff1-9616-5656-b389-81e6a600dea3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

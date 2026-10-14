@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "7fa456b0-f265-5ab6-a91c-44af818af2c0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Page Image Classification Predictions",
+    "description": "Normalizes scanned page images and runs image classification on them, returning predicted labels with confidence scores for each page.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "6840d81e-d938-5b1d-a8df-621633c9448a",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8fd9f833-a6a9-5ec3-9b24-3918b1d772ca",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "images"
+   }
+  },
+  {
+   "id": "57b37605-80f5-5ad0-b508-c9b30c43639b",
+   "labels": [
+    "Image_Classification_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_classification_predictor",
+    "description": "Applies an image classification model to an image batch and returns predicted labels with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7fa456b0-f265-5ab6-a91c-44af818af2c0",
+   "to": "6840d81e-d938-5b1d-a8df-621633c9448a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6840d81e-d938-5b1d-a8df-621633c9448a",
+   "to": "8fd9f833-a6a9-5ec3-9b24-3918b1d772ca",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['images']": "from['outputs']['images']"
+    }
+   }
+  },
+  {
+   "from": "8fd9f833-a6a9-5ec3-9b24-3918b1d772ca",
+   "to": "57b37605-80f5-5ad0-b508-c9b30c43639b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['images']": "from['images']"
+    }
+   }
+  },
+  {
+   "from": "57b37605-80f5-5ad0-b508-c9b30c43639b",
+   "to": "6840d81e-d938-5b1d-a8df-621633c9448a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7fa456b0-f265-5ab6-a91c-44af818af2c0",
+   "to": "57b37605-80f5-5ad0-b508-c9b30c43639b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

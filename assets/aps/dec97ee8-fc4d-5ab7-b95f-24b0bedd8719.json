@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "dec97ee8-fc4d-5ab7-b95f-24b0bedd8719",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Schema Difference Report",
+    "description": "Profiles a table row array and compares its inferred column types to an expected profile, returning missing, extra, and type-mismatched columns.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "f467ee7e-bf1a-5c55-bc1b-ef013d3b0bb4",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ad2f4d75-ec42-588d-a6e9-6a9041b45536",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "d4d62165-b31c-5ac8-94dc-44cb91d9dc68",
+   "labels": [
+    "DatasetSchemaComparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "compare_dataset_schemas",
+    "description": "Compares two dataset profiles and returns a schema validation report. It flags missing, extra, and type-mismatched columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema_diff",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dec97ee8-fc4d-5ab7-b95f-24b0bedd8719",
+   "to": "f467ee7e-bf1a-5c55-bc1b-ef013d3b0bb4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f467ee7e-bf1a-5c55-bc1b-ef013d3b0bb4",
+   "to": "ad2f4d75-ec42-588d-a6e9-6a9041b45536",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "ad2f4d75-ec42-588d-a6e9-6a9041b45536",
+   "to": "d4d62165-b31c-5ac8-94dc-44cb91d9dc68",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "d4d62165-b31c-5ac8-94dc-44cb91d9dc68",
+   "to": "f467ee7e-bf1a-5c55-bc1b-ef013d3b0bb4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dec97ee8-fc4d-5ab7-b95f-24b0bedd8719",
+   "to": "d4d62165-b31c-5ac8-94dc-44cb91d9dc68",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

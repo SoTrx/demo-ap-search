@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "c2141a90-3662-53d2-9254-bfa8254f088c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Medical Code Descendant Expansion",
+    "description": "Expands a starting medical code list to include all codes reachable through parent-child vocabulary relationships.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "0457477c-7296-5381-9911-fbdc18546e94",
+   "labels": [
+    "Medical_Code_Set_Expander_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "code_set_expander",
+    "description": "Expands a base medical code set to descendant codes using parent-child vocabulary triples. It returns the original codes and any reachable descendants.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "base_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "vocabulary_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c2141a90-3662-53d2-9254-bfa8254f088c",
+   "to": "0457477c-7296-5381-9911-fbdc18546e94",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

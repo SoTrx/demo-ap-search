@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "ae06ec72-a35e-5e28-8803-5e971652777e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe Provenance Prediction Explanations",
+    "description": "Validates a provenance report, runs only the permitted SQL query, and returns per-row feature attributions for the model predictions.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "e46c1152-5cd2-58f7-812f-2f18e6ce5539",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3d6b3874-70ef-53da-829f-b3d29f327a18",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "6d7aa449-b153-51b6-8903-dc07b907c997",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "a7a9e4e9-42f0-5f5e-896f-bac4a6e73576",
+   "labels": [
+    "Explain_Classifier_Predictions_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "explain_classifier_predictions",
+    "description": "Attributes the predicted class for each input row to the model feature columns and returns row-level attribution scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "feature_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "attributions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ae06ec72-a35e-5e28-8803-5e971652777e",
+   "to": "e46c1152-5cd2-58f7-812f-2f18e6ce5539",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e46c1152-5cd2-58f7-812f-2f18e6ce5539",
+   "to": "3d6b3874-70ef-53da-829f-b3d29f327a18",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "3d6b3874-70ef-53da-829f-b3d29f327a18",
+   "to": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "to": "e46c1152-5cd2-58f7-812f-2f18e6ce5539",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ae06ec72-a35e-5e28-8803-5e971652777e",
+   "to": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "to": "6d7aa449-b153-51b6-8903-dc07b907c997",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "6d7aa449-b153-51b6-8903-dc07b907c997",
+   "to": "a7a9e4e9-42f0-5f5e-896f-bac4a6e73576",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "a7a9e4e9-42f0-5f5e-896f-bac4a6e73576",
+   "to": "7b80f59c-9850-56b5-a62c-4436961e8971",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ae06ec72-a35e-5e28-8803-5e971652777e",
+   "to": "a7a9e4e9-42f0-5f5e-896f-bac4a6e73576",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

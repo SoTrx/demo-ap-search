@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "8ca3448b-0253-520a-a829-677f220c4904",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Sampled Economic Price Series Builder",
+    "description": "Samples a bounded number of rows from a dataset and maps selected date and value columns into an ordered economic indicator or price time series.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "6a652939-07eb-545a-aae5-550da09ad67a",
+   "labels": [
+    "DatasetSampleMaterializer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "materialize_dataset_sample",
+    "description": "Materializes a bounded row sample from a dataset for profiling. It uses the supplied threshold as the maximum number of rows to return.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dataset",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "row_limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5e06ebb7-644e-506f-abb1-5a29dc2bc1ac",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "sample_rows"
+   }
+  },
+  {
+   "id": "6ad9f26e-2b5e-50c3-8540-1c88a4463439",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8ca3448b-0253-520a-a829-677f220c4904",
+   "to": "6a652939-07eb-545a-aae5-550da09ad67a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6a652939-07eb-545a-aae5-550da09ad67a",
+   "to": "5e06ebb7-644e-506f-abb1-5a29dc2bc1ac",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['sample_rows']": "from['outputs']['sample_rows']"
+    }
+   }
+  },
+  {
+   "from": "5e06ebb7-644e-506f-abb1-5a29dc2bc1ac",
+   "to": "6ad9f26e-2b5e-50c3-8540-1c88a4463439",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['sample_rows']"
+    }
+   }
+  },
+  {
+   "from": "6ad9f26e-2b5e-50c3-8540-1c88a4463439",
+   "to": "6a652939-07eb-545a-aae5-550da09ad67a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8ca3448b-0253-520a-a829-677f220c4904",
+   "to": "6ad9f26e-2b5e-50c3-8540-1c88a4463439",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "2c59e414-05b9-5e70-be37-bf6b00e29da4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic Gap Material Recommendations",
+    "description": "Recommends study material entries for a student's topic gap based on performance profile and returns only those entries as JSON without answers or explanations.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "c18d9bab-0b91-58be-83b0-5cd303b1d83f",
+   "labels": [
+    "Study_Material_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_material_recommender",
+    "description": "Recommends study material entries as JSON for a student's topic gap based on performance profile. Returns material entries only, without answers or explanations.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "material_limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2c59e414-05b9-5e70-be37-bf6b00e29da4",
+   "to": "c18d9bab-0b91-58be-83b0-5cd303b1d83f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

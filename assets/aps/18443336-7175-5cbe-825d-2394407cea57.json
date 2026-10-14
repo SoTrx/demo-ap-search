@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "18443336-7175-5cbe-825d-2394407cea57",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Matching Key Recommender",
+    "description": "This AP takes two harmonized table record arrays and returns a recommended left and right key specification for aligning them.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "43e30927-1e22-5240-a303-1d8144590cce",
+   "labels": [
+    "Join_Key_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "join_key_recommender",
+    "description": "Recommends left and right join keys that can align two harmonized table datasets. It evaluates key uniqueness and value overlap between the tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "join_key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "18443336-7175-5cbe-825d-2394407cea57",
+   "to": "43e30927-1e22-5240-a303-1d8144590cce",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

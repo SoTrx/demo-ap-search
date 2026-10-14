@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "0ce64261-f638-57bd-a548-1711001e53e4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Executive Summary",
+    "description": "This AP converts a dashboard object into a plain-text executive summary that describes the dashboard's panels, annotations, and filters.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "eaa0157f-afda-509b-aafb-84afc28ffe14",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0ce64261-f638-57bd-a548-1711001e53e4",
+   "to": "eaa0157f-afda-509b-aafb-84afc28ffe14",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "f0befd77-330c-57f6-9ad7-a4d4a7f5734a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Card Citation Support",
+    "description": "Creates a plain-text dataset card from a dataset profile and returns whether the query-specific answer summary is supported by the supplied citations.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "73ee7089-5ce4-59da-9efe-f4696bd062d7",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "13da428c-bf87-5db7-a1c6-75b82a314bba",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "b600c812-6307-5bac-b6ba-26e2b4a8ee36",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f0befd77-330c-57f6-9ad7-a4d4a7f5734a",
+   "to": "73ee7089-5ce4-59da-9efe-f4696bd062d7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "73ee7089-5ce4-59da-9efe-f4696bd062d7",
+   "to": "13da428c-bf87-5db7-a1c6-75b82a314bba",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "13da428c-bf87-5db7-a1c6-75b82a314bba",
+   "to": "b600c812-6307-5bac-b6ba-26e2b4a8ee36",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "b600c812-6307-5bac-b6ba-26e2b4a8ee36",
+   "to": "73ee7089-5ce4-59da-9efe-f4696bd062d7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f0befd77-330c-57f6-9ad7-a4d4a7f5734a",
+   "to": "b600c812-6307-5bac-b6ba-26e2b4a8ee36",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

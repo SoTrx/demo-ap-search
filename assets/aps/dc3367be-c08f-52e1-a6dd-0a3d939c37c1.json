@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "dc3367be-c08f-52e1-a6dd-0a3d939c37c1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Summary Citation Builder",
+    "description": "This AP adds filter controls to a dashboard from a field mapping, writes an executive dashboard summary, and returns citation records from passages that support that summary.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "40778c6e-ddf6-5219-a289-259a53e8f92f",
+   "labels": [
+    "Dashboard_Filter_Configurator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_filter_configurator",
+    "description": "Adds interactive filter controls to a dashboard by mapping selectable display fields to source table columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fe68ecbd-5167-51f0-b318-4e3053f0fb2e",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "dashboard"
+   }
+  },
+  {
+   "id": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8c5db2e5-9a87-5a0f-a1e6-21cfebb156ea",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "12fc2b7b-4095-5139-b63a-c61f0ca54320",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dc3367be-c08f-52e1-a6dd-0a3d939c37c1",
+   "to": "40778c6e-ddf6-5219-a289-259a53e8f92f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "40778c6e-ddf6-5219-a289-259a53e8f92f",
+   "to": "fe68ecbd-5167-51f0-b318-4e3053f0fb2e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['dashboard']": "from['outputs']['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "fe68ecbd-5167-51f0-b318-4e3053f0fb2e",
+   "to": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['dashboard']": "from['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "to": "40778c6e-ddf6-5219-a289-259a53e8f92f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc3367be-c08f-52e1-a6dd-0a3d939c37c1",
+   "to": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "to": "8c5db2e5-9a87-5a0f-a1e6-21cfebb156ea",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "8c5db2e5-9a87-5a0f-a1e6-21cfebb156ea",
+   "to": "12fc2b7b-4095-5139-b63a-c61f0ca54320",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "12fc2b7b-4095-5139-b63a-c61f0ca54320",
+   "to": "fe1ed75b-8cd1-5637-869f-95d19222a39c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc3367be-c08f-52e1-a6dd-0a3d939c37c1",
+   "to": "12fc2b7b-4095-5139-b63a-c61f0ca54320",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

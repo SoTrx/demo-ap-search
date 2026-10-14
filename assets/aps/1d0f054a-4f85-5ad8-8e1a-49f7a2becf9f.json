@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "1d0f054a-4f85-5ad8-8e1a-49f7a2becf9f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Point Polygon Area Map Layer",
+    "description": "This AP assigns points to the polygons that contain them and produces a vector map layer specification built from those polygons and their area metrics.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "4a5e0422-c302-5121-a4f1-11aff5c6c911",
+   "labels": [
+    "Spatial_Join_Points_To_Polygons_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spatial_join_points_polygons",
+    "description": "Assigns point geometries to containing polygons and returns polygons with joined point attributes.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0ffc0a05-f5ab-5571-a28c-a06e2d7db332",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "polygons"
+   }
+  },
+  {
+   "id": "b3414105-286e-5152-90e4-28ee89d66062",
+   "labels": [
+    "Build_Area_Map_Layer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_area_map_layer",
+    "description": "Builds a vector map layer specification from polygons and their area metrics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "area_metrics",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layer",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1d0f054a-4f85-5ad8-8e1a-49f7a2becf9f",
+   "to": "4a5e0422-c302-5121-a4f1-11aff5c6c911",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4a5e0422-c302-5121-a4f1-11aff5c6c911",
+   "to": "0ffc0a05-f5ab-5571-a28c-a06e2d7db332",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['polygons']": "from['outputs']['polygons']"
+    }
+   }
+  },
+  {
+   "from": "0ffc0a05-f5ab-5571-a28c-a06e2d7db332",
+   "to": "b3414105-286e-5152-90e4-28ee89d66062",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['polygons']": "from['polygons']"
+    }
+   }
+  },
+  {
+   "from": "b3414105-286e-5152-90e4-28ee89d66062",
+   "to": "4a5e0422-c302-5121-a4f1-11aff5c6c911",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1d0f054a-4f85-5ad8-8e1a-49f7a2becf9f",
+   "to": "b3414105-286e-5152-90e4-28ee89d66062",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

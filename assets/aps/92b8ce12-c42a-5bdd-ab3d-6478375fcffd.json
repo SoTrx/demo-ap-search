@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "92b8ce12-c42a-5bdd-ab3d-6478375fcffd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Kaplan-Meier Survival Curve Points",
+    "description": "Computes survival curve time points with survival probabilities, event counts, and number at risk from survival records using a minimum group-size threshold.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "96bdd8d9-327b-5fcc-a84d-4cd488580462",
+   "labels": [
+    "Kaplan_Meier_Curve_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "kaplan_meier_curve",
+    "description": "Estimates Kaplan-Meier survival curve points from survival records and a minimum event-group size threshold. The output contains time points, survival probability, events, and number at risk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survival_curve",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "92b8ce12-c42a-5bdd-ab3d-6478375fcffd",
+   "to": "96bdd8d9-327b-5fcc-a84d-4cd488580462",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

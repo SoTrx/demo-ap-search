@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "2424d197-6aa9-5e94-904c-a4d5c942fb84",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Regional Summary Comparison Report",
+    "description": "Compares two regional summary tables and returns a report object of region-by-region differences.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "0f1a25c5-2f2a-5e50-a197-cfbfabe0b096",
+   "labels": [
+    "Regional_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_summary_comparator",
+    "description": "Compares left and right regional summary tables and returns region-by-region differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2424d197-6aa9-5e94-904c-a4d5c942fb84",
+   "to": "0f1a25c5-2f2a-5e50-a197-cfbfabe0b096",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+{
+ "nodes": [
+  {
+   "id": "c44438bf-c517-50af-a414-5f9d8c949c02",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Climate Indicator Builder",
+    "description": "Detects weather readings above or below a chosen threshold and combines the resulting extreme events with period and regional comparisons to produce a normalized climate indicator.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "1d6cc987-4820-5660-a4ca-c38e1d1215f5",
+   "labels": [
+    "Extreme_Event_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extreme_event_detector",
+    "description": "Detects weather readings that exceed a threshold in the chosen direction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "detection_mode",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7e4069ea-1198-56fb-ad9f-22b454201439",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "events"
+   }
+  },
+  {
+   "id": "74623154-8f13-5566-a93e-d13c1d3335a2",
+   "labels": [
+    "Climate_Indicator_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "climate_indicator_calculator",
+    "description": "Computes a normalized climate indicator from period comparison, regional comparison, and detected extreme events.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "period_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "regional_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "extreme_events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "indicator",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c44438bf-c517-50af-a414-5f9d8c949c02",
+   "to": "1d6cc987-4820-5660-a4ca-c38e1d1215f5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1d6cc987-4820-5660-a4ca-c38e1d1215f5",
+   "to": "7e4069ea-1198-56fb-ad9f-22b454201439",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['events']": "from['outputs']['events']"
+    }
+   }
+  },
+  {
+   "from": "7e4069ea-1198-56fb-ad9f-22b454201439",
+   "to": "74623154-8f13-5566-a93e-d13c1d3335a2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['extreme_events']": "from['events']"
+    }
+   }
+  },
+  {
+   "from": "74623154-8f13-5566-a93e-d13c1d3335a2",
+   "to": "1d6cc987-4820-5660-a4ca-c38e1d1215f5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c44438bf-c517-50af-a414-5f9d8c949c02",
+   "to": "74623154-8f13-5566-a93e-d13c1d3335a2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

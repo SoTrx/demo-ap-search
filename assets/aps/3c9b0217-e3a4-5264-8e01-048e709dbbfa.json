@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "3c9b0217-e3a4-5264-8e01-048e709dbbfa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Non-overlapping Speaker Assignment Refinement",
+    "description": "Refines timed speaker assignment records into single-speaker slices using the original segment timing while keeping speaker identifiers unchanged.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "e8ad332c-e4e5-50c3-ba6b-491c101cfce2",
+   "labels": [
+    "Speaker_Overlap_Resolver_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_overlap_resolver",
+    "description": "Resolves overlapping speaker assignments into single-speaker time slices using the original segment timing. Returns refined speaker assignment records without changing speaker identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "refined_assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3c9b0217-e3a4-5264-8e01-048e709dbbfa",
+   "to": "e8ad332c-e4e5-50c3-ba6b-491c101cfce2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

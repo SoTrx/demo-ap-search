@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "3b6f238e-1331-5397-8a86-582f009e3032",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Database Schema URL Summarizer",
+    "description": "Given a database URL, connect to the target database and return a textual summary of its schema.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "76b99f19-0ad4-5a33-b37d-98416b12e530",
+   "labels": [
+    "Schema_Analyzer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Analyzer",
+    "description": "Connects to the target database and returns a textual summary of its schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_url",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3b6f238e-1331-5397-8a86-582f009e3032",
+   "to": "76b99f19-0ad4-5a33-b37d-98416b12e530",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

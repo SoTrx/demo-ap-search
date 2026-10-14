@@ -1,0 +1,12 @@
+services:
+  app:
+    # The base file builds the app's image; the devcontainer runs the code from the workspace instead.
+    build: !reset null
+    image: mcr.microsoft.com/devcontainers/python:3.14-trixie
+    volumes:
+      - ..:/workspaces:cached
+    command: sleep infinity
+
+networks:
+  traefik:
+    external: false

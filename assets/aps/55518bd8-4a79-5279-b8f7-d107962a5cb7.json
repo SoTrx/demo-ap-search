@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "55518bd8-4a79-5279-b8f7-d107962a5cb7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Transcript Alignment",
+    "description": "Resolves overlapping speaker assignments over segments and merges them with transcripts to produce aligned speaker transcript records with timing and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "96d3910d-25de-56fd-b1bc-930a48dbed7a",
+   "labels": [
+    "Speaker_Overlap_Resolver_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_overlap_resolver",
+    "description": "Resolves overlapping speaker assignments into single-speaker time slices using the original segment timing. Returns refined speaker assignment records without changing speaker identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "refined_assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2a03fd64-31f8-56bf-beb2-e802a6a3841e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "refined_assignments"
+   }
+  },
+  {
+   "id": "8f842baa-d3ca-5aa0-a89a-dfe0609cbc6d",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "55518bd8-4a79-5279-b8f7-d107962a5cb7",
+   "to": "96d3910d-25de-56fd-b1bc-930a48dbed7a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "96d3910d-25de-56fd-b1bc-930a48dbed7a",
+   "to": "2a03fd64-31f8-56bf-beb2-e802a6a3841e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['refined_assignments']": "from['outputs']['refined_assignments']"
+    }
+   }
+  },
+  {
+   "from": "2a03fd64-31f8-56bf-beb2-e802a6a3841e",
+   "to": "8f842baa-d3ca-5aa0-a89a-dfe0609cbc6d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assignments']": "from['refined_assignments']"
+    }
+   }
+  },
+  {
+   "from": "8f842baa-d3ca-5aa0-a89a-dfe0609cbc6d",
+   "to": "96d3910d-25de-56fd-b1bc-930a48dbed7a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "55518bd8-4a79-5279-b8f7-d107962a5cb7",
+   "to": "8f842baa-d3ca-5aa0-a89a-dfe0609cbc6d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

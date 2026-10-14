@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "f4c9915f-a8b4-53ff-8a13-6ded7ba8f547",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Transcript Alignment",
+    "description": "Generates speaker-labelled transcript records with timings and confidence from audio, silence settings, speaker tags, and text fragments.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "d66b5a9b-0447-50a0-8d5a-d1ab9f0f374a",
+   "labels": [
+    "Audio_Segmenter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "audio_segmenter",
+    "description": "Splits an audio file into speech segments using silence and energy thresholds. Returns segment records with identifiers, start times, and end times.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "audio_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "silence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f2bc6b5f-a94c-5302-b68c-376bfdb38c86",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "segments"
+   }
+  },
+  {
+   "id": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "labels": [
+    "Speaker_Overlap_Resolver_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_overlap_resolver",
+    "description": "Resolves overlapping speaker assignments into single-speaker time slices using the original segment timing. Returns refined speaker assignment records without changing speaker identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "refined_assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "20d52ae1-82df-5538-970e-061e9ce40981",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "refined_assignments"
+   }
+  },
+  {
+   "id": "89fecd61-6d64-5a25-8200-b427091d90dd",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f4c9915f-a8b4-53ff-8a13-6ded7ba8f547",
+   "to": "d66b5a9b-0447-50a0-8d5a-d1ab9f0f374a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d66b5a9b-0447-50a0-8d5a-d1ab9f0f374a",
+   "to": "f2bc6b5f-a94c-5302-b68c-376bfdb38c86",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['segments']": "from['outputs']['segments']"
+    }
+   }
+  },
+  {
+   "from": "f2bc6b5f-a94c-5302-b68c-376bfdb38c86",
+   "to": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['segments']": "from['segments']"
+    }
+   }
+  },
+  {
+   "from": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "to": "d66b5a9b-0447-50a0-8d5a-d1ab9f0f374a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f4c9915f-a8b4-53ff-8a13-6ded7ba8f547",
+   "to": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "to": "20d52ae1-82df-5538-970e-061e9ce40981",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['refined_assignments']": "from['outputs']['refined_assignments']"
+    }
+   }
+  },
+  {
+   "from": "20d52ae1-82df-5538-970e-061e9ce40981",
+   "to": "89fecd61-6d64-5a25-8200-b427091d90dd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assignments']": "from['refined_assignments']"
+    }
+   }
+  },
+  {
+   "from": "89fecd61-6d64-5a25-8200-b427091d90dd",
+   "to": "94da5afd-d718-5100-9905-d4652d29ac50",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f4c9915f-a8b4-53ff-8a13-6ded7ba8f547",
+   "to": "89fecd61-6d64-5a25-8200-b427091d90dd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

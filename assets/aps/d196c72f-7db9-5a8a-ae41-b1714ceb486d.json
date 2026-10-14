@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "d196c72f-7db9-5a8a-ae41-b1714ceb486d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pairwise Geodesic Point Distances",
+    "description": "Computes the full geodesic distance matrix between a supplied array of left points and an array of right points, returning the distance for every left-right pair.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "cc7733f1-b896-5693-a128-6bd6f4d8677c",
+   "labels": [
+    "Compute_Geodesic_Distance_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "compute_distance_matrix",
+    "description": "Computes pairwise geodesic distances between two sets of point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "distances",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d196c72f-7db9-5a8a-ae41-b1714ceb486d",
+   "to": "cc7733f1-b896-5693-a128-6bd6f4d8677c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

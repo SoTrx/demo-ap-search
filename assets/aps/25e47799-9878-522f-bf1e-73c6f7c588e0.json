@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "25e47799-9878-522f-bf1e-73c6f7c588e0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Period Comparison Chart",
+    "description": "Groups weather readings by time period, computes a chosen summary metric, compares those period values with target period values, and produces a chart specification.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "9194a3f5-3f23-5ffa-8017-4fecd32b8dfa",
+   "labels": [
+    "Period_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_aggregator",
+    "description": "Groups weather readings by time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ea70f0cb-07be-5d5b-8471-3aada3e1a265",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "labels": [
+    "Period_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_summary_comparator",
+    "description": "Compares baseline and target period summaries and returns period-by-period differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "baseline_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "51ffc365-5cd3-5f38-a24c-0f455db3ee52",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "c10bf8b1-8097-5194-bbb0-1d6356d97e44",
+   "labels": [
+    "Period_Comparison_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_comparison_chart_builder",
+    "description": "Turns a period comparison report into a chart specification that contrasts baseline and target values for each period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "25e47799-9878-522f-bf1e-73c6f7c588e0",
+   "to": "9194a3f5-3f23-5ffa-8017-4fecd32b8dfa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9194a3f5-3f23-5ffa-8017-4fecd32b8dfa",
+   "to": "ea70f0cb-07be-5d5b-8471-3aada3e1a265",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "ea70f0cb-07be-5d5b-8471-3aada3e1a265",
+   "to": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['baseline_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "to": "9194a3f5-3f23-5ffa-8017-4fecd32b8dfa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "25e47799-9878-522f-bf1e-73c6f7c588e0",
+   "to": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "to": "51ffc365-5cd3-5f38-a24c-0f455db3ee52",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "51ffc365-5cd3-5f38-a24c-0f455db3ee52",
+   "to": "c10bf8b1-8097-5194-bbb0-1d6356d97e44",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['comparison']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "c10bf8b1-8097-5194-bbb0-1d6356d97e44",
+   "to": "8a20c49c-04f5-56d4-8fae-24fc603170cc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "25e47799-9878-522f-bf1e-73c6f7c588e0",
+   "to": "c10bf8b1-8097-5194-bbb0-1d6356d97e44",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

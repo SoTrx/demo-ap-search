@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "0df77631-2e34-571f-a69f-87a81baab1c5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Ranked Dataset Identifier Retrieval",
+    "description": "Searches a dataset index with supplied keywords and a limit, returning ranked matching dataset identifiers.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "9717c6d9-6901-5e64-8444-684b94ccc943",
+   "labels": [
+    "DatasetCatalogueSearcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "search_dataset_catalogue",
+    "description": "Searches a dataset retrieval index using keyword records and returns ranked dataset identifiers. It applies the recommendation limit to the candidate list.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0df77631-2e34-571f-a69f-87a81baab1c5",
+   "to": "9717c6d9-6901-5e64-8444-684b94ccc943",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

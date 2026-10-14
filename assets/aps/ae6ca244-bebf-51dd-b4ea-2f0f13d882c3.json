@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "ae6ca244-bebf-51dd-b4ea-2f0f13d882c3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Plain-Language Graph Query Summary",
+    "description": "Runs a graph query plan over triples, aggregates numeric result columns into compact rows, and returns a plain-language summary of the query results using the original SQL as context.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "06cb7234-1bd2-505d-bfab-73fdb6d56d2c",
+   "labels": [
+    "Graph_Query_Executor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_executor",
+    "description": "Runs a graph query plan over graph triples and returns matching result rows. It returns only query results, without adding or removing graph triples.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8edaed90-26bb-5478-b729-8247a6de4ee6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "labels": [
+    "Result_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Aggregator",
+    "description": "Aggregates numeric columns in a result-row array into compact summary rows and returns the aggregate rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "253ff091-5e3f-5e74-b710-c86f3c81b498",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "rows"
+   }
+  },
+  {
+   "id": "161695b6-d911-5340-a24b-9d3cef9253c7",
+   "labels": [
+    "Result_Summary_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Summary",
+    "description": "Summarises a result-row array in plain language using the originating SQL query as context and returns a result summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ae6ca244-bebf-51dd-b4ea-2f0f13d882c3",
+   "to": "06cb7234-1bd2-505d-bfab-73fdb6d56d2c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "06cb7234-1bd2-505d-bfab-73fdb6d56d2c",
+   "to": "8edaed90-26bb-5478-b729-8247a6de4ee6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "8edaed90-26bb-5478-b729-8247a6de4ee6",
+   "to": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "to": "06cb7234-1bd2-505d-bfab-73fdb6d56d2c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ae6ca244-bebf-51dd-b4ea-2f0f13d882c3",
+   "to": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "to": "253ff091-5e3f-5e74-b710-c86f3c81b498",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['rows']": "from['outputs']['rows']"
+    }
+   }
+  },
+  {
+   "from": "253ff091-5e3f-5e74-b710-c86f3c81b498",
+   "to": "161695b6-d911-5340-a24b-9d3cef9253c7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['rows']"
+    }
+   }
+  },
+  {
+   "from": "161695b6-d911-5340-a24b-9d3cef9253c7",
+   "to": "a692cfd7-8d69-57fe-90ad-57a54ffed9cb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ae6ca244-bebf-51dd-b4ea-2f0f13d882c3",
+   "to": "161695b6-d911-5340-a24b-9d3cef9253c7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

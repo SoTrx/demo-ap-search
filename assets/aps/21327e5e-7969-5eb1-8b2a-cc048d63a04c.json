@@ -1,0 +1,275 @@
+{
+ "nodes": [
+  {
+   "id": "21327e5e-7969-5eb1-8b2a-cc048d63a04c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Extract Entity Relation Triples",
+    "description": "It builds a graph schema from a database schema and sample entity records, resolves those records to candidate graph nodes, and outputs typed relation triples extracted from text chunks for linked entity pairs.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "labels": [
+    "Graph_Schema_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_schema_builder",
+    "description": "Derives a knowledge graph schema from a database schema and a sample of entity records. The returned schema describes node classes, properties, and expected property types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a79b8841-5f16-55ab-9bf6-8b612d81f6f2",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "graph_schema"
+   }
+  },
+  {
+   "id": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "labels": [
+    "Entity_Record_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_record_linker",
+    "description": "Links entity records to candidate graph nodes using a graph schema. Returns link records that include node candidates and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c5809f9c-05a3-5e34-96a6-a9bbb5a59f8d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entity_link_records"
+   }
+  },
+  {
+   "id": "2baf97c1-4032-5493-9f18-bb0a48b1f2e6",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "graph_schema"
+   }
+  },
+  {
+   "id": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "labels": [
+    "Relation_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "relation_extractor",
+    "description": "Extracts typed relation candidates from text chunks for pairs of linked entities. The graph schema guides relation classes and expected argument types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "21327e5e-7969-5eb1-8b2a-cc048d63a04c",
+   "to": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "to": "a79b8841-5f16-55ab-9bf6-8b612d81f6f2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_schema']": "from['outputs']['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "a79b8841-5f16-55ab-9bf6-8b612d81f6f2",
+   "to": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['graph_schema']": "from['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "to": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "21327e5e-7969-5eb1-8b2a-cc048d63a04c",
+   "to": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "to": "c5809f9c-05a3-5e34-96a6-a9bbb5a59f8d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entity_link_records']": "from['outputs']['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "c5809f9c-05a3-5e34-96a6-a9bbb5a59f8d",
+   "to": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_link_records']": "from['entity_link_records']"
+    }
+   }
+  },
+  {
+   "from": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "to": "2baf97c1-4032-5493-9f18-bb0a48b1f2e6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_schema']": "from['outputs']['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "2baf97c1-4032-5493-9f18-bb0a48b1f2e6",
+   "to": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['graph_schema']": "from['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "to": "1d26bd21-e8a5-5d4d-91c4-52bba78d2f3e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "to": "285d2108-8c93-5071-bf74-c3a067f7c3ee",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "21327e5e-7969-5eb1-8b2a-cc048d63a04c",
+   "to": "bbbe0573-5c16-5390-b7a7-9a2b124e4350",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "02b666db-606d-58e8-857d-3ff9ee63621a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker-Labeled Transcript Alignment",
+    "description": "Cleans transcript segments, retains high-confidence language segments, and joins them with speaker assignments to return speaker-labelled transcript records.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "8648a442-f7b3-5108-bb0a-d4107aaa76fa",
+   "labels": [
+    "Transcript_Disfluency_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "transcript_disfluency_cleaner",
+    "description": "Cleans transcript records by collapsing repeated words, removing filler disfluencies, and normalizing whitespace. Returns transcript records with timing and confidence preserved.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "028cf208-cecd-5d14-b4eb-2cee91fd107c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_transcripts"
+   }
+  },
+  {
+   "id": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5ba5c2a3-f092-5253-bac0-fc5d6700489d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filtered_transcripts"
+   }
+  },
+  {
+   "id": "dec66a97-5dd3-5760-8550-1adf7025d3a2",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "02b666db-606d-58e8-857d-3ff9ee63621a",
+   "to": "8648a442-f7b3-5108-bb0a-d4107aaa76fa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8648a442-f7b3-5108-bb0a-d4107aaa76fa",
+   "to": "028cf208-cecd-5d14-b4eb-2cee91fd107c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_transcripts']": "from['outputs']['cleaned_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "028cf208-cecd-5d14-b4eb-2cee91fd107c",
+   "to": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['cleaned_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "to": "8648a442-f7b3-5108-bb0a-d4107aaa76fa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02b666db-606d-58e8-857d-3ff9ee63621a",
+   "to": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "to": "5ba5c2a3-f092-5253-bac0-fc5d6700489d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filtered_transcripts']": "from['outputs']['filtered_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "5ba5c2a3-f092-5253-bac0-fc5d6700489d",
+   "to": "dec66a97-5dd3-5760-8550-1adf7025d3a2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['filtered_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "dec66a97-5dd3-5760-8550-1adf7025d3a2",
+   "to": "f94c1f97-a00e-55dc-8687-69a59bf5c0e8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02b666db-606d-58e8-857d-3ff9ee63621a",
+   "to": "dec66a97-5dd3-5760-8550-1adf7025d3a2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

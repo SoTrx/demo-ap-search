@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "0177ebf2-0129-535b-a999-1643513fdab8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Profile from Smoothed Series",
+    "description": "Extracts a period-by-period seasonal profile from a raw time series by separating the trend, smoothing the level, and estimating repeating seasonal indices.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "420b16bb-d2a2-5bc2-a5d1-7ac8f9328821",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0506f9fd-4e50-54c6-b357-f5221e792689",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "08bd01e3-3616-58fe-9e1d-15052434ae4e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "01e4b97a-7058-5cd4-a385-817ceb1c8906",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0177ebf2-0129-535b-a999-1643513fdab8",
+   "to": "420b16bb-d2a2-5bc2-a5d1-7ac8f9328821",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "420b16bb-d2a2-5bc2-a5d1-7ac8f9328821",
+   "to": "0506f9fd-4e50-54c6-b357-f5221e792689",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "0506f9fd-4e50-54c6-b357-f5221e792689",
+   "to": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "to": "420b16bb-d2a2-5bc2-a5d1-7ac8f9328821",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0177ebf2-0129-535b-a999-1643513fdab8",
+   "to": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "to": "08bd01e3-3616-58fe-9e1d-15052434ae4e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "08bd01e3-3616-58fe-9e1d-15052434ae4e",
+   "to": "01e4b97a-7058-5cd4-a385-817ceb1c8906",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "01e4b97a-7058-5cd4-a385-817ceb1c8906",
+   "to": "b70ddd63-ea8f-500e-ac59-b79ef80a026e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0177ebf2-0129-535b-a999-1643513fdab8",
+   "to": "01e4b97a-7058-5cd4-a385-817ceb1c8906",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

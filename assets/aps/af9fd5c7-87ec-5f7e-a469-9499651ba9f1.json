@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "af9fd5c7-87ec-5f7e-a469-9499651ba9f1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Schema Row Violation Report",
+    "description": "Derives column checks from a schema string and produces a row-level violation report for input table rows.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "a7e76f94-4eb6-57e2-b898-df5addb5146a",
+   "labels": [
+    "Validation_Rule_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "validation_rule_builder",
+    "description": "Builds a validation rule specification from a database schema string. Returns rule constraints for column types, allowed values, numeric ranges, and regex formats.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rules",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "23164207-38e8-590e-b40a-98f02f2bd1ca",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "rules"
+   }
+  },
+  {
+   "id": "f194385b-f884-56cc-9214-473a7d8b69c1",
+   "labels": [
+    "Table_Rule_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "table_rule_validator",
+    "description": "Validates table rows against a validation rule specification and returns row-level violations. Returns only violations, without modifying the rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rules",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "af9fd5c7-87ec-5f7e-a469-9499651ba9f1",
+   "to": "a7e76f94-4eb6-57e2-b898-df5addb5146a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a7e76f94-4eb6-57e2-b898-df5addb5146a",
+   "to": "23164207-38e8-590e-b40a-98f02f2bd1ca",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['rules']": "from['outputs']['rules']"
+    }
+   }
+  },
+  {
+   "from": "23164207-38e8-590e-b40a-98f02f2bd1ca",
+   "to": "f194385b-f884-56cc-9214-473a7d8b69c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rules']": "from['rules']"
+    }
+   }
+  },
+  {
+   "from": "f194385b-f884-56cc-9214-473a7d8b69c1",
+   "to": "a7e76f94-4eb6-57e2-b898-df5addb5146a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "af9fd5c7-87ec-5f7e-a469-9499651ba9f1",
+   "to": "f194385b-f884-56cc-9214-473a7d8b69c1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

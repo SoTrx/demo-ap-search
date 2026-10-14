@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "9048fc11-d203-5a09-89c3-581d06dce38a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Text Address List to Records",
+    "description": "Converts an array of textual addresses into an array of corresponding address records.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "25a2a71a-7d33-5804-b082-2eb65d43d1d6",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "07c7ff7d-0a34-5780-af23-0a8508e11736",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "5d40d2ee-93dd-57e4-95e4-872d44e89dce",
+   "labels": [
+    "Reverse_Geocode_Points_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "reverse_geocode_points",
+    "description": "Converts point geometries into address records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "addresses",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9048fc11-d203-5a09-89c3-581d06dce38a",
+   "to": "25a2a71a-7d33-5804-b082-2eb65d43d1d6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "25a2a71a-7d33-5804-b082-2eb65d43d1d6",
+   "to": "07c7ff7d-0a34-5780-af23-0a8508e11736",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "07c7ff7d-0a34-5780-af23-0a8508e11736",
+   "to": "5d40d2ee-93dd-57e4-95e4-872d44e89dce",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "5d40d2ee-93dd-57e4-95e4-872d44e89dce",
+   "to": "25a2a71a-7d33-5804-b082-2eb65d43d1d6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9048fc11-d203-5a09-89c3-581d06dce38a",
+   "to": "5d40d2ee-93dd-57e4-95e4-872d44e89dce",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

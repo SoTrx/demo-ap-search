@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "e2fc77e4-7d28-56a9-a23d-496ae40094fd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Provenance Compliance Flag",
+    "description": "Formats raw provenance text into a structured report and returns a boolean indicating whether required sources and transformations are present.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "f986c710-1eb8-5cd3-ab99-7f7f8e40265e",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "867b791c-4a53-5c87-ac8a-35aa5f689b19",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "b89d54f8-eaf1-5f1d-b5f2-2421aca147cb",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e2fc77e4-7d28-56a9-a23d-496ae40094fd",
+   "to": "f986c710-1eb8-5cd3-ab99-7f7f8e40265e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f986c710-1eb8-5cd3-ab99-7f7f8e40265e",
+   "to": "867b791c-4a53-5c87-ac8a-35aa5f689b19",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "867b791c-4a53-5c87-ac8a-35aa5f689b19",
+   "to": "b89d54f8-eaf1-5f1d-b5f2-2421aca147cb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "b89d54f8-eaf1-5f1d-b5f2-2421aca147cb",
+   "to": "f986c710-1eb8-5cd3-ab99-7f7f8e40265e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e2fc77e4-7d28-56a9-a23d-496ae40094fd",
+   "to": "b89d54f8-eaf1-5f1d-b5f2-2421aca147cb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

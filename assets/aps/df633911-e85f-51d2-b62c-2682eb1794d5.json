@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "df633911-e85f-51d2-b62c-2682eb1794d5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Sensitive Group Diversity Report",
+    "description": "Evaluates preformed groups for distinct sensitive-attribute values against a numeric threshold and returns per-group diversity scores plus classes that fail it.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "bccf44c8-85f7-53e6-8d31-e44d7f0a3428",
+   "labels": [
+    "L_Diversity_Evaluator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "l_diversity_evaluator",
+    "description": "Measures distinct sensitive-attribute values inside each equivalence class using the column mapping and threshold. It returns an l-diversity report with group-level diversity scores and classes that fail the threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "df633911-e85f-51d2-b62c-2682eb1794d5",
+   "to": "bccf44c8-85f7-53e6-8d31-e44d7f0a3428",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

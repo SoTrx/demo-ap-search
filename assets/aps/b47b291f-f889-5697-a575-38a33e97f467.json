@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "b47b291f-f889-5697-a575-38a33e97f467",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Recent Student Score Trend Summary",
+    "description": "Reads assessment attempt rows for a learner and returns a plain-text description of whether recent scores are improving, declining, or stable.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "62fed750-a3e2-560e-ae34-525dce399343",
+   "labels": [
+    "Performance_Trend_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "performance_trend_summarizer",
+    "description": "Summarizes the trend in a student's result rows over recent attempts, such as improving, declining, or stable. Returns a plain-text trend description.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b47b291f-f889-5697-a575-38a33e97f467",
+   "to": "62fed750-a3e2-560e-ae34-525dce399343",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

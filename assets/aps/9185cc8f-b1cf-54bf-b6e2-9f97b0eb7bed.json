@@ -1,0 +1,293 @@
+{
+ "nodes": [
+  {
+   "id": "9185cc8f-b1cf-54bf-b6e2-9f97b0eb7bed",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Validated Student Performance Profile",
+    "description": "Validates raw provenance, executes a supplied SQL assessment query when it is safe, and aggregates the returned rows into a single student's topic scores, accuracy, and recent trend.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "43bd64ec-42d5-5b12-82be-ec284ac95b5d",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "878d7164-2690-5fa3-81b6-d755adf4d1f5",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5c8e1c9b-95b6-5b36-87cb-5975be2a58dd",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "fda48195-b5af-54da-9ac3-f6aea89b6943",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "feef1871-9fac-5a3c-85e5-04bb18a01a97",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9185cc8f-b1cf-54bf-b6e2-9f97b0eb7bed",
+   "to": "43bd64ec-42d5-5b12-82be-ec284ac95b5d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "43bd64ec-42d5-5b12-82be-ec284ac95b5d",
+   "to": "878d7164-2690-5fa3-81b6-d755adf4d1f5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "878d7164-2690-5fa3-81b6-d755adf4d1f5",
+   "to": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "to": "43bd64ec-42d5-5b12-82be-ec284ac95b5d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9185cc8f-b1cf-54bf-b6e2-9f97b0eb7bed",
+   "to": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "to": "5c8e1c9b-95b6-5b36-87cb-5975be2a58dd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "5c8e1c9b-95b6-5b36-87cb-5975be2a58dd",
+   "to": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "to": "41b50303-6fe0-53b4-96fb-f6ac3ea98b69",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9185cc8f-b1cf-54bf-b6e2-9f97b0eb7bed",
+   "to": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "to": "fda48195-b5af-54da-9ac3-f6aea89b6943",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "fda48195-b5af-54da-9ac3-f6aea89b6943",
+   "to": "feef1871-9fac-5a3c-85e5-04bb18a01a97",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "feef1871-9fac-5a3c-85e5-04bb18a01a97",
+   "to": "eef5b1b6-01ab-525c-89be-c5a8ec1d450c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9185cc8f-b1cf-54bf-b6e2-9f97b0eb7bed",
+   "to": "feef1871-9fac-5a3c-85e5-04bb18a01a97",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

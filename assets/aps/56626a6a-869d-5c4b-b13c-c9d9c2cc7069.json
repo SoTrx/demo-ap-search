@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "56626a6a-869d-5c4b-b13c-c9d9c2cc7069",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Database Schema Column Mapping",
+    "description": "Given two database schema definitions, finds corresponding columns and returns a source-to-target column mapping.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "d300864f-31b8-59bd-aabd-ee5afb10cdd7",
+   "labels": [
+    "Schema_Column_Mapping_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_column_matcher",
+    "description": "Finds corresponding columns between two database schemas and returns a column mapping. It uses table names, column names, and inferred types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "56626a6a-869d-5c4b-b13c-c9d9c2cc7069",
+   "to": "d300864f-31b8-59bd-aabd-ee5afb10cdd7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

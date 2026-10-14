@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "eadabeb0-ba59-5739-8090-03393c4117a1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Extract Patient-Level Clinical Records",
+    "description": "Extracts patient-level clinical rows that have a patient identifier and keeps only the columns listed in the column mapping, returning an array of patient records.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "2055db52-e1db-51b9-8142-9a48fcb37152",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "eadabeb0-ba59-5739-8090-03393c4117a1",
+   "to": "2055db52-e1db-51b9-8142-9a48fcb37152",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

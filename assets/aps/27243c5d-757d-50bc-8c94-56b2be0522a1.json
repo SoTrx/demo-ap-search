@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "27243c5d-757d-50bc-8c94-56b2be0522a1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic Filtered Database Schema",
+    "description": "Connects to a database using its URL, summarizes the schema, and returns only the tables and columns relevant to a requested subject topic.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "ccc85cd2-8ecd-5a39-86ec-971c8c04031f",
+   "labels": [
+    "Schema_Analyzer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Analyzer",
+    "description": "Connects to the target database and returns a textual summary of its schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_url",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a82dd2ce-b8eb-5409-92da-28decae03c5e",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "ba22d6a9-9f0b-5095-8944-830dda29f984",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "27243c5d-757d-50bc-8c94-56b2be0522a1",
+   "to": "ccc85cd2-8ecd-5a39-86ec-971c8c04031f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ccc85cd2-8ecd-5a39-86ec-971c8c04031f",
+   "to": "a82dd2ce-b8eb-5409-92da-28decae03c5e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "a82dd2ce-b8eb-5409-92da-28decae03c5e",
+   "to": "ba22d6a9-9f0b-5095-8944-830dda29f984",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "ba22d6a9-9f0b-5095-8944-830dda29f984",
+   "to": "ccc85cd2-8ecd-5a39-86ec-971c8c04031f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "27243c5d-757d-50bc-8c94-56b2be0522a1",
+   "to": "ba22d6a9-9f0b-5095-8944-830dda29f984",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

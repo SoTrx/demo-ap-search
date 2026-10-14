@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "9e6fa7be-290b-58a5-9329-73d1acf8a63e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Prediction Intervals from Historical Tables",
+    "description": "Fits a simple linear regression to mapped numeric columns in existing table rows, then uses the fitted relationship to predict target values for new rows with alpha-controlled prediction intervals.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "3dab4b0a-9a28-52d8-9391-2f15fd127cf1",
+   "labels": [
+    "Simple_Linear_Regression_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "simple_linear_regression_fit",
+    "description": "Fits a simple linear regression model to selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "815afd42-641a-571e-8c83-ec1bfb196ceb",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "model"
+   }
+  },
+  {
+   "id": "f1deec24-fb7c-5886-a6cc-e1219a460406",
+   "labels": [
+    "Regression_Prediction_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regression_prediction_interval",
+    "description": "Applies a fitted regression model to new table rows to produce predicted values with prediction intervals. The threshold value controls the width of the intervals.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "new_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9e6fa7be-290b-58a5-9329-73d1acf8a63e",
+   "to": "3dab4b0a-9a28-52d8-9391-2f15fd127cf1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3dab4b0a-9a28-52d8-9391-2f15fd127cf1",
+   "to": "815afd42-641a-571e-8c83-ec1bfb196ceb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['model']": "from['outputs']['model']"
+    }
+   }
+  },
+  {
+   "from": "815afd42-641a-571e-8c83-ec1bfb196ceb",
+   "to": "f1deec24-fb7c-5886-a6cc-e1219a460406",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['model']"
+    }
+   }
+  },
+  {
+   "from": "f1deec24-fb7c-5886-a6cc-e1219a460406",
+   "to": "3dab4b0a-9a28-52d8-9391-2f15fd127cf1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9e6fa7be-290b-58a5-9329-73d1acf8a63e",
+   "to": "f1deec24-fb7c-5886-a6cc-e1219a460406",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "ff21e761-ac43-55a1-82d7-016167ae3207",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Batch Object Detection",
+    "description": "Runs a supplied object detection model across a batch of images and returns each detected object's class label, bounding box, and confidence score.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "fcd3c99f-0dde-5e3c-8b59-7a228de9dfaf",
+   "labels": [
+    "Object_Detection_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "object_detection_predictor",
+    "description": "Applies an object detection model to an image batch and returns detected objects with class labels, bounding boxes, and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ff21e761-ac43-55a1-82d7-016167ae3207",
+   "to": "fcd3c99f-0dde-5e3c-8b59-7a228de9dfaf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

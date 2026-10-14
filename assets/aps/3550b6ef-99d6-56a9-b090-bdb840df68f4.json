@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3550b6ef-99d6-56a9-b090-bdb840df68f4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Caption Batch From Classifier",
+    "description": "Fits a classifier from tabular rows and a target-column mapping, then generates one short natural-language caption for each supplied image in the original order.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "b7f9a7bf-7778-5329-8baf-5095d8aa7480",
+   "labels": [
+    "Train_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "train_classifier",
+    "description": "Fits a classification model from feature rows and the target column identified in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "95e0bd47-6ab5-5e1f-8d8a-97d70d5c0bca",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "model"
+   }
+  },
+  {
+   "id": "fe5430eb-f8be-510d-a67a-afe3cbe75483",
+   "labels": [
+    "Image_Caption_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_caption_generator",
+    "description": "Generates a short natural-language caption for each image in an image batch. Returns one caption record per image in the same order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "captions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3550b6ef-99d6-56a9-b090-bdb840df68f4",
+   "to": "b7f9a7bf-7778-5329-8baf-5095d8aa7480",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b7f9a7bf-7778-5329-8baf-5095d8aa7480",
+   "to": "95e0bd47-6ab5-5e1f-8d8a-97d70d5c0bca",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['model']": "from['outputs']['model']"
+    }
+   }
+  },
+  {
+   "from": "95e0bd47-6ab5-5e1f-8d8a-97d70d5c0bca",
+   "to": "fe5430eb-f8be-510d-a67a-afe3cbe75483",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['model']"
+    }
+   }
+  },
+  {
+   "from": "fe5430eb-f8be-510d-a67a-afe3cbe75483",
+   "to": "b7f9a7bf-7778-5329-8baf-5095d8aa7480",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3550b6ef-99d6-56a9-b090-bdb840df68f4",
+   "to": "fe5430eb-f8be-510d-a67a-afe3cbe75483",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "6fb739f1-eeba-5039-8eda-172f0d76f739",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Text to ISCO Coding",
+    "description": "Splits a plain-text document into bounded text segments and returns candidate ISCO occupation codes with confidence scores for each segment.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "ca48c520-3482-5279-8d51-1e8ba49e3b78",
+   "labels": [
+    "Plain_Text_Chunk_Splitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "plain_text_chunk_splitter",
+    "description": "Splits a plain-text document into translatable chunks using the maximum chunk size threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "max_chunk_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f5c1c2f5-caaa-5f9a-8f87-60f9a0b66fb1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "36852b21-adc1-5b72-aade-82058ae485d6",
+   "labels": [
+    "ISCO_Candidate_Matcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_candidate_matcher",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns candidate occupation codes with confidence scores. It may return multiple candidates for each text chunk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "occupation_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6fb739f1-eeba-5039-8eda-172f0d76f739",
+   "to": "ca48c520-3482-5279-8d51-1e8ba49e3b78",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ca48c520-3482-5279-8d51-1e8ba49e3b78",
+   "to": "f5c1c2f5-caaa-5f9a-8f87-60f9a0b66fb1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "f5c1c2f5-caaa-5f9a-8f87-60f9a0b66fb1",
+   "to": "36852b21-adc1-5b72-aade-82058ae485d6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "36852b21-adc1-5b72-aade-82058ae485d6",
+   "to": "ca48c520-3482-5279-8d51-1e8ba49e3b78",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6fb739f1-eeba-5039-8eda-172f0d76f739",
+   "to": "36852b21-adc1-5b72-aade-82058ae485d6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

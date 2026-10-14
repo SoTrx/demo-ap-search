@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "ddb79c84-ce55-5676-bdd7-9bff4abb39da",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Language-Confidence Transcript Filter",
+    "description": "Detects the language of supplied text chunks and returns only associated transcript records whose language-identification confidence meets the supplied threshold.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "bea23138-fa19-5cd0-8439-2499e5410c73",
+   "labels": [
+    "Written_Text_Language_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "written_text_language_detector",
+    "description": "Detects the written language of each text chunk. Returns language identification records with language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "079aa74f-3564-55c5-a567-95466f3e2820",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "language_records"
+   }
+  },
+  {
+   "id": "393eb3b5-8ccf-5d04-9bc0-2ce97d443e87",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ddb79c84-ce55-5676-bdd7-9bff4abb39da",
+   "to": "bea23138-fa19-5cd0-8439-2499e5410c73",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bea23138-fa19-5cd0-8439-2499e5410c73",
+   "to": "079aa74f-3564-55c5-a567-95466f3e2820",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['language_records']": "from['outputs']['language_records']"
+    }
+   }
+  },
+  {
+   "from": "079aa74f-3564-55c5-a567-95466f3e2820",
+   "to": "393eb3b5-8ccf-5d04-9bc0-2ce97d443e87",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['language_records']": "from['language_records']"
+    }
+   }
+  },
+  {
+   "from": "393eb3b5-8ccf-5d04-9bc0-2ce97d443e87",
+   "to": "bea23138-fa19-5cd0-8439-2499e5410c73",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ddb79c84-ce55-5676-bdd7-9bff4abb39da",
+   "to": "393eb3b5-8ccf-5d04-9bc0-2ce97d443e87",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

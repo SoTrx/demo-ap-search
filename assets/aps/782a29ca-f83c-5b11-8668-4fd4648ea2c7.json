@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "782a29ca-f83c-5b11-8668-4fd4648ea2c7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Scanned Document Object Detection",
+    "description": "It converts a PDF or scanned document into page images, standardizes the image batch, and runs an object detection model to return detections with class labels, bounding boxes, and confidence scores.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "bee9cf5b-a8a6-5405-a9d6-615cce7af39e",
+   "labels": [
+    "Document_To_Page_Images_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_to_page_images",
+    "description": "Converts a PDF or scanned document into an ordered array of page images.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "document_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "45132e2a-1093-5f38-b64a-54d310e4f28f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "page_images"
+   }
+  },
+  {
+   "id": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "04277ab7-d34d-5151-8e91-801df0d9213c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "images"
+   }
+  },
+  {
+   "id": "017a0d81-ce43-5481-920e-ce28aebabdc2",
+   "labels": [
+    "Object_Detection_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "object_detection_predictor",
+    "description": "Applies an object detection model to an image batch and returns detected objects with class labels, bounding boxes, and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "782a29ca-f83c-5b11-8668-4fd4648ea2c7",
+   "to": "bee9cf5b-a8a6-5405-a9d6-615cce7af39e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bee9cf5b-a8a6-5405-a9d6-615cce7af39e",
+   "to": "45132e2a-1093-5f38-b64a-54d310e4f28f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['page_images']": "from['outputs']['page_images']"
+    }
+   }
+  },
+  {
+   "from": "45132e2a-1093-5f38-b64a-54d310e4f28f",
+   "to": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['page_images']": "from['page_images']"
+    }
+   }
+  },
+  {
+   "from": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "to": "bee9cf5b-a8a6-5405-a9d6-615cce7af39e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "782a29ca-f83c-5b11-8668-4fd4648ea2c7",
+   "to": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "to": "04277ab7-d34d-5151-8e91-801df0d9213c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['images']": "from['outputs']['images']"
+    }
+   }
+  },
+  {
+   "from": "04277ab7-d34d-5151-8e91-801df0d9213c",
+   "to": "017a0d81-ce43-5481-920e-ce28aebabdc2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['images']": "from['images']"
+    }
+   }
+  },
+  {
+   "from": "017a0d81-ce43-5481-920e-ce28aebabdc2",
+   "to": "a71dc4d9-4c86-5cd4-bed5-23f6ed435918",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "782a29ca-f83c-5b11-8668-4fd4648ea2c7",
+   "to": "017a0d81-ce43-5481-920e-ce28aebabdc2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

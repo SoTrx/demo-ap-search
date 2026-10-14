@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "9f9cbc34-19be-518d-8ff7-926aa6cd0a0d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Duplicate Key Recommendation Spec",
+    "description": "Builds a duplicate-key specification with candidate columns and matching tolerances from a dataset profile, without grouping or removing rows.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "f540e62d-9ea4-52e4-9bf5-ad0b79804a47",
+   "labels": [
+    "Duplicate_Key_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_key_selector",
+    "description": "Selects candidate duplicate-key columns and matching options from a dataset profile. Returns a duplicate-key specification without grouping rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9f9cbc34-19be-518d-8ff7-926aa6cd0a0d",
+   "to": "f540e62d-9ea4-52e4-9bf5-ad0b79804a47",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

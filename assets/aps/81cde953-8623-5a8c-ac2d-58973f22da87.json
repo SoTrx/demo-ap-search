@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "81cde953-8623-5a8c-ac2d-58973f22da87",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Text Chunk Summary Generator",
+    "description": "Takes an array of text chunks and produces one shorter plain-text summary.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "a78a8b9b-53b7-58ce-a0bb-79c891496a6f",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "81cde953-8623-5a8c-ac2d-58973f22da87",
+   "to": "a78a8b9b-53b7-58ce-a0bb-79c891496a6f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "7ad0f21e-cc3c-59a3-86a4-d1b3c76e9f58",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Single Record Per Key",
+    "description": "Given rows and a key_spec, this returns a deduplicated array of rows containing one representative record for each key.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "dd6ed2fa-ef87-5966-869c-6c9aeeb9098b",
+   "labels": [
+    "Duplicate_Record_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_record_detector",
+    "description": "Groups table rows into duplicate candidate clusters using a duplicate-key specification. Returns duplicate groups without deleting rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f3d6fa93-3966-51de-b994-9447e1724055",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "duplicate_groups"
+   }
+  },
+  {
+   "id": "a58b250c-fdeb-5138-aa34-e5668e9bb955",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7ad0f21e-cc3c-59a3-86a4-d1b3c76e9f58",
+   "to": "dd6ed2fa-ef87-5966-869c-6c9aeeb9098b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "dd6ed2fa-ef87-5966-869c-6c9aeeb9098b",
+   "to": "f3d6fa93-3966-51de-b994-9447e1724055",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['duplicate_groups']": "from['outputs']['duplicate_groups']"
+    }
+   }
+  },
+  {
+   "from": "f3d6fa93-3966-51de-b994-9447e1724055",
+   "to": "a58b250c-fdeb-5138-aa34-e5668e9bb955",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['duplicate_groups']": "from['duplicate_groups']"
+    }
+   }
+  },
+  {
+   "from": "a58b250c-fdeb-5138-aa34-e5668e9bb955",
+   "to": "dd6ed2fa-ef87-5966-869c-6c9aeeb9098b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7ad0f21e-cc3c-59a3-86a4-d1b3c76e9f58",
+   "to": "a58b250c-fdeb-5138-aa34-e5668e9bb955",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

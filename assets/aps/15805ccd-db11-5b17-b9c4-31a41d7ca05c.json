@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "15805ccd-db11-5b17-b9c4-31a41d7ca05c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Diagnosis Code Patient Filter",
+    "description": "Starting with coded patient records and a target medical code set, it keeps only the records containing at least one matching diagnosis code and returns the filtered record set.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "d0b29807-0303-5c80-bf29-5e15a8e82512",
+   "labels": [
+    "Diagnosis_Code_Set_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_code_filter",
+    "description": "Keeps coded patient records containing at least one diagnosis code in the target medical code set. Records with no matching code are removed.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "15805ccd-db11-5b17-b9c4-31a41d7ca05c",
+   "to": "d0b29807-0303-5c80-bf29-5e15a8e82512",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

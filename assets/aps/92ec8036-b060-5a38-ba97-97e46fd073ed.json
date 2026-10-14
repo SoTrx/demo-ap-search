@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "92ec8036-b060-5a38-ba97-97e46fd073ed",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Assemble Approved Translation Text",
+    "description": "Combines editor-approved translated chunks into one full translated text, substituting original source chunks where no approved translation is matched.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "ac0f673c-89bc-5144-a22b-540b20bc1eac",
+   "labels": [
+    "Multilingual_Text_Recomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "multilingual_text_recomposer",
+    "description": "Reassembles accepted aligned translated chunks into a full translated text, using original source chunks as fallback for unaligned content.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "92ec8036-b060-5a38-ba97-97e46fd073ed",
+   "to": "ac0f673c-89bc-5144-a22b-540b20bc1eac",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

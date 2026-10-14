@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "7857ac72-e53a-5eea-974b-916c23574ba4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Economic Indicator Forecasting",
+    "description": "Converts mapped table rows into an ordered economic indicator or price series and returns a requested number of future values.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "ba10b269-7eda-5b20-8f64-6b186e0f26af",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f02f8903-d4f2-5e6e-a2c6-4440493254eb",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "748db9a4-a501-5498-a288-7dd078bc0196",
+   "labels": [
+    "Time_Series_Forecaster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Forecaster",
+    "description": "Forecasts the next requested number of observations from a time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7857ac72-e53a-5eea-974b-916c23574ba4",
+   "to": "ba10b269-7eda-5b20-8f64-6b186e0f26af",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ba10b269-7eda-5b20-8f64-6b186e0f26af",
+   "to": "f02f8903-d4f2-5e6e-a2c6-4440493254eb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "f02f8903-d4f2-5e6e-a2c6-4440493254eb",
+   "to": "748db9a4-a501-5498-a288-7dd078bc0196",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "748db9a4-a501-5498-a288-7dd078bc0196",
+   "to": "ba10b269-7eda-5b20-8f64-6b186e0f26af",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7857ac72-e53a-5eea-974b-916c23574ba4",
+   "to": "748db9a4-a501-5498-a288-7dd078bc0196",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

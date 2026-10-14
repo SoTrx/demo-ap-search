@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "dc7f5303-7b35-5be9-8420-b4d83d48cd83",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymised Table Record Extraction",
+    "description": "Converts document table layout blocks and OCR text chunks into table records and returns them after replacing direct identifiers according to a pseudonymisation plan.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "01df60ef-e4d3-50aa-8f16-cd1cacca35bf",
+   "labels": [
+    "Table_Region_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_regions",
+    "description": "Selects table layout blocks and converts them into bounding table regions ready for cell extraction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8bce7f45-d2c3-5b43-abf1-d040a2e308c3",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_regions"
+   }
+  },
+  {
+   "id": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fd243734-d60b-5ec4-b34a-359ceb47662f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "9252ab5b-cfc0-5d7f-b7d8-858a221ed1eb",
+   "labels": [
+    "Pseudonymisation_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pseudonymisation_applier",
+    "description": "Applies a pseudonymisation plan to table records and returns pseudonymised table records. Detected direct-identifier values are replaced with reversible pseudonyms, while non-target fields are preserved.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "pseudonymised_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dc7f5303-7b35-5be9-8420-b4d83d48cd83",
+   "to": "01df60ef-e4d3-50aa-8f16-cd1cacca35bf",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "01df60ef-e4d3-50aa-8f16-cd1cacca35bf",
+   "to": "8bce7f45-d2c3-5b43-abf1-d040a2e308c3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_regions']": "from['outputs']['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "8bce7f45-d2c3-5b43-abf1-d040a2e308c3",
+   "to": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_regions']": "from['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "to": "01df60ef-e4d3-50aa-8f16-cd1cacca35bf",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc7f5303-7b35-5be9-8420-b4d83d48cd83",
+   "to": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "to": "fd243734-d60b-5ec4-b34a-359ceb47662f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "fd243734-d60b-5ec4-b34a-359ceb47662f",
+   "to": "9252ab5b-cfc0-5d7f-b7d8-858a221ed1eb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "9252ab5b-cfc0-5d7f-b7d8-858a221ed1eb",
+   "to": "76f74cc1-dd74-5966-8241-fdcca30275a6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dc7f5303-7b35-5be9-8420-b4d83d48cd83",
+   "to": "9252ab5b-cfc0-5d7f-b7d8-858a221ed1eb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

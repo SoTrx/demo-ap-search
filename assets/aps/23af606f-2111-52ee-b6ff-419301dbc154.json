@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "23af606f-2111-52ee-b6ff-419301dbc154",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Student Attempt Trend Summary",
+    "description": "Executes a supplied SQL query against student assessment data and returns a plain-text description of whether recent student attempts are improving, declining, or stable.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "8ec4ed8f-b313-55c2-995b-f2bb7e395395",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "b7c98c14-a070-5c2b-ba6b-8308dab4f5a2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "16083119-ae27-5168-81b0-999b29fefd48",
+   "labels": [
+    "Performance_Trend_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "performance_trend_summarizer",
+    "description": "Summarizes the trend in a student's result rows over recent attempts, such as improving, declining, or stable. Returns a plain-text trend description.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "23af606f-2111-52ee-b6ff-419301dbc154",
+   "to": "8ec4ed8f-b313-55c2-995b-f2bb7e395395",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8ec4ed8f-b313-55c2-995b-f2bb7e395395",
+   "to": "b7c98c14-a070-5c2b-ba6b-8308dab4f5a2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "b7c98c14-a070-5c2b-ba6b-8308dab4f5a2",
+   "to": "16083119-ae27-5168-81b0-999b29fefd48",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "16083119-ae27-5168-81b0-999b29fefd48",
+   "to": "8ec4ed8f-b313-55c2-995b-f2bb7e395395",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "23af606f-2111-52ee-b6ff-419301dbc154",
+   "to": "16083119-ae27-5168-81b0-999b29fefd48",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

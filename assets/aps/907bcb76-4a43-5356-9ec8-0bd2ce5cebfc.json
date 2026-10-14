@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "907bcb76-4a43-5356-9ec8-0bd2ce5cebfc",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Passage Retrieval from Chunks",
+    "description": "The AP indexes ordered text chunks and retrieves passages by dense vector similarity for a query.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "9d525016-ab23-5661-abcb-721e80193cb5",
+   "labels": [
+    "Passage_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "passage_index_builder",
+    "description": "Builds a searchable index from ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6b2f1871-8140-5ab7-a9f9-90e3ee6f9aff",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "15ebba00-dd5a-50ee-86c7-ab5cbdbc47c3",
+   "labels": [
+    "Dense_Vector_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dense_vector_retriever",
+    "description": "Retrieves text chunks from a search index using dense vector similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "907bcb76-4a43-5356-9ec8-0bd2ce5cebfc",
+   "to": "9d525016-ab23-5661-abcb-721e80193cb5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9d525016-ab23-5661-abcb-721e80193cb5",
+   "to": "6b2f1871-8140-5ab7-a9f9-90e3ee6f9aff",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "6b2f1871-8140-5ab7-a9f9-90e3ee6f9aff",
+   "to": "15ebba00-dd5a-50ee-86c7-ab5cbdbc47c3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "15ebba00-dd5a-50ee-86c7-ab5cbdbc47c3",
+   "to": "9d525016-ab23-5661-abcb-721e80193cb5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "907bcb76-4a43-5356-9ec8-0bd2ce5cebfc",
+   "to": "15ebba00-dd5a-50ee-86c7-ab5cbdbc47c3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

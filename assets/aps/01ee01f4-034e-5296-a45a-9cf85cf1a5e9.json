@@ -1,0 +1,407 @@
+{
+ "nodes": [
+  {
+   "id": "01ee01f4-034e-5296-a45a-9cf85cf1a5e9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Validated Translation Segment Alignment",
+    "description": "The AP splits a plain-text document into ordered chunks, cleans translated chunks against the source, aligns source and translated segments using length, order, and content cues, filters alignments by an acceptance threshold, and returns a validation report with only the accepted alignments.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9f72a653-8685-58e3-8a46-6401d8076875",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "labels": [
+    "Translated_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translated_text_cleaner",
+    "description": "Cleans translated chunks by normalizing whitespace, preserving placeholders, and repairing formatting with reference to the original source chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "16eaa8c4-2a39-5e52-8d7a-05a0bdbcc62c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_translated_chunks"
+   }
+  },
+  {
+   "id": "658319f8-fd2c-53ec-b3e6-e555eb76eab7",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "labels": [
+    "Parallel_Segment_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "parallel_segment_aligner",
+    "description": "Aligns source and translated text chunks by length, order, and content cues, returning segment pairs with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "align_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "919792ac-b2c0-5cde-90dd-078a7a80314b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "segment_alignment"
+   }
+  },
+  {
+   "id": "1c3735f3-8e92-5f72-9f6f-b43ede60dd26",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_translated_chunks"
+   }
+  },
+  {
+   "id": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "labels": [
+    "Translation_Alignment_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_alignment_validator",
+    "description": "Reviews segment alignments against a quality threshold and returns a validation report plus the alignments that pass.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accept_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "validation_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "01ee01f4-034e-5296-a45a-9cf85cf1a5e9",
+   "to": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "to": "9f72a653-8685-58e3-8a46-6401d8076875",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "9f72a653-8685-58e3-8a46-6401d8076875",
+   "to": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "to": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01ee01f4-034e-5296-a45a-9cf85cf1a5e9",
+   "to": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "to": "16eaa8c4-2a39-5e52-8d7a-05a0bdbcc62c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_translated_chunks']": "from['outputs']['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "16eaa8c4-2a39-5e52-8d7a-05a0bdbcc62c",
+   "to": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['translated_chunks']": "from['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "to": "658319f8-fd2c-53ec-b3e6-e555eb76eab7",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "658319f8-fd2c-53ec-b3e6-e555eb76eab7",
+   "to": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['source_chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "to": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "to": "c0225dec-f8ff-5043-8022-f411568e4f05",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01ee01f4-034e-5296-a45a-9cf85cf1a5e9",
+   "to": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "to": "919792ac-b2c0-5cde-90dd-078a7a80314b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['segment_alignment']": "from['outputs']['segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "919792ac-b2c0-5cde-90dd-078a7a80314b",
+   "to": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['segment_alignment']": "from['segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "to": "1c3735f3-8e92-5f72-9f6f-b43ede60dd26",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_translated_chunks']": "from['outputs']['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "1c3735f3-8e92-5f72-9f6f-b43ede60dd26",
+   "to": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['translated_chunks']": "from['cleaned_translated_chunks']"
+    }
+   }
+  },
+  {
+   "from": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "to": "4d1e879f-e237-56fb-a4e4-cbd8ea55f9d8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "to": "c755ce36-fadf-5b40-8b28-afc61cd7027c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01ee01f4-034e-5296-a45a-9cf85cf1a5e9",
+   "to": "f3e0591c-7ee1-5898-afff-efc550d8f6b5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "6b607b01-efac-5755-a742-a34acd0e6cb3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Study Urgency Score",
+    "description": "It estimates a learner's topic proficiency and combines it with their performance profile to return a numeric study priority score.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "549c6785-10eb-5c94-91de-49614e841102",
+   "labels": [
+    "Student_Proficiency_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_proficiency_estimator",
+    "description": "Estimates a student's proficiency level for a topic from the student performance profile. Uses only the profile and the requested topic.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f17e2ce0-d7e8-5268-9fd5-7e6215b2dcfc",
+   "labels": [
+    "ResultType",
+    "number"
+   ],
+   "properties": {
+    "name": "proficiency_level"
+   }
+  },
+  {
+   "id": "5ade706f-bba0-58c7-aa29-52557e17e0fd",
+   "labels": [
+    "Study_Priority_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_priority_scorer",
+    "description": "Scores how urgent a topic is for study by combining the student performance profile with the estimated proficiency level. Returns one numeric priority score.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "priority_score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6b607b01-efac-5755-a742-a34acd0e6cb3",
+   "to": "549c6785-10eb-5c94-91de-49614e841102",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "549c6785-10eb-5c94-91de-49614e841102",
+   "to": "f17e2ce0-d7e8-5268-9fd5-7e6215b2dcfc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['proficiency_level']": "from['outputs']['proficiency_level']"
+    }
+   }
+  },
+  {
+   "from": "f17e2ce0-d7e8-5268-9fd5-7e6215b2dcfc",
+   "to": "5ade706f-bba0-58c7-aa29-52557e17e0fd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['proficiency_level']": "from['proficiency_level']"
+    }
+   }
+  },
+  {
+   "from": "5ade706f-bba0-58c7-aa29-52557e17e0fd",
+   "to": "549c6785-10eb-5c94-91de-49614e841102",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6b607b01-efac-5755-a742-a34acd0e6cb3",
+   "to": "5ade706f-bba0-58c7-aa29-52557e17e0fd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

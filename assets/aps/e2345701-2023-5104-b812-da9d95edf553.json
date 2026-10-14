@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "e2345701-2023-5104-b812-da9d95edf553",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Extract Foreign Language Table Records",
+    "description": "It filters OCR text chunks to those whose detected language differs from the target language, then extracts headers and cell values from the corresponding table regions to produce table records.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "ba982c38-def9-5137-8fdf-8609a1456c35",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "216cdded-f74d-5b0b-9cc7-9700ade6fe75",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "59113add-e657-5aad-909b-87e36fe8b299",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e2345701-2023-5104-b812-da9d95edf553",
+   "to": "ba982c38-def9-5137-8fdf-8609a1456c35",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ba982c38-def9-5137-8fdf-8609a1456c35",
+   "to": "216cdded-f74d-5b0b-9cc7-9700ade6fe75",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "216cdded-f74d-5b0b-9cc7-9700ade6fe75",
+   "to": "59113add-e657-5aad-909b-87e36fe8b299",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "59113add-e657-5aad-909b-87e36fe8b299",
+   "to": "ba982c38-def9-5137-8fdf-8609a1456c35",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e2345701-2023-5104-b812-da9d95edf553",
+   "to": "59113add-e657-5aad-909b-87e36fe8b299",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

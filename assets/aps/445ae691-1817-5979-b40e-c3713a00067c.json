@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "445ae691-1817-5979-b40e-c3713a00067c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Expanded Diagnosis Patient Filtering",
+    "description": "Validates candidate relation triples against a graph schema, expands the base medical code set through descendant vocabulary relations, and filters coded patient records to those containing a matching target diagnosis code.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "ad4ece6f-b2ea-584b-a079-02d1e1d2e457",
+   "labels": [
+    "Graph_Triple_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_triple_builder",
+    "description": "Converts relation candidates into graph triples that conform to the graph schema. Invalid relation classes or mismatched entity types are dropped.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "84ea7e7d-eee4-582a-a508-2be8d39e9960",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "graph_triples"
+   }
+  },
+  {
+   "id": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "labels": [
+    "Medical_Code_Set_Expander_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "code_set_expander",
+    "description": "Expands a base medical code set to descendant codes using parent-child vocabulary triples. It returns the original codes and any reachable descendants.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "base_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "vocabulary_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "33d97550-2fc7-5223-90c9-8e3c6cc77721",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "expanded_code_set"
+   }
+  },
+  {
+   "id": "71802ad9-42cc-53a6-9aa8-62d938b1671c",
+   "labels": [
+    "Diagnosis_Code_Set_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_code_filter",
+    "description": "Keeps coded patient records containing at least one diagnosis code in the target medical code set. Records with no matching code are removed.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "445ae691-1817-5979-b40e-c3713a00067c",
+   "to": "ad4ece6f-b2ea-584b-a079-02d1e1d2e457",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ad4ece6f-b2ea-584b-a079-02d1e1d2e457",
+   "to": "84ea7e7d-eee4-582a-a508-2be8d39e9960",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_triples']": "from['outputs']['graph_triples']"
+    }
+   }
+  },
+  {
+   "from": "84ea7e7d-eee4-582a-a508-2be8d39e9960",
+   "to": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['vocabulary_triples']": "from['graph_triples']"
+    }
+   }
+  },
+  {
+   "from": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "to": "ad4ece6f-b2ea-584b-a079-02d1e1d2e457",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "445ae691-1817-5979-b40e-c3713a00067c",
+   "to": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "to": "33d97550-2fc7-5223-90c9-8e3c6cc77721",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['expanded_code_set']": "from['outputs']['expanded_code_set']"
+    }
+   }
+  },
+  {
+   "from": "33d97550-2fc7-5223-90c9-8e3c6cc77721",
+   "to": "71802ad9-42cc-53a6-9aa8-62d938b1671c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['target_code_set']": "from['expanded_code_set']"
+    }
+   }
+  },
+  {
+   "from": "71802ad9-42cc-53a6-9aa8-62d938b1671c",
+   "to": "df3a7b75-3faf-5cbe-8da5-c7c2dd696a20",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "445ae691-1817-5979-b40e-c3713a00067c",
+   "to": "71802ad9-42cc-53a6-9aa8-62d938b1671c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

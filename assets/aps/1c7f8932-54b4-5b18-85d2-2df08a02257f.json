@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "1c7f8932-54b4-5b18-85d2-2df08a02257f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation Answer Support Checker",
+    "description": "It parses citation records into consistent fields and returns whether an answer summary is supported by the cited passages for a query.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "bff527f2-0990-585b-8cf5-ad51bcf727f4",
+   "labels": [
+    "Citation_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_citations",
+    "description": "Parses citation records into consistent fields such as authors, title, venue, and year.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6af14110-34de-531d-8d0c-edba9b83b74f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citation_records"
+   }
+  },
+  {
+   "id": "9e785349-6bf8-5135-a81a-b1f30f4568b5",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1c7f8932-54b4-5b18-85d2-2df08a02257f",
+   "to": "bff527f2-0990-585b-8cf5-ad51bcf727f4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bff527f2-0990-585b-8cf5-ad51bcf727f4",
+   "to": "6af14110-34de-531d-8d0c-edba9b83b74f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citation_records']": "from['outputs']['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "6af14110-34de-531d-8d0c-edba9b83b74f",
+   "to": "9e785349-6bf8-5135-a81a-b1f30f4568b5",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citations']": "from['citation_records']"
+    }
+   }
+  },
+  {
+   "from": "9e785349-6bf8-5135-a81a-b1f30f4568b5",
+   "to": "bff527f2-0990-585b-8cf5-ad51bcf727f4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1c7f8932-54b4-5b18-85d2-2df08a02257f",
+   "to": "9e785349-6bf8-5135-a81a-b1f30f4568b5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

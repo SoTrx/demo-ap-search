@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "7dc86ade-558a-58b4-8d9a-0fea9b6e1cf0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Bar Chart Spec Builder",
+    "description": "Takes tabular rows and a mapping that designates a categorical field and a numeric field, then outputs a bar chart object ready for rendering.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "352f677e-b244-5179-86ff-5f07d077edbf",
+   "labels": [
+    "Bar_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bar_chart_builder",
+    "description": "Builds a bar chart specification from tabular rows and a column mapping that identifies the categorical field and numeric value field.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7dc86ade-558a-58b4-8d9a-0fea9b6e1cf0",
+   "to": "352f677e-b244-5179-86ff-5f07d077edbf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

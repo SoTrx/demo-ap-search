@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "495a1016-e243-5ae8-a5de-62bf60d0493f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Summary Citation Finder",
+    "description": "The AP reads a dashboard and retrieved passages, writes an executive summary of its panels, annotations, and filters, then returns passage chunks that support that summary.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "55d00530-f063-58dc-b0e3-cf2179fc4bec",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "51ac946e-421a-5531-851b-d9a7704b6536",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "851fffe8-06db-5149-9714-100cf25780e4",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "495a1016-e243-5ae8-a5de-62bf60d0493f",
+   "to": "55d00530-f063-58dc-b0e3-cf2179fc4bec",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "55d00530-f063-58dc-b0e3-cf2179fc4bec",
+   "to": "51ac946e-421a-5531-851b-d9a7704b6536",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "51ac946e-421a-5531-851b-d9a7704b6536",
+   "to": "851fffe8-06db-5149-9714-100cf25780e4",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "851fffe8-06db-5149-9714-100cf25780e4",
+   "to": "55d00530-f063-58dc-b0e3-cf2179fc4bec",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "495a1016-e243-5ae8-a5de-62bf60d0493f",
+   "to": "851fffe8-06db-5149-9714-100cf25780e4",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

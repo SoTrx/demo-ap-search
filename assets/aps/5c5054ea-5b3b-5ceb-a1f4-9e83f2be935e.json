@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "5c5054ea-5b3b-5ceb-a1f4-9e83f2be935e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Titled Three-Chart Dashboard Builder",
+    "description": "Combines three existing chart definitions into one dashboard specification with ordered panels and panel titles.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "64f720f3-334f-51c1-9878-9141b20f8ea5",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1d8ba080-7631-5056-aa0d-edd9db34646d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chart_collection"
+   }
+  },
+  {
+   "id": "8df5a6a3-6ae3-5878-b2cd-172163da7b21",
+   "labels": [
+    "Dashboard_Layout_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_layout_builder",
+    "description": "Arranges a chart collection into a dashboard specification with panels and titles.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5c5054ea-5b3b-5ceb-a1f4-9e83f2be935e",
+   "to": "64f720f3-334f-51c1-9878-9141b20f8ea5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "64f720f3-334f-51c1-9878-9141b20f8ea5",
+   "to": "1d8ba080-7631-5056-aa0d-edd9db34646d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart_collection']": "from['outputs']['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "1d8ba080-7631-5056-aa0d-edd9db34646d",
+   "to": "8df5a6a3-6ae3-5878-b2cd-172163da7b21",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_collection']": "from['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "8df5a6a3-6ae3-5878-b2cd-172163da7b21",
+   "to": "64f720f3-334f-51c1-9878-9141b20f8ea5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5c5054ea-5b3b-5ceb-a1f4-9e83f2be935e",
+   "to": "8df5a6a3-6ae3-5878-b2cd-172163da7b21",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

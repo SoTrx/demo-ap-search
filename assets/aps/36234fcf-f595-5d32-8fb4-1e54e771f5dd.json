@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "36234fcf-f595-5d32-8fb4-1e54e771f5dd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Similarity Search Index",
+    "description": "Builds a queryable nearest-neighbor index from arrays of image feature vectors so stored images can be retrieved by visual similarity.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "107da6f9-a688-5d33-aeab-ca3df62ac10a",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "36234fcf-f595-5d32-8fb4-1e54e771f5dd",
+   "to": "107da6f9-a688-5d33-aeab-ca3df62ac10a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

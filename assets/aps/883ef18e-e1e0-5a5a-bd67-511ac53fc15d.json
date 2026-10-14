@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "883ef18e-e1e0-5a5a-bd67-511ac53fc15d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filterable Dashboard Builder",
+    "description": "Builds a titled dashboard from a chart collection and adds interactive filter controls by binding chosen display fields to source table columns.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "9cb72c87-cc08-5ae1-aeee-d1bc249c842e",
+   "labels": [
+    "Dashboard_Layout_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_layout_builder",
+    "description": "Arranges a chart collection into a dashboard specification with panels and titles.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "29e8475a-76b1-5e0d-b07e-23e17c359d46",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "dashboard"
+   }
+  },
+  {
+   "id": "a8ca4867-602b-5231-aa4b-ddf9575ecc36",
+   "labels": [
+    "Dashboard_Filter_Configurator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_filter_configurator",
+    "description": "Adds interactive filter controls to a dashboard by mapping selectable display fields to source table columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "883ef18e-e1e0-5a5a-bd67-511ac53fc15d",
+   "to": "9cb72c87-cc08-5ae1-aeee-d1bc249c842e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9cb72c87-cc08-5ae1-aeee-d1bc249c842e",
+   "to": "29e8475a-76b1-5e0d-b07e-23e17c359d46",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['dashboard']": "from['outputs']['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "29e8475a-76b1-5e0d-b07e-23e17c359d46",
+   "to": "a8ca4867-602b-5231-aa4b-ddf9575ecc36",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['dashboard']": "from['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "a8ca4867-602b-5231-aa4b-ddf9575ecc36",
+   "to": "9cb72c87-cc08-5ae1-aeee-d1bc249c842e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "883ef18e-e1e0-5a5a-bd67-511ac53fc15d",
+   "to": "a8ca4867-602b-5231-aa4b-ddf9575ecc36",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

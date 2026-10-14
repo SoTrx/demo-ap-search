@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "2dfcaa30-85e5-5857-86e3-ba70f278c064",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Quasi-identifier disclosure risk report",
+    "description": "Uses a records array and a personal-data report to identify remaining quasi-identifier columns and combinations that could uniquely single out records after direct personal data is removed.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "c1b6f1b4-78a4-531c-87e6-7e5eb64ffc02",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2dfcaa30-85e5-5857-86e3-ba70f278c064",
+   "to": "c1b6f1b4-78a4-531c-87e6-7e5eb64ffc02",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

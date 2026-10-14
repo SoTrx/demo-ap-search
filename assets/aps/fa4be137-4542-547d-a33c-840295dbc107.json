@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "fa4be137-4542-547d-a33c-840295dbc107",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Multilingual OCR Table Profile",
+    "description": "Filters OCR text chunks to those not in the target language, extracts table headers and cells from matching table regions, and returns a dataset profile of those rows.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "af9279d3-25f4-5473-add0-0f2158ac947b",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ceb368e4-4166-555a-84d7-c532b69756d5",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4d4d8393-b9d7-5ee3-aae2-c75062727973",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "1cb4f57d-404e-5ba8-9254-c8b4a24d0850",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fa4be137-4542-547d-a33c-840295dbc107",
+   "to": "af9279d3-25f4-5473-add0-0f2158ac947b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "af9279d3-25f4-5473-add0-0f2158ac947b",
+   "to": "ceb368e4-4166-555a-84d7-c532b69756d5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "ceb368e4-4166-555a-84d7-c532b69756d5",
+   "to": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "to": "af9279d3-25f4-5473-add0-0f2158ac947b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "fa4be137-4542-547d-a33c-840295dbc107",
+   "to": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "to": "4d4d8393-b9d7-5ee3-aae2-c75062727973",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "4d4d8393-b9d7-5ee3-aae2-c75062727973",
+   "to": "1cb4f57d-404e-5ba8-9254-c8b4a24d0850",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "1cb4f57d-404e-5ba8-9254-c8b4a24d0850",
+   "to": "c8c40823-bd0d-5f47-907c-0896e04563d7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "fa4be137-4542-547d-a33c-840295dbc107",
+   "to": "1cb4f57d-404e-5ba8-9254-c8b4a24d0850",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "d57ba907-84b0-566c-ba58-370f3234ddbb",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Budget Actual Variance Report",
+    "description": "Uses the column mapping and comparison report to translate values, harmonizes budget and actual records, and produces a fiscal-period budget-to-actual variance comparison.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "f8b870f6-a60d-5f49-bc10-f4c342cadbbc",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a675e9a4-0ac0-5b1c-baef-8d7e7ad0ea28",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "value_mapping"
+   }
+  },
+  {
+   "id": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1931afd5-99de-5736-a6b5-cc64157b0cd5",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "5db8eeaa-eb98-5e49-b164-ccdf51cb1c00",
+   "labels": [
+    "Budget_Period_Variance_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_period_variance_builder",
+    "description": "Compares budgeted and actual amount columns by fiscal period and computes absolute and percentage variance for each period. It returns a period comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d57ba907-84b0-566c-ba58-370f3234ddbb",
+   "to": "f8b870f6-a60d-5f49-bc10-f4c342cadbbc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f8b870f6-a60d-5f49-bc10-f4c342cadbbc",
+   "to": "a675e9a4-0ac0-5b1c-baef-8d7e7ad0ea28",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['value_mapping']": "from['outputs']['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "a675e9a4-0ac0-5b1c-baef-8d7e7ad0ea28",
+   "to": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['value_mapping']": "from['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "to": "f8b870f6-a60d-5f49-bc10-f4c342cadbbc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d57ba907-84b0-566c-ba58-370f3234ddbb",
+   "to": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "to": "1931afd5-99de-5736-a6b5-cc64157b0cd5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "1931afd5-99de-5736-a6b5-cc64157b0cd5",
+   "to": "5db8eeaa-eb98-5e49-b164-ccdf51cb1c00",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "5db8eeaa-eb98-5e49-b164-ccdf51cb1c00",
+   "to": "eccad52d-7b2d-56da-90b9-1a0beb528824",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d57ba907-84b0-566c-ba58-370f3234ddbb",
+   "to": "5db8eeaa-eb98-5e49-b164-ccdf51cb1c00",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

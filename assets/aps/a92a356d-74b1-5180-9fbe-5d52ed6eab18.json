@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "a92a356d-74b1-5180-9fbe-5d52ed6eab18",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Batch Classification Predictions",
+    "description": "Classifies a batch of images with a supplied trained model and returns per-image predicted labels with confidence scores.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "3b43f839-3c23-5716-b7ed-e9cc17f17cb2",
+   "labels": [
+    "Image_Classification_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_classification_predictor",
+    "description": "Applies an image classification model to an image batch and returns predicted labels with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a92a356d-74b1-5180-9fbe-5d52ed6eab18",
+   "to": "3b43f839-3c23-5716-b7ed-e9cc17f17cb2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

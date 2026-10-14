@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "ce9026d8-0135-535e-a4fb-e7bc7322ed2f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Document Entity Context Extractor",
+    "description": "Turns a long plain-text document into a list of named entities and the context around each.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "4c6e44d7-ee30-5ccd-9146-918136bbed63",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8090b603-baf4-54aa-8ad3-f424309053ba",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks"
+   }
+  },
+  {
+   "id": "6cc6e047-9162-50b0-8b29-ba7628d95588",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ce9026d8-0135-535e-a4fb-e7bc7322ed2f",
+   "to": "4c6e44d7-ee30-5ccd-9146-918136bbed63",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4c6e44d7-ee30-5ccd-9146-918136bbed63",
+   "to": "8090b603-baf4-54aa-8ad3-f424309053ba",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks']": "from['outputs']['chunks']"
+    }
+   }
+  },
+  {
+   "from": "8090b603-baf4-54aa-8ad3-f424309053ba",
+   "to": "6cc6e047-9162-50b0-8b29-ba7628d95588",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['chunks']"
+    }
+   }
+  },
+  {
+   "from": "6cc6e047-9162-50b0-8b29-ba7628d95588",
+   "to": "4c6e44d7-ee30-5ccd-9146-918136bbed63",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ce9026d8-0135-535e-a4fb-e7bc7322ed2f",
+   "to": "6cc6e047-9162-50b0-8b29-ba7628d95588",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

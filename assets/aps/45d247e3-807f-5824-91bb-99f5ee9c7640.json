@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "45d247e3-807f-5824-91bb-99f5ee9c7640",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Audio Segment Transcription",
+    "description": "Converts an array of audio segments into transcript records with recognized text, timing, and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "f3e8a69f-240b-5a68-bc82-3fbcba6df540",
+   "labels": [
+    "Speech_Transcriber_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speech_transcriber",
+    "description": "Converts audio segments to text using an automatic speech recognition model. Returns transcript records containing recognized text, segment timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "45d247e3-807f-5824-91bb-99f5ee9c7640",
+   "to": "f3e8a69f-240b-5a68-bc82-3fbcba6df540",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

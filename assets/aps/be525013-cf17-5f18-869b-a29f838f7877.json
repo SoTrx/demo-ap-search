@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "be525013-cf17-5f18-869b-a29f838f7877",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seed Dataset Similar Recommendations",
+    "description": "Given a seed dataset and a count, this entry returns a ranked array of recommended dataset IDs.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "c7546339-f9cf-52b3-8438-6267633cac61",
+   "labels": [
+    "DatasetRecommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "GetRecommendations Operator",
+    "description": "Dataset-to-Dataset recommender operator. Accepts a seed dataset as input and returns a ranked list of recommended dataset IDs as output.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "seed",
+      "type": "sc:Dataset",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "n",
+      "type": "number",
+      "required": false,
+      "default": 2
+     }
+    ],
+    "outputs": [
+     {
+      "name": "recommendations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "be525013-cf17-5f18-869b-a29f838f7877",
+   "to": "c7546339-f9cf-52b3-8438-6267633cac61",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

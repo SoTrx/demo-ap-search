@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "004d545f-06d5-55b6-a239-4509a6d0ffdd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Database Question Difficulty Scoring",
+    "description": "Given a database schema and a question limit, this AP generates suggested analytic questions and returns a string of difficulty scores calibrated to a student proficiency level.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "dbd65d62-b6d8-5e85-ab63-3a896ccfd944",
+   "labels": [
+    "Schema_Question_Suggester_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Question Suggester",
+    "description": "Generates analytic questions that can be asked about a database schema and returns them as recommended question JSON.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "60434a76-12f3-5c60-8371-b68ab1a54db2",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "questions"
+   }
+  },
+  {
+   "id": "65ed5188-ab80-594d-b1f8-7d4ed3fc7d93",
+   "labels": [
+    "Question_Difficulty_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "question_difficulty_estimator",
+    "description": "Estimates a difficulty score for each recommended question using the question JSON and the student's proficiency level. Returns scores only, without re-ranking or rewriting the questions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "difficulty_scores",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "004d545f-06d5-55b6-a239-4509a6d0ffdd",
+   "to": "dbd65d62-b6d8-5e85-ab63-3a896ccfd944",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "dbd65d62-b6d8-5e85-ab63-3a896ccfd944",
+   "to": "60434a76-12f3-5c60-8371-b68ab1a54db2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['questions']": "from['outputs']['questions']"
+    }
+   }
+  },
+  {
+   "from": "60434a76-12f3-5c60-8371-b68ab1a54db2",
+   "to": "65ed5188-ab80-594d-b1f8-7d4ed3fc7d93",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['questions']": "from['questions']"
+    }
+   }
+  },
+  {
+   "from": "65ed5188-ab80-594d-b1f8-7d4ed3fc7d93",
+   "to": "dbd65d62-b6d8-5e85-ab63-3a896ccfd944",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "004d545f-06d5-55b6-a239-4509a6d0ffdd",
+   "to": "65ed5188-ab80-594d-b1f8-7d4ed3fc7d93",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

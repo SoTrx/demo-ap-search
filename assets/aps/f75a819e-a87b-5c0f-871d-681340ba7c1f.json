@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "f75a819e-a87b-5c0f-871d-681340ba7c1f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Keyword Relevance Score Cutoff",
+    "description": "Filters a supplied array of keyword records by a numeric relevance-score cutoff and returns the keyword records that meet or exceed that cutoff.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "1778b979-d97e-507d-a79e-afe615655125",
+   "labels": [
+    "Keyword_Threshold_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "keyword_threshold_filter",
+    "description": "Keeps keyword records whose relevance score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f75a819e-a87b-5c0f-871d-681340ba7c1f",
+   "to": "1778b979-d97e-507d-a79e-afe615655125",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

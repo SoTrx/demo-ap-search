@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "c484f9f0-86e6-5001-9713-c66c0720602e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Chart Answer Annotation Highlighter",
+    "description": "Builds an answer summary from a query and retrieved passages and adds that note plus highlight hints to an existing chart.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "36795811-78a2-56db-a301-92d06b6bfc44",
+   "labels": [
+    "Answer_Synthesizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_synthesizer",
+    "description": "Generates an answer summary for a query from retrieved text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3a04cb26-16bb-5bf3-b3f1-8d1ea8de475b",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "answer_summary"
+   }
+  },
+  {
+   "id": "23c87a1f-adbb-5fec-bcb8-b1f8422dc0c3",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c484f9f0-86e6-5001-9713-c66c0720602e",
+   "to": "36795811-78a2-56db-a301-92d06b6bfc44",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "36795811-78a2-56db-a301-92d06b6bfc44",
+   "to": "3a04cb26-16bb-5bf3-b3f1-8d1ea8de475b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['answer_summary']": "from['outputs']['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "3a04cb26-16bb-5bf3-b3f1-8d1ea8de475b",
+   "to": "23c87a1f-adbb-5fec-bcb8-b1f8422dc0c3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "23c87a1f-adbb-5fec-bcb8-b1f8422dc0c3",
+   "to": "36795811-78a2-56db-a301-92d06b6bfc44",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c484f9f0-86e6-5001-9713-c66c0720602e",
+   "to": "23c87a1f-adbb-5fec-bcb8-b1f8422dc0c3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

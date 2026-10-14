@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "7748da19-c868-59bd-bb39-b7171b3e4145",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "OCR Clinical Table To Patient Records",
+    "description": "Parse OCR table regions and text into cell values, then keep only patient-level rows with an identifier, mapped to the selected columns.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "f68bd4a6-5017-5a8e-bc86-aec338534063",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5842a907-2188-5572-a134-8f0e625a9b90",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "697066e8-366c-5a5d-97d5-2ad08835765b",
+   "labels": [
+    "Clinical_Patient_Record_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "patient_record_filter",
+    "description": "Filters clinical table rows to patient-level records and keeps only the columns named in the column mapping. Rows without a patient identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7748da19-c868-59bd-bb39-b7171b3e4145",
+   "to": "f68bd4a6-5017-5a8e-bc86-aec338534063",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f68bd4a6-5017-5a8e-bc86-aec338534063",
+   "to": "5842a907-2188-5572-a134-8f0e625a9b90",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "5842a907-2188-5572-a134-8f0e625a9b90",
+   "to": "697066e8-366c-5a5d-97d5-2ad08835765b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_records']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "697066e8-366c-5a5d-97d5-2ad08835765b",
+   "to": "f68bd4a6-5017-5a8e-bc86-aec338534063",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7748da19-c868-59bd-bb39-b7171b3e4145",
+   "to": "697066e8-366c-5a5d-97d5-2ad08835765b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

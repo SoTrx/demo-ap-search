@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "27d88f8e-b70d-5efc-aa06-c90e58ec97d4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Rank Correlation Matrix Builder",
+    "description": "Generates a Spearman rank correlation matrix for selected numeric columns from supplied table rows and column mapping.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "a1fc9908-2850-5ae0-976c-8fcd70548b74",
+   "labels": [
+    "Spearman_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spearman_correlation_matrix",
+    "description": "Computes a Spearman rank correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "27d88f8e-b70d-5efc-aa06-c90e58ec97d4",
+   "to": "a1fc9908-2850-5ae0-976c-8fcd70548b74",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+{
+ "nodes": [
+  {
+   "id": "61686c5d-3ede-53ce-a5e0-49947ff3bc2d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Summaries by Region and Period",
+    "description": "Filters weather readings to a given date range and computes chosen summary metrics grouped by region and period.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "864e0027-9a74-57c2-bba4-410def322f85",
+   "labels": [
+    "Time_Range_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "time_range_filter",
+    "description": "Keeps weather readings whose timestamps fall between two dates.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dd217507-a296-5179-8900-4b49a8636d6c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "a16bf3bc-e3ce-57b8-bedc-fb968b825799",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "61686c5d-3ede-53ce-a5e0-49947ff3bc2d",
+   "to": "864e0027-9a74-57c2-bba4-410def322f85",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "864e0027-9a74-57c2-bba4-410def322f85",
+   "to": "dd217507-a296-5179-8900-4b49a8636d6c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "dd217507-a296-5179-8900-4b49a8636d6c",
+   "to": "a16bf3bc-e3ce-57b8-bedc-fb968b825799",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "a16bf3bc-e3ce-57b8-bedc-fb968b825799",
+   "to": "864e0027-9a74-57c2-bba4-410def322f85",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "61686c5d-3ede-53ce-a5e0-49947ff3bc2d",
+   "to": "a16bf3bc-e3ce-57b8-bedc-fb968b825799",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

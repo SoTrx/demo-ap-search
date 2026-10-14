@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "4d21b2ba-2e90-5d66-8c88-cb0ecf6439a6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Plain-Language SQL Result Summary",
+    "description": "Turns a SQL result array into a concise plain-language explanation using the original query context.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "b3c90ae7-535f-514f-8856-b150490ad3a2",
+   "labels": [
+    "Result_Summary_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Summary",
+    "description": "Summarises a result-row array in plain language using the originating SQL query as context and returns a result summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "4d21b2ba-2e90-5d66-8c88-cb0ecf6439a6",
+   "to": "b3c90ae7-535f-514f-8856-b150490ad3a2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

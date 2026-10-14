@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "c45361e6-1d39-5e89-b146-521ea3fbeb8f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Forecast Accuracy Scorer",
+    "description": "Convert selected weather observations into a time series and score a forecast against the recent observed tail.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "4c991d2a-7fac-564a-80cd-42c243ab067d",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a45362a4-b3a7-519c-bd84-538e39112242",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "0a19cd46-5a83-5eaf-955d-556bf04c8f95",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c45361e6-1d39-5e89-b146-521ea3fbeb8f",
+   "to": "4c991d2a-7fac-564a-80cd-42c243ab067d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4c991d2a-7fac-564a-80cd-42c243ab067d",
+   "to": "a45362a4-b3a7-519c-bd84-538e39112242",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "a45362a4-b3a7-519c-bd84-538e39112242",
+   "to": "0a19cd46-5a83-5eaf-955d-556bf04c8f95",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "0a19cd46-5a83-5eaf-955d-556bf04c8f95",
+   "to": "4c991d2a-7fac-564a-80cd-42c243ab067d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c45361e6-1d39-5e89-b146-521ea3fbeb8f",
+   "to": "0a19cd46-5a83-5eaf-955d-556bf04c8f95",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

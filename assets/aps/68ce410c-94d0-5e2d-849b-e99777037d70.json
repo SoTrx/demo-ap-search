@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "68ce410c-94d0-5e2d-849b-e99777037d70",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema Mapping Scaled Profile",
+    "description": "Maps columns between source and target schemas, standardizes selected numeric columns in sample rows, and returns a column-level profile for catalogue comparison.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "a70331d5-67d8-58c5-b428-29114fbf51ed",
+   "labels": [
+    "Schema_Column_Mapping_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_column_matcher",
+    "description": "Finds corresponding columns between two database schemas and returns a column mapping. It uses table names, column names, and inferred types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2b410bad-f3ae-54ef-b5c2-9edbf7d251af",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "mapping"
+   }
+  },
+  {
+   "id": "42119c78-c020-5838-8649-79c300ed36f2",
+   "labels": [
+    "Standardize_Numeric_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "standardize_numeric_features",
+    "description": "Rescales selected numeric feature columns in table rows to zero mean and unit variance.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "scaled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "570a909a-bbf2-589d-a7ed-8e0be8c389c1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "scaled_rows"
+   }
+  },
+  {
+   "id": "2bf1400d-8865-5942-9a45-53aaed8a29e3",
+   "labels": [
+    "DatasetColumnProfileBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_column_profile",
+    "description": "Builds a column-level profile from table records. It summarizes observed column names, inferred types, and row counts for catalogue comparison.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "68ce410c-94d0-5e2d-849b-e99777037d70",
+   "to": "a70331d5-67d8-58c5-b428-29114fbf51ed",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a70331d5-67d8-58c5-b428-29114fbf51ed",
+   "to": "2b410bad-f3ae-54ef-b5c2-9edbf7d251af",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['mapping']": "from['outputs']['mapping']"
+    }
+   }
+  },
+  {
+   "from": "2b410bad-f3ae-54ef-b5c2-9edbf7d251af",
+   "to": "42119c78-c020-5838-8649-79c300ed36f2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['features']": "from['mapping']"
+    }
+   }
+  },
+  {
+   "from": "42119c78-c020-5838-8649-79c300ed36f2",
+   "to": "a70331d5-67d8-58c5-b428-29114fbf51ed",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "68ce410c-94d0-5e2d-849b-e99777037d70",
+   "to": "42119c78-c020-5838-8649-79c300ed36f2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "42119c78-c020-5838-8649-79c300ed36f2",
+   "to": "570a909a-bbf2-589d-a7ed-8e0be8c389c1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['scaled_rows']": "from['outputs']['scaled_rows']"
+    }
+   }
+  },
+  {
+   "from": "570a909a-bbf2-589d-a7ed-8e0be8c389c1",
+   "to": "2bf1400d-8865-5942-9a45-53aaed8a29e3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['sample_rows']": "from['scaled_rows']"
+    }
+   }
+  },
+  {
+   "from": "2bf1400d-8865-5942-9a45-53aaed8a29e3",
+   "to": "42119c78-c020-5838-8649-79c300ed36f2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "68ce410c-94d0-5e2d-849b-e99777037d70",
+   "to": "2bf1400d-8865-5942-9a45-53aaed8a29e3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

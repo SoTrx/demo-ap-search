@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "3b6d16c1-b676-5257-a031-78182644fdca",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Region Detection",
+    "description": "It converts page images into layout blocks and returns bounding regions for the table blocks.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "84b35d6c-22b1-5f46-ba11-c2952bec9be3",
+   "labels": [
+    "Layout_Block_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detect_layout_blocks",
+    "description": "Segments page images into layout blocks such as paragraphs, headings, figures, and tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fc31069b-aef1-57c2-8a20-808a1ce90021",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "layout_blocks"
+   }
+  },
+  {
+   "id": "c691259c-4029-5b5f-b8ce-e57b51f29725",
+   "labels": [
+    "Table_Region_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_regions",
+    "description": "Selects table layout blocks and converts them into bounding table regions ready for cell extraction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3b6d16c1-b676-5257-a031-78182644fdca",
+   "to": "84b35d6c-22b1-5f46-ba11-c2952bec9be3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "84b35d6c-22b1-5f46-ba11-c2952bec9be3",
+   "to": "fc31069b-aef1-57c2-8a20-808a1ce90021",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['layout_blocks']": "from['outputs']['layout_blocks']"
+    }
+   }
+  },
+  {
+   "from": "fc31069b-aef1-57c2-8a20-808a1ce90021",
+   "to": "c691259c-4029-5b5f-b8ce-e57b51f29725",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['layout_blocks']": "from['layout_blocks']"
+    }
+   }
+  },
+  {
+   "from": "c691259c-4029-5b5f-b8ce-e57b51f29725",
+   "to": "84b35d6c-22b1-5f46-ba11-c2952bec9be3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3b6d16c1-b676-5257-a031-78182644fdca",
+   "to": "c691259c-4029-5b5f-b8ce-e57b51f29725",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

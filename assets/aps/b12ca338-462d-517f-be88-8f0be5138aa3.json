@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "b12ca338-462d-517f-be88-8f0be5138aa3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Rolling Volatility Change Returns",
+    "description": "This AP converts raw returns into a rolling volatility series and then into period-over-period percentage changes of that volatility.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "ed0e5286-d41e-5f0f-a87e-1bc242d4965b",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "96054b32-5e54-50ad-93c0-19666efaa04a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "0db74021-19ed-581f-8937-6ac38dee3ecf",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b12ca338-462d-517f-be88-8f0be5138aa3",
+   "to": "ed0e5286-d41e-5f0f-a87e-1bc242d4965b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ed0e5286-d41e-5f0f-a87e-1bc242d4965b",
+   "to": "96054b32-5e54-50ad-93c0-19666efaa04a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "96054b32-5e54-50ad-93c0-19666efaa04a",
+   "to": "0db74021-19ed-581f-8937-6ac38dee3ecf",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "0db74021-19ed-581f-8937-6ac38dee3ecf",
+   "to": "ed0e5286-d41e-5f0f-a87e-1bc242d4965b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b12ca338-462d-517f-be88-8f0be5138aa3",
+   "to": "0db74021-19ed-581f-8937-6ac38dee3ecf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

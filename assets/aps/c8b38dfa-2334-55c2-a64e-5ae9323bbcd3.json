@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "c8b38dfa-2334-55c2-a64e-5ae9323bbcd3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Nearest Polygon Address Matching",
+    "description": "Converts a list of textual addresses into points and assigns each point to its closest polygon, returning point-to-polygon matches.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "1e6aabc0-25ba-5343-900f-69f2878e9ea1",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0219ab5c-ad73-5cab-860c-7ce7f3113541",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "points"
+   }
+  },
+  {
+   "id": "c8a9a8fb-391a-5b6c-aea4-7fdef4c0c9bb",
+   "labels": [
+    "Match_Nearest_Polygon_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "match_nearest_polygon",
+    "description": "Assigns each point geometry to its closest polygon and returns point-to-polygon matches.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matches",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c8b38dfa-2334-55c2-a64e-5ae9323bbcd3",
+   "to": "1e6aabc0-25ba-5343-900f-69f2878e9ea1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1e6aabc0-25ba-5343-900f-69f2878e9ea1",
+   "to": "0219ab5c-ad73-5cab-860c-7ce7f3113541",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['points']": "from['outputs']['points']"
+    }
+   }
+  },
+  {
+   "from": "0219ab5c-ad73-5cab-860c-7ce7f3113541",
+   "to": "c8a9a8fb-391a-5b6c-aea4-7fdef4c0c9bb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['points']": "from['points']"
+    }
+   }
+  },
+  {
+   "from": "c8a9a8fb-391a-5b6c-aea4-7fdef4c0c9bb",
+   "to": "1e6aabc0-25ba-5343-900f-69f2878e9ea1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c8b38dfa-2334-55c2-a64e-5ae9323bbcd3",
+   "to": "c8a9a8fb-391a-5b6c-aea4-7fdef4c0c9bb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

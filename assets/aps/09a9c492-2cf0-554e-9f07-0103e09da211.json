@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "09a9c492-2cf0-554e-9f07-0103e09da211",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Schema Safety Check",
+    "description": "Checks whether an SQL query references only tables and columns present in a given schema and returns a safety flag.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "6d192b19-f190-5cf8-a8ec-3a4b551667e3",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "09a9c492-2cf0-554e-9f07-0103e09da211",
+   "to": "6d192b19-f190-5cf8-a8ec-3a4b551667e3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

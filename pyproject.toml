@@ -1,0 +1,14 @@
+[project]
+name = "demo-ap-search"
+version = "0.1.0"
+description = "Today's AP search and the custom embedder's, side by side, over 605 APs"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "httpx>=0.28.1",
+    "streamlit>=1.54.0",
+]
+
+[tool.uv]
+# An app and its assets, not a package to install.
+package = false

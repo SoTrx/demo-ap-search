@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e62ae32c-2af4-5cb0-9468-14d163d8bcb5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Labeled Image Embedding Extractor",
+    "description": "Learns a classification model from labeled table rows and a column mapping, then produces a fixed-length embedding for each image in the batch.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "8ede2a6d-d9ce-5a82-9d91-88d220a12213",
+   "labels": [
+    "Train_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "train_classifier",
+    "description": "Fits a classification model from feature rows and the target column identified in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1f9513de-1165-5785-842d-ec1e9ace50be",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "model"
+   }
+  },
+  {
+   "id": "9c25df93-2c97-5a60-b761-b360b2243259",
+   "labels": [
+    "Image_Embedding_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_embedding_extractor",
+    "description": "Extracts fixed-length visual embeddings from each image in an image batch.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e62ae32c-2af4-5cb0-9468-14d163d8bcb5",
+   "to": "8ede2a6d-d9ce-5a82-9d91-88d220a12213",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8ede2a6d-d9ce-5a82-9d91-88d220a12213",
+   "to": "1f9513de-1165-5785-842d-ec1e9ace50be",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['model']": "from['outputs']['model']"
+    }
+   }
+  },
+  {
+   "from": "1f9513de-1165-5785-842d-ec1e9ace50be",
+   "to": "9c25df93-2c97-5a60-b761-b360b2243259",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['model']"
+    }
+   }
+  },
+  {
+   "from": "9c25df93-2c97-5a60-b761-b360b2243259",
+   "to": "8ede2a6d-d9ce-5a82-9d91-88d220a12213",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e62ae32c-2af4-5cb0-9468-14d163d8bcb5",
+   "to": "9c25df93-2c97-5a60-b761-b360b2243259",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

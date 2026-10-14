@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "f9651495-76e4-582e-beaf-adf7cf2a1de3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Scanned Answer Source Citations",
+    "description": "Reads text from scanned page images and returns citation records showing which recognized passages support a supplied answer summary.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "80991297-377e-5c78-98bc-8058b0828776",
+   "labels": [
+    "Page_Image_Ocr_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "page_image_ocr",
+    "description": "Runs OCR on each page image and returns recognized page text as ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4372bd80-dc25-58c8-ae37-07d0905ec183",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "bc26f674-fe89-583f-8ca1-7506c8f9acdf",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f9651495-76e4-582e-beaf-adf7cf2a1de3",
+   "to": "80991297-377e-5c78-98bc-8058b0828776",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "80991297-377e-5c78-98bc-8058b0828776",
+   "to": "4372bd80-dc25-58c8-ae37-07d0905ec183",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "4372bd80-dc25-58c8-ae37-07d0905ec183",
+   "to": "bc26f674-fe89-583f-8ca1-7506c8f9acdf",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['passages']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "bc26f674-fe89-583f-8ca1-7506c8f9acdf",
+   "to": "80991297-377e-5c78-98bc-8058b0828776",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f9651495-76e4-582e-beaf-adf7cf2a1de3",
+   "to": "bc26f674-fe89-583f-8ca1-7506c8f9acdf",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

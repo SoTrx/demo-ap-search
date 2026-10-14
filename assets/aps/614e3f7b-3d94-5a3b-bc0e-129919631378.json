@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "614e3f7b-3d94-5a3b-bc0e-129919631378",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Deduplicate Tabular Records",
+    "description": "Removes duplicate table records by keeping one representative row from each group of duplicates and returning the cleaned row set.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "893061ef-f7b3-5e92-90eb-95dbd6cea0df",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "614e3f7b-3d94-5a3b-bc0e-129919631378",
+   "to": "893061ef-f7b3-5e92-90eb-95dbd6cea0df",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

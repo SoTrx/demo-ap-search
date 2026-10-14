@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "c6ae8bca-40d6-5a70-8e14-b280a5491e6c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Answer Supported SQL Results",
+    "description": "Cleans occupational text chunks, summarizes an answer for a query, verifies that the summary is supported by cited passages, and executes the supplied SQL to return result rows only after that verification passes.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "ea44a53a-084e-5ba0-b768-97acb776420b",
+   "labels": [
+    "Occupation_Text_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_text_cleaner",
+    "description": "Cleans occupational text chunks by normalizing case, whitespace, punctuation, and common abbreviations. It preserves chunk and response identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "008cf80d-356b-5ed4-a7de-2414a5918f61",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "text_chunks"
+   }
+  },
+  {
+   "id": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "labels": [
+    "Answer_Synthesizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_synthesizer",
+    "description": "Generates an answer summary for a query from retrieved text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "746ff363-7447-5529-bf08-9d968c4c21bc",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "answer_summary"
+   }
+  },
+  {
+   "id": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d6c67e75-459f-548d-86ef-2bbd836a725d",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "supported"
+   }
+  },
+  {
+   "id": "5bee10ab-b301-509f-8a17-7382333bd25c",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c6ae8bca-40d6-5a70-8e14-b280a5491e6c",
+   "to": "ea44a53a-084e-5ba0-b768-97acb776420b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ea44a53a-084e-5ba0-b768-97acb776420b",
+   "to": "008cf80d-356b-5ed4-a7de-2414a5918f61",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['text_chunks']": "from['outputs']['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "008cf80d-356b-5ed4-a7de-2414a5918f61",
+   "to": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['passages']": "from['text_chunks']"
+    }
+   }
+  },
+  {
+   "from": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "to": "ea44a53a-084e-5ba0-b768-97acb776420b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c6ae8bca-40d6-5a70-8e14-b280a5491e6c",
+   "to": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "to": "746ff363-7447-5529-bf08-9d968c4c21bc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['answer_summary']": "from['outputs']['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "746ff363-7447-5529-bf08-9d968c4c21bc",
+   "to": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "to": "3d0d70e2-4558-5d8e-b085-58b386ba5065",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c6ae8bca-40d6-5a70-8e14-b280a5491e6c",
+   "to": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "to": "d6c67e75-459f-548d-86ef-2bbd836a725d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['supported']": "from['outputs']['supported']"
+    }
+   }
+  },
+  {
+   "from": "d6c67e75-459f-548d-86ef-2bbd836a725d",
+   "to": "5bee10ab-b301-509f-8a17-7382333bd25c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['supported']"
+    }
+   }
+  },
+  {
+   "from": "5bee10ab-b301-509f-8a17-7382333bd25c",
+   "to": "df0b4f93-cfaa-5437-bfd0-d13a79f6e2d2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c6ae8bca-40d6-5a70-8e14-b280a5491e6c",
+   "to": "5bee10ab-b301-509f-8a17-7382333bd25c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

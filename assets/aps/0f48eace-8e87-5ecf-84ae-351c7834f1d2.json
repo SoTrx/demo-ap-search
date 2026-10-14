@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "0f48eace-8e87-5ecf-84ae-351c7834f1d2",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Coded Patient Survival Record Builder",
+    "description": "Given two database schemas and coded patient records, it infers a column mapping and creates cleaned survival records containing patient identifiers, follow-up time, and event indicators while excluding rows with missing time or event values.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "816f67f5-8a5b-502d-b02e-9020ace904e4",
+   "labels": [
+    "Schema_Column_Mapping_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_column_matcher",
+    "description": "Finds corresponding columns between two database schemas and returns a column mapping. It uses table names, column names, and inferred types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a2ad5bb1-1c64-55d0-919c-6189c1795d2d",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "mapping"
+   }
+  },
+  {
+   "id": "1e2b725e-ce45-5a7e-9412-00c0d2b94e02",
+   "labels": [
+    "Survival_Event_Table_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survival_table_builder",
+    "description": "Builds survival records from coded patient records by extracting patient identifier, follow-up time, and event indicator columns named in the column mapping. Records with missing time or event values are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0f48eace-8e87-5ecf-84ae-351c7834f1d2",
+   "to": "816f67f5-8a5b-502d-b02e-9020ace904e4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "816f67f5-8a5b-502d-b02e-9020ace904e4",
+   "to": "a2ad5bb1-1c64-55d0-919c-6189c1795d2d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['mapping']": "from['outputs']['mapping']"
+    }
+   }
+  },
+  {
+   "from": "a2ad5bb1-1c64-55d0-919c-6189c1795d2d",
+   "to": "1e2b725e-ce45-5a7e-9412-00c0d2b94e02",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['column_mapping']": "from['mapping']"
+    }
+   }
+  },
+  {
+   "from": "1e2b725e-ce45-5a7e-9412-00c0d2b94e02",
+   "to": "816f67f5-8a5b-502d-b02e-9020ace904e4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0f48eace-8e87-5ecf-84ae-351c7834f1d2",
+   "to": "1e2b725e-ce45-5a7e-9412-00c0d2b94e02",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

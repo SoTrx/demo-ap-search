@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "8df49c2f-0c95-5df7-8a79-4f577c24e8cf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Mapped Schema Flag Builder",
+    "description": "Renames table columns, applies value substitutions, and converts selected categorical fields into binary indicator columns.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "5e5a72ab-6ae2-5e78-8ec9-e2330f374523",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a8f1e74b-0454-5641-b212-8d788177743e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "41aaa630-daa1-529d-8b60-3222dcbd51e2",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8df49c2f-0c95-5df7-8a79-4f577c24e8cf",
+   "to": "5e5a72ab-6ae2-5e78-8ec9-e2330f374523",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5e5a72ab-6ae2-5e78-8ec9-e2330f374523",
+   "to": "a8f1e74b-0454-5641-b212-8d788177743e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "a8f1e74b-0454-5641-b212-8d788177743e",
+   "to": "41aaa630-daa1-529d-8b60-3222dcbd51e2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "41aaa630-daa1-529d-8b60-3222dcbd51e2",
+   "to": "5e5a72ab-6ae2-5e78-8ec9-e2330f374523",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8df49c2f-0c95-5df7-8a79-4f577c24e8cf",
+   "to": "41aaa630-daa1-529d-8b60-3222dcbd51e2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

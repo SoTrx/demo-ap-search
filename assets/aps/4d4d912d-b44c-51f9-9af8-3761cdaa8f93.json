@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "4d4d912d-b44c-51f9-9af8-3761cdaa8f93",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Ordered Dashboard Chart Collection",
+    "description": "Collects three chart specifications into an ordered chart collection for dashboard assembly.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "9bfbdfc9-61f8-5d00-b3a7-039902070f47",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "4d4d912d-b44c-51f9-9af8-3761cdaa8f93",
+   "to": "9bfbdfc9-61f8-5d00-b3a7-039902070f47",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

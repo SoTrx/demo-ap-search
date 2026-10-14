@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "f9bb093f-d2b7-55d4-8208-cfb92e5a7f9f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Forecast Period-over-Period Returns",
+    "description": "Converts a historical level series into period-over-period percentage returns and forecasts the next requested observations of those returns.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "45103e47-808a-5c86-8a0d-fd61f75ed446",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5da8fada-216c-5cda-bb7c-95693ba67612",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "returns"
+   }
+  },
+  {
+   "id": "1605ab41-2b58-5b3d-a21e-0ec6617ce074",
+   "labels": [
+    "Time_Series_Forecaster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Forecaster",
+    "description": "Forecasts the next requested number of observations from a time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f9bb093f-d2b7-55d4-8208-cfb92e5a7f9f",
+   "to": "45103e47-808a-5c86-8a0d-fd61f75ed446",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "45103e47-808a-5c86-8a0d-fd61f75ed446",
+   "to": "5da8fada-216c-5cda-bb7c-95693ba67612",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['returns']": "from['outputs']['returns']"
+    }
+   }
+  },
+  {
+   "from": "5da8fada-216c-5cda-bb7c-95693ba67612",
+   "to": "1605ab41-2b58-5b3d-a21e-0ec6617ce074",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['returns']"
+    }
+   }
+  },
+  {
+   "from": "1605ab41-2b58-5b3d-a21e-0ec6617ce074",
+   "to": "45103e47-808a-5c86-8a0d-fd61f75ed446",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f9bb093f-d2b7-55d4-8208-cfb92e5a7f9f",
+   "to": "1605ab41-2b58-5b3d-a21e-0ec6617ce074",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "7d974a0b-1103-5d10-963e-e6743bbc600b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Similarity Retrieval Index",
+    "description": "Extracts fixed-length visual embeddings from a batch of images using a supplied model and assembles them into a nearest-neighbor lookup index for image similarity search.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "52d9e8b1-563c-51f0-b7da-71185612c4f7",
+   "labels": [
+    "Image_Embedding_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_embedding_extractor",
+    "description": "Extracts fixed-length visual embeddings from each image in an image batch.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1d651401-2b7d-5f4d-8de3-d7eeb3460ed1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "embeddings"
+   }
+  },
+  {
+   "id": "8d036889-9c48-5fcc-97c0-e7ffa3ab50b8",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7d974a0b-1103-5d10-963e-e6743bbc600b",
+   "to": "52d9e8b1-563c-51f0-b7da-71185612c4f7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "52d9e8b1-563c-51f0-b7da-71185612c4f7",
+   "to": "1d651401-2b7d-5f4d-8de3-d7eeb3460ed1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['embeddings']": "from['outputs']['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "1d651401-2b7d-5f4d-8de3-d7eeb3460ed1",
+   "to": "8d036889-9c48-5fcc-97c0-e7ffa3ab50b8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['embeddings']": "from['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "8d036889-9c48-5fcc-97c0-e7ffa3ab50b8",
+   "to": "52d9e8b1-563c-51f0-b7da-71185612c4f7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7d974a0b-1103-5d10-963e-e6743bbc600b",
+   "to": "8d036889-9c48-5fcc-97c0-e7ffa3ab50b8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

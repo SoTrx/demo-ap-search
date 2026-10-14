@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "78e569d2-e393-5b41-a407-fc81d9eadc79",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Embedding Similarity Passage Search",
+    "description": "Creates a nearest-neighbor index from supplied embeddings and returns the text passages whose vectors are closest to a query string.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "82cab19e-f6c9-5d55-bc03-e693dcb3f1a9",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "92575161-cccb-553f-b92f-198a2e9d523d",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "95bfe470-5142-5498-afb0-5e9c1b198181",
+   "labels": [
+    "Dense_Vector_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dense_vector_retriever",
+    "description": "Retrieves text chunks from a search index using dense vector similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "78e569d2-e393-5b41-a407-fc81d9eadc79",
+   "to": "82cab19e-f6c9-5d55-bc03-e693dcb3f1a9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "82cab19e-f6c9-5d55-bc03-e693dcb3f1a9",
+   "to": "92575161-cccb-553f-b92f-198a2e9d523d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "92575161-cccb-553f-b92f-198a2e9d523d",
+   "to": "95bfe470-5142-5498-afb0-5e9c1b198181",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "95bfe470-5142-5498-afb0-5e9c1b198181",
+   "to": "82cab19e-f6c9-5d55-bc03-e693dcb3f1a9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "78e569d2-e393-5b41-a407-fc81d9eadc79",
+   "to": "95bfe470-5142-5498-afb0-5e9c1b198181",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

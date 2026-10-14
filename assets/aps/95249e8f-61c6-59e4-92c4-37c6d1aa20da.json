@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "95249e8f-61c6-59e4-92c4-37c6d1aa20da",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Student Assessment Trend Summarizer",
+    "description": "Checks a provenance report for required sources and transformations, runs the supplied SQL query safely, and summarizes the trend in a student's recent assessment results as improving, declining, or stable.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "1b396e56-75f1-5609-a8f6-40eb2b8caeb4",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7f5931f8-3c2c-5ffa-9d0b-a6ed93c80536",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "bb270a14-272c-5cf4-9841-991a6c27c1a0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "f37ea064-8e79-54aa-a55a-f71d347ce006",
+   "labels": [
+    "Performance_Trend_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "performance_trend_summarizer",
+    "description": "Summarizes the trend in a student's result rows over recent attempts, such as improving, declining, or stable. Returns a plain-text trend description.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "95249e8f-61c6-59e4-92c4-37c6d1aa20da",
+   "to": "1b396e56-75f1-5609-a8f6-40eb2b8caeb4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1b396e56-75f1-5609-a8f6-40eb2b8caeb4",
+   "to": "7f5931f8-3c2c-5ffa-9d0b-a6ed93c80536",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "7f5931f8-3c2c-5ffa-9d0b-a6ed93c80536",
+   "to": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "to": "1b396e56-75f1-5609-a8f6-40eb2b8caeb4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "95249e8f-61c6-59e4-92c4-37c6d1aa20da",
+   "to": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "to": "bb270a14-272c-5cf4-9841-991a6c27c1a0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "bb270a14-272c-5cf4-9841-991a6c27c1a0",
+   "to": "f37ea064-8e79-54aa-a55a-f71d347ce006",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "f37ea064-8e79-54aa-a55a-f71d347ce006",
+   "to": "375b91d3-cd6e-5899-ac4a-2a089f99d063",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "95249e8f-61c6-59e4-92c4-37c6d1aa20da",
+   "to": "f37ea064-8e79-54aa-a55a-f71d347ce006",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

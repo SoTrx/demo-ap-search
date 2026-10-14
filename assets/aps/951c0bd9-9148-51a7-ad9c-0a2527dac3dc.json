@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "951c0bd9-9148-51a7-ad9c-0a2527dac3dc",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Baseline Trend Resampler",
+    "description": "Given a series array, a fixed seasonal length, and a target granularity, it extracts the trend under the seasonal profile and returns that baseline re-aggregated to the target period as an array.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "0e34cddb-cd02-5c47-bb40-4479b0b1df4f",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d5e9d843-d3e1-5ddd-96d7-b18fe45ee835",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "22b6e718-3d43-50a6-9af9-4caa07463d94",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "951c0bd9-9148-51a7-ad9c-0a2527dac3dc",
+   "to": "0e34cddb-cd02-5c47-bb40-4479b0b1df4f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0e34cddb-cd02-5c47-bb40-4479b0b1df4f",
+   "to": "d5e9d843-d3e1-5ddd-96d7-b18fe45ee835",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "d5e9d843-d3e1-5ddd-96d7-b18fe45ee835",
+   "to": "22b6e718-3d43-50a6-9af9-4caa07463d94",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "22b6e718-3d43-50a6-9af9-4caa07463d94",
+   "to": "0e34cddb-cd02-5c47-bb40-4479b0b1df4f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "951c0bd9-9148-51a7-ad9c-0a2527dac3dc",
+   "to": "22b6e718-3d43-50a6-9af9-4caa07463d94",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

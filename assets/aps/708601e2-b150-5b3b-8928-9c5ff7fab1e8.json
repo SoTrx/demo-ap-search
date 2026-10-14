@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "708601e2-b150-5b3b-8928-9c5ff7fab1e8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Short-Horizon Time Series Forecast",
+    "description": "Given a time series array and a horizon number, the AP generates the requested number of future observations as a forecast array.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "a0bc925c-6888-56c8-90ac-fc1affc5859d",
+   "labels": [
+    "Time_Series_Forecaster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Forecaster",
+    "description": "Forecasts the next requested number of observations from a time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "708601e2-b150-5b3b-8928-9c5ff7fab1e8",
+   "to": "a0bc925c-6888-56c8-90ac-fc1affc5859d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

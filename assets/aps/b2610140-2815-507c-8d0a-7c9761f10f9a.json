@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "b2610140-2815-507c-8d0a-7c9761f10f9a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Record Candidate Linker",
+    "description": "Given a database schema and entity records, it derives an internal graph schema and returns link records containing candidate graph nodes with confidence scores for each input record.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "509aea2c-70a7-5617-b6e6-04efb90d6c4e",
+   "labels": [
+    "Graph_Schema_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_schema_builder",
+    "description": "Derives a knowledge graph schema from a database schema and a sample of entity records. The returned schema describes node classes, properties, and expected property types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c326c826-a14b-5785-a92a-266268f87310",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "graph_schema"
+   }
+  },
+  {
+   "id": "066f943d-1746-56b0-b399-80cc873d8699",
+   "labels": [
+    "Entity_Record_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_record_linker",
+    "description": "Links entity records to candidate graph nodes using a graph schema. Returns link records that include node candidates and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b2610140-2815-507c-8d0a-7c9761f10f9a",
+   "to": "509aea2c-70a7-5617-b6e6-04efb90d6c4e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "509aea2c-70a7-5617-b6e6-04efb90d6c4e",
+   "to": "c326c826-a14b-5785-a92a-266268f87310",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_schema']": "from['outputs']['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "c326c826-a14b-5785-a92a-266268f87310",
+   "to": "066f943d-1746-56b0-b399-80cc873d8699",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['graph_schema']": "from['graph_schema']"
+    }
+   }
+  },
+  {
+   "from": "066f943d-1746-56b0-b399-80cc873d8699",
+   "to": "509aea2c-70a7-5617-b6e6-04efb90d6c4e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b2610140-2815-507c-8d0a-7c9761f10f9a",
+   "to": "066f943d-1746-56b0-b399-80cc873d8699",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

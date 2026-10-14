@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "5db8a308-6a57-5107-b87a-cb51ea7fa499",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe Weather Reading Extractor",
+    "description": "Checks whether all period variances in a comparison report fall within an absolute limit, runs the supplied SQL only when that check passes, and converts the result rows into normalized readings for one measured variable.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "817f8849-f69b-5fab-bbf0-795e8cac3be1",
+   "labels": [
+    "Budget_Variance_Safety_Flag_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_variance_safety_flag",
+    "description": "Checks period variances in the comparison report against the supplied absolute limit. It returns a safety flag that is true when every period variance is within the limit.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "safe",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9edae12b-d94d-5077-a2bf-8ed43035e311",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "safe"
+   }
+  },
+  {
+   "id": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "1db337ee-a220-57c7-9cd7-0dc1c6431f02",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "a4b69042-76fc-5c6f-ab17-5046ad72310c",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5db8a308-6a57-5107-b87a-cb51ea7fa499",
+   "to": "817f8849-f69b-5fab-bbf0-795e8cac3be1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "817f8849-f69b-5fab-bbf0-795e8cac3be1",
+   "to": "9edae12b-d94d-5077-a2bf-8ed43035e311",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['safe']": "from['outputs']['safe']"
+    }
+   }
+  },
+  {
+   "from": "9edae12b-d94d-5077-a2bf-8ed43035e311",
+   "to": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['safe']"
+    }
+   }
+  },
+  {
+   "from": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "to": "817f8849-f69b-5fab-bbf0-795e8cac3be1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5db8a308-6a57-5107-b87a-cb51ea7fa499",
+   "to": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "to": "1db337ee-a220-57c7-9cd7-0dc1c6431f02",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "1db337ee-a220-57c7-9cd7-0dc1c6431f02",
+   "to": "a4b69042-76fc-5c6f-ab17-5046ad72310c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "a4b69042-76fc-5c6f-ab17-5046ad72310c",
+   "to": "afc49290-1424-5213-b808-d4ddc5b09349",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5db8a308-6a57-5107-b87a-cb51ea7fa499",
+   "to": "a4b69042-76fc-5c6f-ab17-5046ad72310c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

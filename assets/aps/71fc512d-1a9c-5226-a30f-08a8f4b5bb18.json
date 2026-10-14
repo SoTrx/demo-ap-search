@@ -1,0 +1,317 @@
+{
+ "nodes": [
+  {
+   "id": "71fc512d-1a9c-5226-a30f-08a8f4b5bb18",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Evidence Validated Class Matrix",
+    "description": "Summarizes text chunks, checks the answer against cited evidence, obtains predictions from the supplied query, and compares them with labeled rows to produce a predicted-versus-actual class matrix.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "051d3163-11a3-5dd4-866f-c8844ede9b32",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2dc4bab1-ea11-52ca-ad7a-e011dddb62dc",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5b9a7cc8-b771-51cb-b51a-d9384fa6d586",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "supported"
+   }
+  },
+  {
+   "id": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "df06556b-bb19-5f8a-9380-bbbc36bfe9e7",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "55673b4e-141e-539e-92fa-d7afe7cb92ab",
+   "labels": [
+    "Build_Confusion_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_confusion_matrix",
+    "description": "Counts predicted class versus actual class pairs from aligned prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matrix",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "71fc512d-1a9c-5226-a30f-08a8f4b5bb18",
+   "to": "051d3163-11a3-5dd4-866f-c8844ede9b32",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "051d3163-11a3-5dd4-866f-c8844ede9b32",
+   "to": "2dc4bab1-ea11-52ca-ad7a-e011dddb62dc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "2dc4bab1-ea11-52ca-ad7a-e011dddb62dc",
+   "to": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "to": "051d3163-11a3-5dd4-866f-c8844ede9b32",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "71fc512d-1a9c-5226-a30f-08a8f4b5bb18",
+   "to": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "to": "5b9a7cc8-b771-51cb-b51a-d9384fa6d586",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['supported']": "from['outputs']['supported']"
+    }
+   }
+  },
+  {
+   "from": "5b9a7cc8-b771-51cb-b51a-d9384fa6d586",
+   "to": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['supported']"
+    }
+   }
+  },
+  {
+   "from": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "to": "1155c342-edc4-588e-8fa8-fae130d51116",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "71fc512d-1a9c-5226-a30f-08a8f4b5bb18",
+   "to": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "to": "df06556b-bb19-5f8a-9380-bbbc36bfe9e7",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "df06556b-bb19-5f8a-9380-bbbc36bfe9e7",
+   "to": "55673b4e-141e-539e-92fa-d7afe7cb92ab",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "55673b4e-141e-539e-92fa-d7afe7cb92ab",
+   "to": "4a869d69-8ed7-50b6-a8ae-b518b31d1400",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "71fc512d-1a9c-5226-a30f-08a8f4b5bb18",
+   "to": "55673b4e-141e-539e-92fa-d7afe7cb92ab",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

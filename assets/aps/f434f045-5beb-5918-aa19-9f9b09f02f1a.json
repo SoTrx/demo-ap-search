@@ -1,0 +1,347 @@
+{
+ "nodes": [
+  {
+   "id": "f434f045-5beb-5918-aa19-9f9b09f02f1a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Similarity Dataset Recommendation",
+    "description": "Builds a nearest-neighbor image index from embeddings, matches a text query to related chunks, extracts weighted key phrases, and returns ranked dataset identifiers within a limit.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a19fd55a-2ac3-5b99-bbc2-1bdf60c1f958",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "labels": [
+    "Dense_Vector_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dense_vector_retriever",
+    "description": "Retrieves text chunks from a search index using dense vector similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "225740a7-1a0c-572e-a4ef-0a540215e1b5",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "labels": [
+    "Chunk_Keyword_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_keyword_extractor",
+    "description": "Extracts weighted key phrases from an array of text chunks and returns keyword records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f63b2d39-5f88-58a2-872d-6991a9b04e2c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "keywords"
+   }
+  },
+  {
+   "id": "6cc93cc5-1574-54f6-9d0e-20b4f466bdef",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "labels": [
+    "DatasetCatalogueSearcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "search_dataset_catalogue",
+    "description": "Searches a dataset retrieval index using keyword records and returns ranked dataset identifiers. It applies the recommendation limit to the candidate list.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f434f045-5beb-5918-aa19-9f9b09f02f1a",
+   "to": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "to": "a19fd55a-2ac3-5b99-bbc2-1bdf60c1f958",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "a19fd55a-2ac3-5b99-bbc2-1bdf60c1f958",
+   "to": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "to": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f434f045-5beb-5918-aa19-9f9b09f02f1a",
+   "to": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "to": "225740a7-1a0c-572e-a4ef-0a540215e1b5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "225740a7-1a0c-572e-a4ef-0a540215e1b5",
+   "to": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "to": "4efa88ea-1642-5968-b6fc-7133ac7a6917",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f434f045-5beb-5918-aa19-9f9b09f02f1a",
+   "to": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "to": "f63b2d39-5f88-58a2-872d-6991a9b04e2c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['keywords']": "from['outputs']['keywords']"
+    }
+   }
+  },
+  {
+   "from": "f63b2d39-5f88-58a2-872d-6991a9b04e2c",
+   "to": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['keywords']": "from['keywords']"
+    }
+   }
+  },
+  {
+   "from": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "to": "6cc93cc5-1574-54f6-9d0e-20b4f466bdef",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "6cc93cc5-1574-54f6-9d0e-20b4f466bdef",
+   "to": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "to": "0a9a2586-c994-525f-8677-6dd0cc903004",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "to": "2535af5e-ff80-5b99-b7bc-7e99dfde0455",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f434f045-5beb-5918-aa19-9f9b09f02f1a",
+   "to": "f5efbd30-071b-5e6e-b2b4-cdb0d2277c33",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

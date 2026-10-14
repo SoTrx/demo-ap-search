@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "45f98900-8585-56c4-a4e5-2b094a3a1a8c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Correlation Significance For Rows",
+    "description": "Computes Pearson correlations for mapped numeric fields and reports pair-level p-values and significance decisions at the supplied alpha.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "8fffa042-e611-5c46-8a87-222a8657397c",
+   "labels": [
+    "Pearson_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pearson_correlation_matrix",
+    "description": "Computes a Pearson correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b818d04a-444c-5e62-abdd-a5e3b1f36a2e",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "correlations"
+   }
+  },
+  {
+   "id": "ab1ac351-2ecf-56ee-b373-d094680e147f",
+   "labels": [
+    "Correlation_Significance_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "correlation_significance_test",
+    "description": "Tests whether correlations in a correlation matrix are statistically significant at the supplied threshold. Returns a hypothesis test result with pair-level p-values and decisions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "45f98900-8585-56c4-a4e5-2b094a3a1a8c",
+   "to": "8fffa042-e611-5c46-8a87-222a8657397c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8fffa042-e611-5c46-8a87-222a8657397c",
+   "to": "b818d04a-444c-5e62-abdd-a5e3b1f36a2e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['correlations']": "from['outputs']['correlations']"
+    }
+   }
+  },
+  {
+   "from": "b818d04a-444c-5e62-abdd-a5e3b1f36a2e",
+   "to": "ab1ac351-2ecf-56ee-b373-d094680e147f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['correlations']": "from['correlations']"
+    }
+   }
+  },
+  {
+   "from": "ab1ac351-2ecf-56ee-b373-d094680e147f",
+   "to": "8fffa042-e611-5c46-8a87-222a8657397c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "45f98900-8585-56c4-a4e5-2b094a3a1a8c",
+   "to": "ab1ac351-2ecf-56ee-b373-d094680e147f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

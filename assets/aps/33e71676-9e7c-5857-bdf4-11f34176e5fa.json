@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "33e71676-9e7c-5857-bdf4-11f34176e5fa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Series Anomaly Detection",
+    "description": "Smooths a numeric time series, separates trend and fixed-period seasonality, then flags observations whose residual deviation exceeds a threshold.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "343e0bea-5e89-5e34-ae1f-747017aa50be",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "221fe553-aefd-5218-a56b-0affbf613914",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "db69e361-4a89-5357-b950-1d7469568f22",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e898c9c1-e3cf-52dc-9730-f491a3357744",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "a8ed4429-9259-5d0f-980a-67f5c9abc894",
+   "labels": [
+    "Time_Series_Anomaly_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Anomaly Detector",
+    "description": "Flags observations in a time series whose deviation exceeds a numeric threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "anomalies",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "33e71676-9e7c-5857-bdf4-11f34176e5fa",
+   "to": "343e0bea-5e89-5e34-ae1f-747017aa50be",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "343e0bea-5e89-5e34-ae1f-747017aa50be",
+   "to": "221fe553-aefd-5218-a56b-0affbf613914",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "221fe553-aefd-5218-a56b-0affbf613914",
+   "to": "db69e361-4a89-5357-b950-1d7469568f22",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "db69e361-4a89-5357-b950-1d7469568f22",
+   "to": "343e0bea-5e89-5e34-ae1f-747017aa50be",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "33e71676-9e7c-5857-bdf4-11f34176e5fa",
+   "to": "db69e361-4a89-5357-b950-1d7469568f22",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "db69e361-4a89-5357-b950-1d7469568f22",
+   "to": "e898c9c1-e3cf-52dc-9730-f491a3357744",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "e898c9c1-e3cf-52dc-9730-f491a3357744",
+   "to": "a8ed4429-9259-5d0f-980a-67f5c9abc894",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "a8ed4429-9259-5d0f-980a-67f5c9abc894",
+   "to": "db69e361-4a89-5357-b950-1d7469568f22",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "33e71676-9e7c-5857-bdf4-11f34176e5fa",
+   "to": "a8ed4429-9259-5d0f-980a-67f5c9abc894",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

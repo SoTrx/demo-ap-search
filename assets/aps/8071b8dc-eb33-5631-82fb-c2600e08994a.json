@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "8071b8dc-eb33-5631-82fb-c2600e08994a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Periodic Weather Summaries",
+    "description": "Summarizes weather readings into values for chosen time periods such as daily, weekly, monthly, or yearly aggregates.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "63c8d93a-edab-5357-908e-c5969ca7fd07",
+   "labels": [
+    "Period_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_aggregator",
+    "description": "Groups weather readings by time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8071b8dc-eb33-5631-82fb-c2600e08994a",
+   "to": "63c8d93a-edab-5357-908e-c5969ca7fd07",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

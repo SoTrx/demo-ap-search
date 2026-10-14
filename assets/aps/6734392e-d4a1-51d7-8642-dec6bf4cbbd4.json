@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "6734392e-d4a1-51d7-8642-dec6bf4cbbd4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Profile Chart Annotation",
+    "description": "Turns a dataset profile into a plain-text dataset card and adds it as a short note with highlighting hints to an existing chart.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "6fb2cbe2-c1a4-5db5-88fd-1ed24123f8d0",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2b3fb7ea-17b4-5b94-a5d2-fc2df69772de",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "e623d840-996c-5232-8332-daa8160aa3ad",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6734392e-d4a1-51d7-8642-dec6bf4cbbd4",
+   "to": "6fb2cbe2-c1a4-5db5-88fd-1ed24123f8d0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6fb2cbe2-c1a4-5db5-88fd-1ed24123f8d0",
+   "to": "2b3fb7ea-17b4-5b94-a5d2-fc2df69772de",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "2b3fb7ea-17b4-5b94-a5d2-fc2df69772de",
+   "to": "e623d840-996c-5232-8332-daa8160aa3ad",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "e623d840-996c-5232-8332-daa8160aa3ad",
+   "to": "6fb2cbe2-c1a4-5db5-88fd-1ed24123f8d0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6734392e-d4a1-51d7-8642-dec6bf4cbbd4",
+   "to": "e623d840-996c-5232-8332-daa8160aa3ad",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

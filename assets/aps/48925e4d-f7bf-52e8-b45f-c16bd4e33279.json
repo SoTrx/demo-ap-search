@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "48925e4d-f7bf-52e8-b45f-c16bd4e33279",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Keyword Extraction From Chunks",
+    "description": "Extracts weighted key phrases from text chunks and returns ranked keyword records.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "262032c1-82a3-5094-a63b-ca603618c20e",
+   "labels": [
+    "Chunk_Keyword_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_keyword_extractor",
+    "description": "Extracts weighted key phrases from an array of text chunks and returns keyword records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "48925e4d-f7bf-52e8-b45f-c16bd4e33279",
+   "to": "262032c1-82a3-5094-a63b-ca603618c20e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

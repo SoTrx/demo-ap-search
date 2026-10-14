@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "dd22553b-027b-53bc-8917-ea1579350477",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Mapped Survey Response Extractor",
+    "description": "Extracts valid survey response rows from table records and returns them with only the columns named in the mapping.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "7dd23bf4-0d7b-59fe-a175-530b0a0c220e",
+   "labels": [
+    "Survey_Response_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_response_extractor",
+    "description": "Extracts survey response rows from table records and keeps only the columns named in the mapping. Rows without a response identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dd22553b-027b-53bc-8917-ea1579350477",
+   "to": "7dd23bf4-0d7b-59fe-a175-530b0a0c220e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

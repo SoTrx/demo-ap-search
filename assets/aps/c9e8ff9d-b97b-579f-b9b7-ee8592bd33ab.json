@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "c9e8ff9d-b97b-579f-b9b7-ee8592bd33ab",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translation-Pending Citation Extraction",
+    "description": "Filters multilingual text chunks to those whose language differs from a target language and returns bibliographic citation records with surrounding context.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "d5839bed-395a-5a3f-87af-b4e6ce3e2a79",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8cfa42a0-bbdc-57f4-b397-6a13cc4f96fd",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chunks_to_translate"
+   }
+  },
+  {
+   "id": "6f337b40-6f2d-5b0a-94e7-06fde9bdc984",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c9e8ff9d-b97b-579f-b9b7-ee8592bd33ab",
+   "to": "d5839bed-395a-5a3f-87af-b4e6ce3e2a79",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d5839bed-395a-5a3f-87af-b4e6ce3e2a79",
+   "to": "8cfa42a0-bbdc-57f4-b397-6a13cc4f96fd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chunks_to_translate']": "from['outputs']['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "8cfa42a0-bbdc-57f4-b397-6a13cc4f96fd",
+   "to": "6f337b40-6f2d-5b0a-94e7-06fde9bdc984",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text_chunks']": "from['chunks_to_translate']"
+    }
+   }
+  },
+  {
+   "from": "6f337b40-6f2d-5b0a-94e7-06fde9bdc984",
+   "to": "d5839bed-395a-5a3f-87af-b4e6ce3e2a79",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c9e8ff9d-b97b-579f-b9b7-ee8592bd33ab",
+   "to": "6f337b40-6f2d-5b0a-94e7-06fde9bdc984",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

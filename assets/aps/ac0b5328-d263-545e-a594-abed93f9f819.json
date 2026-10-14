@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "ac0b5328-d263-545e-a594-abed93f9f819",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dashboard Chart Collection Builder",
+    "description": "Builds an annotated bar-chart specification from rows and column choices and bundles it with two existing charts into an ordered dashboard chart collection.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "03cbbf64-29a7-51ea-82db-a808fbe39b7d",
+   "labels": [
+    "Bar_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bar_chart_builder",
+    "description": "Builds a bar chart specification from tabular rows and a column mapping that identifies the categorical field and numeric value field.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d2014689-0b07-5706-8dfa-3288506534a1",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5573c505-7254-5ed0-9398-956f5ff3dc55",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "0f9b8959-0bc6-589a-87f4-ae10af526f03",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ac0b5328-d263-545e-a594-abed93f9f819",
+   "to": "03cbbf64-29a7-51ea-82db-a808fbe39b7d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "03cbbf64-29a7-51ea-82db-a808fbe39b7d",
+   "to": "d2014689-0b07-5706-8dfa-3288506534a1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "d2014689-0b07-5706-8dfa-3288506534a1",
+   "to": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "to": "03cbbf64-29a7-51ea-82db-a808fbe39b7d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ac0b5328-d263-545e-a594-abed93f9f819",
+   "to": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "to": "5573c505-7254-5ed0-9398-956f5ff3dc55",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "5573c505-7254-5ed0-9398-956f5ff3dc55",
+   "to": "0f9b8959-0bc6-589a-87f4-ae10af526f03",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "0f9b8959-0bc6-589a-87f4-ae10af526f03",
+   "to": "5be163bc-338c-5dd6-9b91-bfcf4c7c6b25",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ac0b5328-d263-545e-a594-abed93f9f819",
+   "to": "0f9b8959-0bc6-589a-87f4-ae10af526f03",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

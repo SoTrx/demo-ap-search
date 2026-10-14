@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "288ee1f4-deb0-5616-aa74-c6b922b4468e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Deduplicate and Encode Categorical Rows",
+    "description": "The AP keeps one representative row from each duplicate group and converts selected categorical columns into binary indicator columns, returning encoded_rows.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "8ae27044-f7ff-5ad8-a7aa-329f63b6ef21",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c9864ffd-442c-53b7-8e7a-8221a76d9296",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "deduplicated_rows"
+   }
+  },
+  {
+   "id": "6f70229e-02eb-5892-a6c2-ecc896d071d9",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "288ee1f4-deb0-5616-aa74-c6b922b4468e",
+   "to": "8ae27044-f7ff-5ad8-a7aa-329f63b6ef21",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8ae27044-f7ff-5ad8-a7aa-329f63b6ef21",
+   "to": "c9864ffd-442c-53b7-8e7a-8221a76d9296",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['deduplicated_rows']": "from['outputs']['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "c9864ffd-442c-53b7-8e7a-8221a76d9296",
+   "to": "6f70229e-02eb-5892-a6c2-ecc896d071d9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "6f70229e-02eb-5892-a6c2-ecc896d071d9",
+   "to": "8ae27044-f7ff-5ad8-a7aa-329f63b6ef21",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "288ee1f4-deb0-5616-aa74-c6b922b4468e",
+   "to": "6f70229e-02eb-5892-a6c2-ecc896d071d9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

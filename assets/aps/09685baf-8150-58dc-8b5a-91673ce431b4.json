@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "09685baf-8150-58dc-8b5a-91673ce431b4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Descendant Medical Code Expansion",
+    "description": "Expands a base list of medical codes to the original codes plus all reachable descendant codes after validating candidate concept relationships against a schema.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "d9730dd8-e5e9-5951-93a9-1e3d09091d23",
+   "labels": [
+    "Graph_Triple_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_triple_builder",
+    "description": "Converts relation candidates into graph triples that conform to the graph schema. Invalid relation classes or mismatched entity types are dropped.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4c1f9f75-4bcb-5c03-8fb2-27a41db6e741",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "graph_triples"
+   }
+  },
+  {
+   "id": "d43bc224-e1a6-55d0-b30e-2341c3550615",
+   "labels": [
+    "Medical_Code_Set_Expander_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "code_set_expander",
+    "description": "Expands a base medical code set to descendant codes using parent-child vocabulary triples. It returns the original codes and any reachable descendants.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "base_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "vocabulary_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "09685baf-8150-58dc-8b5a-91673ce431b4",
+   "to": "d9730dd8-e5e9-5951-93a9-1e3d09091d23",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d9730dd8-e5e9-5951-93a9-1e3d09091d23",
+   "to": "4c1f9f75-4bcb-5c03-8fb2-27a41db6e741",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['graph_triples']": "from['outputs']['graph_triples']"
+    }
+   }
+  },
+  {
+   "from": "4c1f9f75-4bcb-5c03-8fb2-27a41db6e741",
+   "to": "d43bc224-e1a6-55d0-b30e-2341c3550615",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['vocabulary_triples']": "from['graph_triples']"
+    }
+   }
+  },
+  {
+   "from": "d43bc224-e1a6-55d0-b30e-2341c3550615",
+   "to": "d9730dd8-e5e9-5951-93a9-1e3d09091d23",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "09685baf-8150-58dc-8b5a-91673ce431b4",
+   "to": "d43bc224-e1a6-55d0-b30e-2341c3550615",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

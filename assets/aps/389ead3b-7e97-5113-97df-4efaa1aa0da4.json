@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "389ead3b-7e97-5113-97df-4efaa1aa0da4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Question to Search Keywords",
+    "description": "Converts a natural-language dataset question into an expanded list of search keywords and facet terms for catalogue discovery.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "54172386-c256-5ac1-9575-e33da4ef3fd9",
+   "labels": [
+    "DatasetSearchQueryBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_search_query",
+    "description": "Translates a natural-language dataset question into keyword records for catalogue search. It expands each requested topic into searchable terms and facets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "question",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "389ead3b-7e97-5113-97df-4efaa1aa0da4",
+   "to": "54172386-c256-5ac1-9575-e33da4ef3fd9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

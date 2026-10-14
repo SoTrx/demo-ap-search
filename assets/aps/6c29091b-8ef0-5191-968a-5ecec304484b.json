@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "6c29091b-8ef0-5191-968a-5ecec304484b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Match Graph Linker",
+    "description": "Groups candidate entity matches into clusters using a threshold and maps those clusters to existing graph nodes.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "c8f41f12-570e-5017-b0a8-79de85fe7b99",
+   "labels": [
+    "Entity_Cluster_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_cluster_builder",
+    "description": "Groups candidate entity matches into clusters that represent the same real-world entity. It uses the supplied threshold to avoid chaining weak matches together.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "697b07e3-e995-595d-a4bf-3c542df4c324",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entity_groups"
+   }
+  },
+  {
+   "id": "57e7a32f-c307-5fe5-9eb3-5a10339c5e88",
+   "labels": [
+    "Cluster_Graph_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cluster_graph_linker",
+    "description": "Links resolved entity record groups to existing graph nodes by matching cluster attributes to node properties in the triples. Returns node link records that map cluster identifiers to node identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_record_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "node_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6c29091b-8ef0-5191-968a-5ecec304484b",
+   "to": "c8f41f12-570e-5017-b0a8-79de85fe7b99",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c8f41f12-570e-5017-b0a8-79de85fe7b99",
+   "to": "697b07e3-e995-595d-a4bf-3c542df4c324",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entity_groups']": "from['outputs']['entity_groups']"
+    }
+   }
+  },
+  {
+   "from": "697b07e3-e995-595d-a4bf-3c542df4c324",
+   "to": "57e7a32f-c307-5fe5-9eb3-5a10339c5e88",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_record_groups']": "from['entity_groups']"
+    }
+   }
+  },
+  {
+   "from": "57e7a32f-c307-5fe5-9eb3-5a10339c5e88",
+   "to": "c8f41f12-570e-5017-b0a8-79de85fe7b99",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6c29091b-8ef0-5191-968a-5ecec304484b",
+   "to": "57e7a32f-c307-5fe5-9eb3-5a10339c5e88",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

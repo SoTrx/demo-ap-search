@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "d35854f9-200b-536a-b015-8a789464fb5d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Period Variance Safety Check",
+    "description": "It returns a safety flag indicating whether every period variance in a comparison report stays within the supplied absolute limit.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "c731cea3-8472-53d9-990f-3a1ddfd8778c",
+   "labels": [
+    "Budget_Variance_Safety_Flag_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_variance_safety_flag",
+    "description": "Checks period variances in the comparison report against the supplied absolute limit. It returns a safety flag that is true when every period variance is within the limit.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "safe",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d35854f9-200b-536a-b015-8a789464fb5d",
+   "to": "c731cea3-8472-53d9-990f-3a1ddfd8778c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

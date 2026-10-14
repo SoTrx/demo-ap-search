@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "36519b58-b9ea-5556-b54a-da93e8df5b7a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Multi-Chart Dashboard Builder",
+    "description": "Builds a bar chart from rows and a field mapping, collects it with two additional chart specifications, and arranges them into a titled multi-panel dashboard specification.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "320e716c-22ad-5201-b83e-87db7024f32c",
+   "labels": [
+    "Bar_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bar_chart_builder",
+    "description": "Builds a bar chart specification from tabular rows and a column mapping that identifies the categorical field and numeric value field.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ae3dd621-a36b-5f28-a3f1-c3851f9f5ae6",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9dfb543a-e5d5-547d-ace4-ea807a32ca44",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chart_collection"
+   }
+  },
+  {
+   "id": "a9c3bcb7-df5a-56e0-a485-a68096e4b8a1",
+   "labels": [
+    "Dashboard_Layout_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_layout_builder",
+    "description": "Arranges a chart collection into a dashboard specification with panels and titles.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "36519b58-b9ea-5556-b54a-da93e8df5b7a",
+   "to": "320e716c-22ad-5201-b83e-87db7024f32c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "320e716c-22ad-5201-b83e-87db7024f32c",
+   "to": "ae3dd621-a36b-5f28-a3f1-c3851f9f5ae6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "ae3dd621-a36b-5f28-a3f1-c3851f9f5ae6",
+   "to": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "to": "320e716c-22ad-5201-b83e-87db7024f32c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "36519b58-b9ea-5556-b54a-da93e8df5b7a",
+   "to": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "to": "9dfb543a-e5d5-547d-ace4-ea807a32ca44",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart_collection']": "from['outputs']['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "9dfb543a-e5d5-547d-ace4-ea807a32ca44",
+   "to": "a9c3bcb7-df5a-56e0-a485-a68096e4b8a1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_collection']": "from['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "a9c3bcb7-df5a-56e0-a485-a68096e4b8a1",
+   "to": "980df53d-cd29-535c-96ae-741b13fe829f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "36519b58-b9ea-5556-b54a-da93e8df5b7a",
+   "to": "a9c3bcb7-df5a-56e0-a485-a68096e4b8a1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

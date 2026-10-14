@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "984f8ac1-1bc2-5fe0-8b94-0129d1cd829f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Occupation Classifier Evaluation",
+    "description": "Evaluates occupational category predictions produced from weighted coded survey records against labeled rows, returning accuracy, precision, recall, and F1 in a report.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "86a8567a-1030-5f08-b9c3-22964161c2f4",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ca0bb561-b861-566f-9799-32fdddeb8acf",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "weighted_survey_records"
+   }
+  },
+  {
+   "id": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d4021e53-8017-542a-bfb3-c78605ac4a23",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "bddd8a57-0196-5639-a372-140b9296e8b0",
+   "labels": [
+    "Evaluate_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "evaluate_classifier",
+    "description": "Computes accuracy, precision, recall, and F1 from aligned classifier prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "984f8ac1-1bc2-5fe0-8b94-0129d1cd829f",
+   "to": "86a8567a-1030-5f08-b9c3-22964161c2f4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "86a8567a-1030-5f08-b9c3-22964161c2f4",
+   "to": "ca0bb561-b861-566f-9799-32fdddeb8acf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weighted_survey_records']": "from['outputs']['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "ca0bb561-b861-566f-9799-32fdddeb8acf",
+   "to": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['weighted_survey_records']": "from['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "to": "86a8567a-1030-5f08-b9c3-22964161c2f4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "984f8ac1-1bc2-5fe0-8b94-0129d1cd829f",
+   "to": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "to": "d4021e53-8017-542a-bfb3-c78605ac4a23",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "d4021e53-8017-542a-bfb3-c78605ac4a23",
+   "to": "bddd8a57-0196-5639-a372-140b9296e8b0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "bddd8a57-0196-5639-a372-140b9296e8b0",
+   "to": "bcc13e46-4d0a-52f1-bcd3-67412404d842",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "984f8ac1-1bc2-5fe0-8b94-0129d1cd829f",
+   "to": "bddd8a57-0196-5639-a372-140b9296e8b0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

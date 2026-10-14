@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "aa68d799-95c5-57ad-b14b-090815a4f096",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Passage Citation Generator",
+    "description": "Derives a metadata profile from a dataset entry, forms a dataset card, and returns citations for passages supporting that card.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "001d8c90-930e-5e29-83b0-c260b6266ee4",
+   "labels": [
+    "DatasetMetadataProfiler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "profile_dataset_metadata",
+    "description": "Builds a metadata profile for a dataset from its catalogue entry. It records available column names, column types, row counts, and provenance fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dataset",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "cf839dc9-6d5b-57ec-8175-d8bf3eeb460b",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5d871740-4d42-5ba6-bb71-9e60bcd5cf1f",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "b55e4595-8bdb-5067-91a8-20b6092e6ec6",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "aa68d799-95c5-57ad-b14b-090815a4f096",
+   "to": "001d8c90-930e-5e29-83b0-c260b6266ee4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "001d8c90-930e-5e29-83b0-c260b6266ee4",
+   "to": "cf839dc9-6d5b-57ec-8175-d8bf3eeb460b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "cf839dc9-6d5b-57ec-8175-d8bf3eeb460b",
+   "to": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "to": "001d8c90-930e-5e29-83b0-c260b6266ee4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "aa68d799-95c5-57ad-b14b-090815a4f096",
+   "to": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "to": "5d871740-4d42-5ba6-bb71-9e60bcd5cf1f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "5d871740-4d42-5ba6-bb71-9e60bcd5cf1f",
+   "to": "b55e4595-8bdb-5067-91a8-20b6092e6ec6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "b55e4595-8bdb-5067-91a8-20b6092e6ec6",
+   "to": "e727fb9d-64b8-538a-945d-5c9d5d454986",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "aa68d799-95c5-57ad-b14b-090815a4f096",
+   "to": "b55e4595-8bdb-5067-91a8-20b6092e6ec6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

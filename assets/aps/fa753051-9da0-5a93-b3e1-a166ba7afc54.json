@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "fa753051-9da0-5a93-b3e1-a166ba7afc54",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Period Summary Difference Report",
+    "description": "Compares baseline and target period summary arrays and produces a report of differences by period.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "2c5dbf31-c56c-531f-993f-31b123990869",
+   "labels": [
+    "Period_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_summary_comparator",
+    "description": "Compares baseline and target period summaries and returns period-by-period differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "baseline_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fa753051-9da0-5a93-b3e1-a166ba7afc54",
+   "to": "2c5dbf31-c56c-531f-993f-31b123990869",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

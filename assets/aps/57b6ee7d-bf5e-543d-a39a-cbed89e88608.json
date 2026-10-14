@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "57b6ee7d-bf5e-543d-a39a-cbed89e88608",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Index Passage Summary Generator",
+    "description": "This AP retrieves passages from an index that match a query and summarizes them into a concise plain-text answer.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "d2fcfcd5-6873-5b73-bfbe-2807b4f65f41",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3a633998-d924-5d5a-981d-d9f904cfa827",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "passages"
+   }
+  },
+  {
+   "id": "75607df1-d67e-5afe-98ef-08d4c9eac270",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "57b6ee7d-bf5e-543d-a39a-cbed89e88608",
+   "to": "d2fcfcd5-6873-5b73-bfbe-2807b4f65f41",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d2fcfcd5-6873-5b73-bfbe-2807b4f65f41",
+   "to": "3a633998-d924-5d5a-981d-d9f904cfa827",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['passages']": "from['outputs']['passages']"
+    }
+   }
+  },
+  {
+   "from": "3a633998-d924-5d5a-981d-d9f904cfa827",
+   "to": "75607df1-d67e-5afe-98ef-08d4c9eac270",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chunks']": "from['passages']"
+    }
+   }
+  },
+  {
+   "from": "75607df1-d67e-5afe-98ef-08d4c9eac270",
+   "to": "d2fcfcd5-6873-5b73-bfbe-2807b4f65f41",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "57b6ee7d-bf5e-543d-a39a-cbed89e88608",
+   "to": "75607df1-d67e-5afe-98ef-08d4c9eac270",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "b4e13965-8c0a-5024-ba0d-9e83a7c1d374",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing Text Cell Report",
+    "description": "Builds a metadata profile from a dataset catalogue entry and scans supplied rows to report missing, blank, whitespace-only, or placeholder text cells.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "909d2895-88eb-5ed8-8c95-6ee961efed94",
+   "labels": [
+    "DatasetMetadataProfiler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "profile_dataset_metadata",
+    "description": "Builds a metadata profile for a dataset from its catalogue entry. It records available column names, column types, row counts, and provenance fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dataset",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ef3f8354-967b-535b-bda9-527077fee0b5",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "000608f1-a341-5ac3-b838-7a4ad2ee6659",
+   "labels": [
+    "Missing_Value_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "missing_value_detector",
+    "description": "Flags null, empty, whitespace, and placeholder cells in table rows, using the profile to identify likely text columns. Returns a missing-value report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b4e13965-8c0a-5024-ba0d-9e83a7c1d374",
+   "to": "909d2895-88eb-5ed8-8c95-6ee961efed94",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "909d2895-88eb-5ed8-8c95-6ee961efed94",
+   "to": "ef3f8354-967b-535b-bda9-527077fee0b5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "ef3f8354-967b-535b-bda9-527077fee0b5",
+   "to": "000608f1-a341-5ac3-b838-7a4ad2ee6659",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "000608f1-a341-5ac3-b838-7a4ad2ee6659",
+   "to": "909d2895-88eb-5ed8-8c95-6ee961efed94",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b4e13965-8c0a-5024-ba0d-9e83a7c1d374",
+   "to": "000608f1-a341-5ac3-b838-7a4ad2ee6659",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

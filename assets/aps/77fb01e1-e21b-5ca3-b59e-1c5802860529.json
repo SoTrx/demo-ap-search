@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "77fb01e1-e21b-5ca3-b59e-1c5802860529",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Text Chunk Topic Classifier",
+    "description": "Takes an array of text chunks and returns the best matching topic category with a confidence value.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "2f8430c6-ddb1-54b1-a28a-bd5e8532a71d",
+   "labels": [
+    "Chunk_Classifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_classifier",
+    "description": "Classifies the topic of an array of text chunks and returns the best matching category with confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "classification",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "77fb01e1-e21b-5ca3-b59e-1c5802860529",
+   "to": "2f8430c6-ddb1-54b1-a28a-bd5e8532a71d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

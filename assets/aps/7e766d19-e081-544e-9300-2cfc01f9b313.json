@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "7e766d19-e081-544e-9300-2cfc01f9b313",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Harmonized Survey Response Extract",
+    "description": "Recommends keys to align two harmonized table datasets, combines them, and extracts survey response records containing only mapped columns, excluding rows without a response identifier.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "f798b446-8b66-571c-a084-e45e255a2038",
+   "labels": [
+    "Join_Key_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "join_key_recommender",
+    "description": "Recommends left and right join keys that can align two harmonized table datasets. It evaluates key uniqueness and value overlap between the tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "join_key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c7f44cdb-459b-58b8-a700-a19d87daa35f",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "join_key_spec"
+   }
+  },
+  {
+   "id": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "labels": [
+    "Heterogeneous_Table_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "heterogeneous_table_joiner",
+    "description": "Joins two table datasets using a join key specification and returns the combined rows. It keeps source table markers to distinguish the two sides.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "join_key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "joined_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a983aa03-b579-5563-8869-a29e077b5986",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "joined_records"
+   }
+  },
+  {
+   "id": "25e54a5b-3986-5a2d-b828-c9e056f7afb0",
+   "labels": [
+    "Survey_Response_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_response_extractor",
+    "description": "Extracts survey response rows from table records and keeps only the columns named in the mapping. Rows without a response identifier are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_response_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7e766d19-e081-544e-9300-2cfc01f9b313",
+   "to": "f798b446-8b66-571c-a084-e45e255a2038",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f798b446-8b66-571c-a084-e45e255a2038",
+   "to": "c7f44cdb-459b-58b8-a700-a19d87daa35f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['join_key_spec']": "from['outputs']['join_key_spec']"
+    }
+   }
+  },
+  {
+   "from": "c7f44cdb-459b-58b8-a700-a19d87daa35f",
+   "to": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['join_key_spec']": "from['join_key_spec']"
+    }
+   }
+  },
+  {
+   "from": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "to": "f798b446-8b66-571c-a084-e45e255a2038",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7e766d19-e081-544e-9300-2cfc01f9b313",
+   "to": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "to": "a983aa03-b579-5563-8869-a29e077b5986",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['joined_records']": "from['outputs']['joined_records']"
+    }
+   }
+  },
+  {
+   "from": "a983aa03-b579-5563-8869-a29e077b5986",
+   "to": "25e54a5b-3986-5a2d-b828-c9e056f7afb0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_records']": "from['joined_records']"
+    }
+   }
+  },
+  {
+   "from": "25e54a5b-3986-5a2d-b828-c9e056f7afb0",
+   "to": "cbf09afa-775f-5560-b299-20f0ef381fab",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7e766d19-e081-544e-9300-2cfc01f9b313",
+   "to": "25e54a5b-3986-5a2d-b828-c9e056f7afb0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

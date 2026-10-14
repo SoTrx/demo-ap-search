@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "85a2cc30-adca-597d-9db6-dc5fc3a0fb13",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Time Series Change Point Detection",
+    "description": "Smoothes a time series with a moving average and detects abrupt level or trend changes as change-point positions using a sensitivity threshold.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "5d00fe97-3b91-5161-a39b-534b0e3c6170",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8ab1989b-85d6-50c5-8074-99556a2d86c7",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "ff3639c7-e12c-5077-860d-75d992f0f48c",
+   "labels": [
+    "Time_Series_Change_Point_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Change Point Detector",
+    "description": "Detects abrupt level or trend changes in a time series using a sensitivity threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "change_points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "85a2cc30-adca-597d-9db6-dc5fc3a0fb13",
+   "to": "5d00fe97-3b91-5161-a39b-534b0e3c6170",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5d00fe97-3b91-5161-a39b-534b0e3c6170",
+   "to": "8ab1989b-85d6-50c5-8074-99556a2d86c7",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "8ab1989b-85d6-50c5-8074-99556a2d86c7",
+   "to": "ff3639c7-e12c-5077-860d-75d992f0f48c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "ff3639c7-e12c-5077-860d-75d992f0f48c",
+   "to": "5d00fe97-3b91-5161-a39b-534b0e3c6170",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "85a2cc30-adca-597d-9db6-dc5fc3a0fb13",
+   "to": "ff3639c7-e12c-5077-860d-75d992f0f48c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

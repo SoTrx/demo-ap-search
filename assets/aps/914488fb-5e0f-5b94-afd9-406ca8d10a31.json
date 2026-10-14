@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "914488fb-5e0f-5b94-afd9-406ca8d10a31",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Normalize Table Record Headers",
+    "description": "Normalizes headers and cell values in an array of extracted table records so the resulting table records are consistent for tabular analysis.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "beadeb0e-c3c8-506c-a76b-97f82e06f675",
+   "labels": [
+    "Table_Record_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_table_records",
+    "description": "Normalizes table headers and cell values in extracted table records for consistent tabular analysis.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "914488fb-5e0f-5b94-afd9-406ca8d10a31",
+   "to": "beadeb0e-c3c8-506c-a76b-97f82e06f675",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

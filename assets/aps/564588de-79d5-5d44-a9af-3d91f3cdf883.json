@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "564588de-79d5-5d44-a9af-3d91f3cdf883",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing-Value Prediction Scoring",
+    "description": "Fills missing numeric and categorical feature values, then applies a trained classifier to return predicted classes and class probabilities.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "adf8d4a0-ccaf-5d63-ad29-9d77a5af9d6e",
+   "labels": [
+    "Impute_Missing_Values_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "impute_missing_values",
+    "description": "Fills missing values in selected feature columns of table rows using a mean for numeric columns and a mode for categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7d17a9ef-a15a-5cfe-9aef-713eebaee7cc",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filled_rows"
+   }
+  },
+  {
+   "id": "71661cbf-35ef-5120-b0a3-195edd0f57d1",
+   "labels": [
+    "Predict_With_Classifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "predict_with_classifier",
+    "description": "Applies the trained classifier to feature rows and returns result rows containing predicted classes and class probabilities.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "564588de-79d5-5d44-a9af-3d91f3cdf883",
+   "to": "adf8d4a0-ccaf-5d63-ad29-9d77a5af9d6e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "adf8d4a0-ccaf-5d63-ad29-9d77a5af9d6e",
+   "to": "7d17a9ef-a15a-5cfe-9aef-713eebaee7cc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filled_rows']": "from['outputs']['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "7d17a9ef-a15a-5cfe-9aef-713eebaee7cc",
+   "to": "71661cbf-35ef-5120-b0a3-195edd0f57d1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "71661cbf-35ef-5120-b0a3-195edd0f57d1",
+   "to": "adf8d4a0-ccaf-5d63-ad29-9d77a5af9d6e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "564588de-79d5-5d44-a9af-3d91f3cdf883",
+   "to": "71661cbf-35ef-5120-b0a3-195edd0f57d1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

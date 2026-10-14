@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "3fa91557-8728-573b-af50-7f7bb4ecd330",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Numeric Moment Summaries by Group",
+    "description": "Computes mean, variance, skewness, and kurtosis for chosen numeric columns across all rows and within each category defined by a grouping column.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "278c14eb-ee10-593f-a975-bcd1b4f1fef3",
+   "labels": [
+    "Descriptive_Statistics_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "descriptive_statistics_calculator",
+    "description": "Computes mean, variance, skewness, and kurtosis for selected numeric columns in table rows. Also computes the same summaries within each group defined by the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "overall",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "grouped",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3fa91557-8728-573b-af50-7f7bb4ecd330",
+   "to": "278c14eb-ee10-593f-a975-bcd1b4f1fef3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

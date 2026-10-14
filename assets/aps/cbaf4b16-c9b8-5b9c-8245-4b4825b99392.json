@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "cbaf4b16-c9b8-5b9c-8245-4b4825b99392",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Normalized Climate Indicator Builder",
+    "description": "Builds a normalized climate indicator by integrating period-to-period differences, regional benchmarking, and detected extreme events.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "428441d6-01e9-56c2-aeac-fb738f074be0",
+   "labels": [
+    "Period_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_summary_comparator",
+    "description": "Compares baseline and target period summaries and returns period-by-period differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "baseline_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6cfdb834-e65a-50e2-a69c-6928fa60c440",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "a27e2aeb-2d0d-5c00-b1c1-f26db8beb8e3",
+   "labels": [
+    "Climate_Indicator_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "climate_indicator_calculator",
+    "description": "Computes a normalized climate indicator from period comparison, regional comparison, and detected extreme events.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "period_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "regional_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "extreme_events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "indicator",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cbaf4b16-c9b8-5b9c-8245-4b4825b99392",
+   "to": "428441d6-01e9-56c2-aeac-fb738f074be0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "428441d6-01e9-56c2-aeac-fb738f074be0",
+   "to": "6cfdb834-e65a-50e2-a69c-6928fa60c440",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "6cfdb834-e65a-50e2-a69c-6928fa60c440",
+   "to": "a27e2aeb-2d0d-5c00-b1c1-f26db8beb8e3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['period_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "a27e2aeb-2d0d-5c00-b1c1-f26db8beb8e3",
+   "to": "428441d6-01e9-56c2-aeac-fb738f074be0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "cbaf4b16-c9b8-5b9c-8245-4b4825b99392",
+   "to": "a27e2aeb-2d0d-5c00-b1c1-f26db8beb8e3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

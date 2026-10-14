@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "687b5c03-6e1d-568a-a6cf-1f330afa710d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Recent Student Result Trend Summary",
+    "description": "This AP limits a set of assessment result rows to a specified number of recent entries and returns a plain-text description of whether the student's performance is improving, declining, or stable.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "0dd49eb2-2a5d-59a4-ace2-279125809c4c",
+   "labels": [
+    "Result_Preview_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Preview",
+    "description": "Returns the first rows of a result-row array, using the input limit to choose how many rows to keep.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f83aa6b5-f112-51ef-bd0c-e5e3d7b680f2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "rows"
+   }
+  },
+  {
+   "id": "921fdde2-03fa-58cb-9fd5-fd1f2f018707",
+   "labels": [
+    "Performance_Trend_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "performance_trend_summarizer",
+    "description": "Summarizes the trend in a student's result rows over recent attempts, such as improving, declining, or stable. Returns a plain-text trend description.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "687b5c03-6e1d-568a-a6cf-1f330afa710d",
+   "to": "0dd49eb2-2a5d-59a4-ace2-279125809c4c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0dd49eb2-2a5d-59a4-ace2-279125809c4c",
+   "to": "f83aa6b5-f112-51ef-bd0c-e5e3d7b680f2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['rows']": "from['outputs']['rows']"
+    }
+   }
+  },
+  {
+   "from": "f83aa6b5-f112-51ef-bd0c-e5e3d7b680f2",
+   "to": "921fdde2-03fa-58cb-9fd5-fd1f2f018707",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['assessment_rows']": "from['rows']"
+    }
+   }
+  },
+  {
+   "from": "921fdde2-03fa-58cb-9fd5-fd1f2f018707",
+   "to": "0dd49eb2-2a5d-59a4-ace2-279125809c4c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "687b5c03-6e1d-568a-a6cf-1f330afa710d",
+   "to": "921fdde2-03fa-58cb-9fd5-fd1f2f018707",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

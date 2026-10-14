@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "3ad29bab-86b9-5db4-b160-4c1bdf827e8c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Profile Card Generator",
+    "description": "Turns a dataset profile into a plain-text dataset card describing size, key columns, and profile coverage.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "6058f8f4-fade-5559-91c0-517e71d8d8eb",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3ad29bab-86b9-5db4-b160-4c1bdf827e8c",
+   "to": "6058f8f4-fade-5559-91c0-517e71d8d8eb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

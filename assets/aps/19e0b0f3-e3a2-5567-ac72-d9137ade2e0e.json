@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "19e0b0f3-e3a2-5567-ac72-d9137ade2e0e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cox Survival Hazard Model Fit",
+    "description": "Fits a Cox proportional hazards model from survival records and a column mapping, returning hazard ratios and model diagnostics.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "4e7f6654-23da-546b-ac0d-0e448bbcdd97",
+   "labels": [
+    "Cox_Proportional_Hazards_Fitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cox_hazard_fitter",
+    "description": "Fits a Cox proportional hazards model to survival records using covariates named in the column mapping. The output is a regression fit containing hazard ratios and model diagnostics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "regression_fit",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "19e0b0f3-e3a2-5567-ac72-d9137ade2e0e",
+   "to": "4e7f6654-23da-546b-ac0d-0e448bbcdd97",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

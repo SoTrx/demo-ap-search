@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "c4d0e95c-8aa1-5023-be57-046209a5bdf1",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filter Object Detections by Confidence",
+    "description": "Keeps only detections whose confidence meets the requested cutoff and returns the remaining detections as an array.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "888b036b-8455-503a-8b0f-a7475e3ea792",
+   "labels": [
+    "Detection_Score_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detection_score_filter",
+    "description": "Keeps only object detections whose confidence score meets the supplied threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_detections",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c4d0e95c-8aa1-5023-be57-046209a5bdf1",
+   "to": "888b036b-8455-503a-8b0f-a7475e3ea792",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

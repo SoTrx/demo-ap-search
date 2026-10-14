@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "a1ea09e1-09c2-5b5c-b925-46bbd7b14898",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Answer Support Citation Finder",
+    "description": "Links an answer summary to the retrieved passages that support it and returns them as citation records.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "e8edefed-b18c-5fea-9bd4-c928ef1e4a53",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a1ea09e1-09c2-5b5c-b925-46bbd7b14898",
+   "to": "e8edefed-b18c-5fea-9bd4-c928ef1e4a53",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

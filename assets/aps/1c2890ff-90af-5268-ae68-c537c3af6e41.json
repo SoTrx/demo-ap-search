@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "1c2890ff-90af-5268-ae68-c537c3af6e41",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Natural Language Safe SQL Execution",
+    "description": "Converts a natural-language question into safe SQL and returns the matching dataset rows.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "86458c95-8afd-5ea9-9ec1-5ed807c1234f",
+   "labels": [
+    "Text_To_SQL_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Text to SQL",
+    "description": "Translates a natural-language string into a safe SQL query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "nl",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fdfa5e37-9a0f-5102-afdb-9069a29d4cdb",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "e07395f8-6c76-51ce-b082-1b48c3895c81",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1c2890ff-90af-5268-ae68-c537c3af6e41",
+   "to": "86458c95-8afd-5ea9-9ec1-5ed807c1234f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "86458c95-8afd-5ea9-9ec1-5ed807c1234f",
+   "to": "fdfa5e37-9a0f-5102-afdb-9069a29d4cdb",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "fdfa5e37-9a0f-5102-afdb-9069a29d4cdb",
+   "to": "e07395f8-6c76-51ce-b082-1b48c3895c81",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['sql']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "e07395f8-6c76-51ce-b082-1b48c3895c81",
+   "to": "86458c95-8afd-5ea9-9ec1-5ed807c1234f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1c2890ff-90af-5268-ae68-c537c3af6e41",
+   "to": "e07395f8-6c76-51ce-b082-1b48c3895c81",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

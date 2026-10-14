@@ -1,0 +1,311 @@
+{
+ "nodes": [
+  {
+   "id": "1b999c96-8bd3-5008-8b8d-d8232f09ab1a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safety-Gated Weather Time Series",
+    "description": "It checks a weather comparison report against an absolute variance limit, runs a supplied SQL query only when the check passes, normalizes the resulting rows into records for one weather variable, and returns an ordered numeric time series.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "02da910e-6fc4-53d9-b53d-8f1a30fc52dd",
+   "labels": [
+    "Budget_Variance_Safety_Flag_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_variance_safety_flag",
+    "description": "Checks period variances in the comparison report against the supplied absolute limit. It returns a safety flag that is true when every period variance is within the limit.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "safe",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "91badeef-bc1e-559c-8f49-d1636c33627e",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "safe"
+   }
+  },
+  {
+   "id": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "a50df0f4-2d94-5b67-9453-8f8fc12a294d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6da91f82-6f04-5df4-96a8-3c970b6f27f3",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "2591bb28-fd0b-5e3d-a07e-f83d3b23aee4",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1b999c96-8bd3-5008-8b8d-d8232f09ab1a",
+   "to": "02da910e-6fc4-53d9-b53d-8f1a30fc52dd",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "02da910e-6fc4-53d9-b53d-8f1a30fc52dd",
+   "to": "91badeef-bc1e-559c-8f49-d1636c33627e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['safe']": "from['outputs']['safe']"
+    }
+   }
+  },
+  {
+   "from": "91badeef-bc1e-559c-8f49-d1636c33627e",
+   "to": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['safe']"
+    }
+   }
+  },
+  {
+   "from": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "to": "02da910e-6fc4-53d9-b53d-8f1a30fc52dd",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1b999c96-8bd3-5008-8b8d-d8232f09ab1a",
+   "to": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "to": "a50df0f4-2d94-5b67-9453-8f8fc12a294d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "a50df0f4-2d94-5b67-9453-8f8fc12a294d",
+   "to": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "to": "536b5103-03ae-5f3b-a80b-9c8e2aa52b9d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1b999c96-8bd3-5008-8b8d-d8232f09ab1a",
+   "to": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "to": "6da91f82-6f04-5df4-96a8-3c970b6f27f3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "6da91f82-6f04-5df4-96a8-3c970b6f27f3",
+   "to": "2591bb28-fd0b-5e3d-a07e-f83d3b23aee4",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "2591bb28-fd0b-5e3d-a07e-f83d3b23aee4",
+   "to": "91a151ef-4e7b-5181-9872-c4ceec79d702",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1b999c96-8bd3-5008-8b8d-d8232f09ab1a",
+   "to": "2591bb28-fd0b-5e3d-a07e-f83d3b23aee4",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

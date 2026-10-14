@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "df28e7c8-d0a0-5cf1-ba13-4a403e6a990e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Numeric Column Correlation Matrix",
+    "description": "Computes pairwise Pearson correlations among selected numeric columns from table rows and a column mapping.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "b7828dee-551c-5f35-873e-35332490b25c",
+   "labels": [
+    "Pearson_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pearson_correlation_matrix",
+    "description": "Computes a Pearson correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "df28e7c8-d0a0-5cf1-ba13-4a403e6a990e",
+   "to": "b7828dee-551c-5f35-873e-35332490b25c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

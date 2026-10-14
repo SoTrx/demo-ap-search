@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "d4ff8bef-f8f7-51fb-a08a-700f7d86f87b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema-Validated Relation Triples",
+    "description": "The AP extracts schema-guided relation candidates from text chunks using linked entities and then converts only the valid candidates into schema-conforming graph triples.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "c3193173-17fb-55b5-97af-44bfb20e6ff2",
+   "labels": [
+    "Relation_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "relation_extractor",
+    "description": "Extracts typed relation candidates from text chunks for pairs of linked entities. The graph schema guides relation classes and expected argument types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "aa1caa97-817b-5229-9eee-b90bbe2f5207",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "relation_triples"
+   }
+  },
+  {
+   "id": "4ea4d4b9-aa27-5cfe-981a-0a0be4f74c33",
+   "labels": [
+    "Graph_Triple_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_triple_builder",
+    "description": "Converts relation candidates into graph triples that conform to the graph schema. Invalid relation classes or mismatched entity types are dropped.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "relation_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d4ff8bef-f8f7-51fb-a08a-700f7d86f87b",
+   "to": "c3193173-17fb-55b5-97af-44bfb20e6ff2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c3193173-17fb-55b5-97af-44bfb20e6ff2",
+   "to": "aa1caa97-817b-5229-9eee-b90bbe2f5207",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['relation_triples']": "from['outputs']['relation_triples']"
+    }
+   }
+  },
+  {
+   "from": "aa1caa97-817b-5229-9eee-b90bbe2f5207",
+   "to": "4ea4d4b9-aa27-5cfe-981a-0a0be4f74c33",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['relation_triples']": "from['relation_triples']"
+    }
+   }
+  },
+  {
+   "from": "4ea4d4b9-aa27-5cfe-981a-0a0be4f74c33",
+   "to": "c3193173-17fb-55b5-97af-44bfb20e6ff2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d4ff8bef-f8f7-51fb-a08a-700f7d86f87b",
+   "to": "4ea4d4b9-aa27-5cfe-981a-0a0be4f74c33",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

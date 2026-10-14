@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "b4fcfcf5-189b-5959-954c-0764fb746727",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Provenance Text Formatting Report",
+    "description": "This AP takes raw provenance text and returns a formatted report that presents the source history in a consistent, readable structure.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "00fbae5e-9f87-556d-a222-7aa0473671d5",
+   "labels": [
+    "Provenance_Report_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Report",
+    "description": "Formats raw provenance text into a structured report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b4fcfcf5-189b-5959-954c-0764fb746727",
+   "to": "00fbae5e-9f87-556d-a222-7aa0473671d5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "fc899fa7-aaec-5839-bd03-486facd5f717",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Diagnosis Text to Codes",
+    "description": "Adds standard medical codes to free-text diagnosis fields by matching terms and synonyms from a supplied code set, preserving the original diagnosis text and returning coded patient records.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "f941ea77-7aa9-509c-9df9-52503538fbb0",
+   "labels": [
+    "Diagnosis_Term_Code_Mapper_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_coder",
+    "description": "Assigns standard codes to diagnosis text fields using terms and synonyms from the supplied medical code set. It appends coded diagnosis fields without removing source text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "fc899fa7-aaec-5839-bd03-486facd5f717",
+   "to": "f941ea77-7aa9-509c-9df9-52503538fbb0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

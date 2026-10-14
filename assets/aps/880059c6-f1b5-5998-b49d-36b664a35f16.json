@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "880059c6-f1b5-5998-b49d-36b664a35f16",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filter Chunks for Translation",
+    "description": "Filters an array of text chunks down to only the chunks that are not already written in the target language.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "a5f9622e-b5c7-5ac9-bc0d-6fb300906f4a",
+   "labels": [
+    "Written_Text_Language_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "written_text_language_detector",
+    "description": "Detects the written language of each text chunk. Returns language identification records with language codes and confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "14642a6f-4c6c-52e6-bfa2-a5c3125b2db0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "language_records"
+   }
+  },
+  {
+   "id": "f667d93d-6237-5f01-b607-b81581c2f1fe",
+   "labels": [
+    "Translation_Candidate_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_candidate_filter",
+    "description": "Filters text chunks down to those requiring translation by keeping chunks whose detected language differs from the target language code.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks_to_translate",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "880059c6-f1b5-5998-b49d-36b664a35f16",
+   "to": "a5f9622e-b5c7-5ac9-bc0d-6fb300906f4a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a5f9622e-b5c7-5ac9-bc0d-6fb300906f4a",
+   "to": "14642a6f-4c6c-52e6-bfa2-a5c3125b2db0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['language_records']": "from['outputs']['language_records']"
+    }
+   }
+  },
+  {
+   "from": "14642a6f-4c6c-52e6-bfa2-a5c3125b2db0",
+   "to": "f667d93d-6237-5f01-b607-b81581c2f1fe",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['language_records']": "from['language_records']"
+    }
+   }
+  },
+  {
+   "from": "f667d93d-6237-5f01-b607-b81581c2f1fe",
+   "to": "a5f9622e-b5c7-5ac9-bc0d-6fb300906f4a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "880059c6-f1b5-5998-b49d-36b664a35f16",
+   "to": "f667d93d-6237-5f01-b607-b81581c2f1fe",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

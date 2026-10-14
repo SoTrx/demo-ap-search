@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "89664aef-c442-5772-94f9-fac2b39db27c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "SQL Result Row Summary",
+    "description": "Rewrites an SQL query against a schema for performance, then explains the returned result rows in plain language.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "9b907fb1-2dc0-5b3d-b165-937fe9eae692",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2801c0f4-86bd-579a-9aa9-a4a0b7213499",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "025ee3a4-dc74-5f87-9061-27fb2f64e34c",
+   "labels": [
+    "Result_Summary_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Result Summary",
+    "description": "Summarises a result-row array in plain language using the originating SQL query as context and returns a result summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "89664aef-c442-5772-94f9-fac2b39db27c",
+   "to": "9b907fb1-2dc0-5b3d-b165-937fe9eae692",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9b907fb1-2dc0-5b3d-b165-937fe9eae692",
+   "to": "2801c0f4-86bd-579a-9aa9-a4a0b7213499",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "2801c0f4-86bd-579a-9aa9-a4a0b7213499",
+   "to": "025ee3a4-dc74-5f87-9061-27fb2f64e34c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "025ee3a4-dc74-5f87-9061-27fb2f64e34c",
+   "to": "9b907fb1-2dc0-5b3d-b165-937fe9eae692",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "89664aef-c442-5772-94f9-fac2b39db27c",
+   "to": "025ee3a4-dc74-5f87-9061-27fb2f64e34c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "073974a9-bfae-5c76-840b-4c165f5597b0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Time Series Line Chart Builder",
+    "description": "Resamples a time series to a chosen period and produces a line chart specification for the selected metric.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "1bd9e356-c96e-5caf-824c-52c2cc035202",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2e1fe7b7-e79d-5176-9213-a22eb89c9cfc",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "5c1b5eb3-3d1d-54d2-b6ea-7c5285dae52e",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "073974a9-bfae-5c76-840b-4c165f5597b0",
+   "to": "1bd9e356-c96e-5caf-824c-52c2cc035202",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1bd9e356-c96e-5caf-824c-52c2cc035202",
+   "to": "2e1fe7b7-e79d-5176-9213-a22eb89c9cfc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "2e1fe7b7-e79d-5176-9213-a22eb89c9cfc",
+   "to": "5c1b5eb3-3d1d-54d2-b6ea-7c5285dae52e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "5c1b5eb3-3d1d-54d2-b6ea-7c5285dae52e",
+   "to": "1bd9e356-c96e-5caf-824c-52c2cc035202",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "073974a9-bfae-5c76-840b-4c165f5597b0",
+   "to": "5c1b5eb3-3d1d-54d2-b6ea-7c5285dae52e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

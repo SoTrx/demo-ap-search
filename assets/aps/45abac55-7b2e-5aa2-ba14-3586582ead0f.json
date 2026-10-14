@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "45abac55-7b2e-5aa2-ba14-3586582ead0f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Occupational Survey Record Weighting",
+    "description": "Creates per-response occupational calibration weights from coded survey records and a value mapping, then returns the original records enriched with a numeric weight field.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "3bf9f92c-05b6-53b8-ba3e-33cad42e0bde",
+   "labels": [
+    "Survey_Weight_Planner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survey_weight_planner",
+    "description": "Builds a post-stratification weight plan by comparing observed occupation group frequencies in coded response records with target population shares. It returns per-response weights as a mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3c1897ac-44a8-5434-b52d-6065e36901dd",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "survey_weight_plan"
+   }
+  },
+  {
+   "id": "5cac5961-d3aa-5eeb-939a-44e980332715",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "45abac55-7b2e-5aa2-ba14-3586582ead0f",
+   "to": "3bf9f92c-05b6-53b8-ba3e-33cad42e0bde",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3bf9f92c-05b6-53b8-ba3e-33cad42e0bde",
+   "to": "3c1897ac-44a8-5434-b52d-6065e36901dd",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['survey_weight_plan']": "from['outputs']['survey_weight_plan']"
+    }
+   }
+  },
+  {
+   "from": "3c1897ac-44a8-5434-b52d-6065e36901dd",
+   "to": "5cac5961-d3aa-5eeb-939a-44e980332715",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['survey_weight_plan']": "from['survey_weight_plan']"
+    }
+   }
+  },
+  {
+   "from": "5cac5961-d3aa-5eeb-939a-44e980332715",
+   "to": "3bf9f92c-05b6-53b8-ba3e-33cad42e0bde",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "45abac55-7b2e-5aa2-ba14-3586582ead0f",
+   "to": "5cac5961-d3aa-5eeb-939a-44e980332715",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

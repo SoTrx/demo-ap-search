@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "a3e3a3fc-2ec9-58e1-ba47-07f282adf10c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe Topic-Based SQL Execution",
+    "description": "It narrows a database schema to a subject topic, checks that a supplied query uses only the remaining tables and columns, and executes the safe SQL to return result rows.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "66094511-e116-5ab2-ad18-a2cb4a2677a7",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2cde732e-0e0f-5330-a11c-a1628c536a00",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4ac0bdb8-e8aa-5e63-adb4-08acf8ce66f1",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "3e11c76b-1dc3-59ce-858b-cba9706789ac",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a3e3a3fc-2ec9-58e1-ba47-07f282adf10c",
+   "to": "66094511-e116-5ab2-ad18-a2cb4a2677a7",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "66094511-e116-5ab2-ad18-a2cb4a2677a7",
+   "to": "2cde732e-0e0f-5330-a11c-a1628c536a00",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "2cde732e-0e0f-5330-a11c-a1628c536a00",
+   "to": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "to": "66094511-e116-5ab2-ad18-a2cb4a2677a7",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a3e3a3fc-2ec9-58e1-ba47-07f282adf10c",
+   "to": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "to": "4ac0bdb8-e8aa-5e63-adb4-08acf8ce66f1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "4ac0bdb8-e8aa-5e63-adb4-08acf8ce66f1",
+   "to": "3e11c76b-1dc3-59ce-858b-cba9706789ac",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "3e11c76b-1dc3-59ce-858b-cba9706789ac",
+   "to": "5662f298-0cd9-5a35-8bb2-dabc263aa54a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a3e3a3fc-2ec9-58e1-ba47-07f282adf10c",
+   "to": "3e11c76b-1dc3-59ce-858b-cba9706789ac",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

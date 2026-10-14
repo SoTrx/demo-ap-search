@@ -1,0 +1,131 @@
+{
+ "nodes": [
+  {
+   "id": "e6b838e1-5929-5223-8f2f-ae81d0a89e7e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Natural Language to SQL Provenance",
+    "description": "Translates a natural-language data question into a safe SQL query and returns provenance describing its data sources, transformations, and execution plan.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "3cde6c11-0257-5312-b044-334c1b766871",
+   "labels": [
+    "Text_To_SQL_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Text to SQL",
+    "description": "Translates a natural-language string into a safe SQL query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "nl",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ed15ad88-b2ba-5da9-900b-96fd377ebfb0",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "f59d7580-95f8-5b26-a0b3-6a2edc4a2d7e",
+   "labels": [
+    "SQL_Provenance_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Provenance",
+    "description": "Analyzes an SQL query and returns provenance information describing the data sources, transformations, and execution plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "provenance",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e6b838e1-5929-5223-8f2f-ae81d0a89e7e",
+   "to": "3cde6c11-0257-5312-b044-334c1b766871",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3cde6c11-0257-5312-b044-334c1b766871",
+   "to": "ed15ad88-b2ba-5da9-900b-96fd377ebfb0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "ed15ad88-b2ba-5da9-900b-96fd377ebfb0",
+   "to": "f59d7580-95f8-5b26-a0b3-6a2edc4a2d7e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['sql']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "f59d7580-95f8-5b26-a0b3-6a2edc4a2d7e",
+   "to": "3cde6c11-0257-5312-b044-334c1b766871",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e6b838e1-5929-5223-8f2f-ae81d0a89e7e",
+   "to": "f59d7580-95f8-5b26-a0b3-6a2edc4a2d7e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

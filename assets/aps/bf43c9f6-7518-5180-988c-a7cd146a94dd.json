@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "bf43c9f6-7518-5180-988c-a7cd146a94dd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Bounded Dataset Row Sample",
+    "description": "Reads a dataset and returns at most the allowed number of rows as a sample array for quick profiling.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "80c4ae2b-74e2-5c46-9707-3125513b2b70",
+   "labels": [
+    "DatasetSampleMaterializer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "materialize_dataset_sample",
+    "description": "Materializes a bounded row sample from a dataset for profiling. It uses the supplied threshold as the maximum number of rows to return.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dataset",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "row_limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "bf43c9f6-7518-5180-988c-a7cd146a94dd",
+   "to": "80c4ae2b-74e2-5c46-9707-3125513b2b70",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

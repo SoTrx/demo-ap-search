@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "a3e72872-4ed7-597e-a606-e29c8cf249bf",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Deduplicated Regression Prediction Intervals",
+    "description": "Deduplicates table rows by candidate duplicate keys and applies a fitted regression model to the retained rows to return predicted values with prediction intervals.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "988599aa-7166-5ba7-aef9-888ff2bec998",
+   "labels": [
+    "Duplicate_Record_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_record_detector",
+    "description": "Groups table rows into duplicate candidate clusters using a duplicate-key specification. Returns duplicate groups without deleting rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1eecf23e-d6e8-5206-8198-39af2a3851c2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "duplicate_groups"
+   }
+  },
+  {
+   "id": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "labels": [
+    "Row_Deduplicator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "row_deduplicator",
+    "description": "Deduplicates table records by retaining one representative row from each duplicate group. Returns the deduplicated table records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "deduplicated_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "460390aa-3b61-5933-b57c-0815922baf90",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "deduplicated_rows"
+   }
+  },
+  {
+   "id": "1d1a8195-b8ae-57a8-bf59-1bede0e45a77",
+   "labels": [
+    "Regression_Prediction_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regression_prediction_interval",
+    "description": "Applies a fitted regression model to new table rows to produce predicted values with prediction intervals. The threshold value controls the width of the intervals.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "new_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a3e72872-4ed7-597e-a606-e29c8cf249bf",
+   "to": "988599aa-7166-5ba7-aef9-888ff2bec998",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "988599aa-7166-5ba7-aef9-888ff2bec998",
+   "to": "1eecf23e-d6e8-5206-8198-39af2a3851c2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['duplicate_groups']": "from['outputs']['duplicate_groups']"
+    }
+   }
+  },
+  {
+   "from": "1eecf23e-d6e8-5206-8198-39af2a3851c2",
+   "to": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['duplicate_groups']": "from['duplicate_groups']"
+    }
+   }
+  },
+  {
+   "from": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "to": "988599aa-7166-5ba7-aef9-888ff2bec998",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a3e72872-4ed7-597e-a606-e29c8cf249bf",
+   "to": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "to": "460390aa-3b61-5933-b57c-0815922baf90",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['deduplicated_rows']": "from['outputs']['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "460390aa-3b61-5933-b57c-0815922baf90",
+   "to": "1d1a8195-b8ae-57a8-bf59-1bede0e45a77",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['new_rows']": "from['deduplicated_rows']"
+    }
+   }
+  },
+  {
+   "from": "1d1a8195-b8ae-57a8-bf59-1bede0e45a77",
+   "to": "5999f60a-9bfd-51f3-8584-c8532e8563b9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a3e72872-4ed7-597e-a606-e29c8cf249bf",
+   "to": "1d1a8195-b8ae-57a8-bf59-1bede0e45a77",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

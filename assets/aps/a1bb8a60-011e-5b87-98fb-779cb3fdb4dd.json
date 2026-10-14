@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "a1bb8a60-011e-5b87-98fb-779cb3fdb4dd",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Graph Schema Builder",
+    "description": "Filters extracted entity records to one requested entity type and derives a knowledge graph schema from the database schema and the filtered sample.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "f0aae7e7-f737-5e8f-99e9-459299e92d99",
+   "labels": [
+    "Entity_Type_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_type_filter",
+    "description": "Keeps only extracted entity records whose entity type matches the requested type.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_type",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0dfc2eae-5b5d-5d7d-a218-1fbd02c68225",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filtered_entities"
+   }
+  },
+  {
+   "id": "38fba7ee-6c6f-57ad-b1a0-2a28820fc034",
+   "labels": [
+    "Graph_Schema_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_schema_builder",
+    "description": "Derives a knowledge graph schema from a database schema and a sample of entity records. The returned schema describes node classes, properties, and expected property types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "database_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a1bb8a60-011e-5b87-98fb-779cb3fdb4dd",
+   "to": "f0aae7e7-f737-5e8f-99e9-459299e92d99",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f0aae7e7-f737-5e8f-99e9-459299e92d99",
+   "to": "0dfc2eae-5b5d-5d7d-a218-1fbd02c68225",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filtered_entities']": "from['outputs']['filtered_entities']"
+    }
+   }
+  },
+  {
+   "from": "0dfc2eae-5b5d-5d7d-a218-1fbd02c68225",
+   "to": "38fba7ee-6c6f-57ad-b1a0-2a28820fc034",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_records']": "from['filtered_entities']"
+    }
+   }
+  },
+  {
+   "from": "38fba7ee-6c6f-57ad-b1a0-2a28820fc034",
+   "to": "f0aae7e7-f737-5e8f-99e9-459299e92d99",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a1bb8a60-011e-5b87-98fb-779cb3fdb4dd",
+   "to": "38fba7ee-6c6f-57ad-b1a0-2a28820fc034",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "81123df0-28a6-5ac1-8866-f92d4e3a146a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Plain Text Chunk Splitter",
+    "description": "Splits a plain-text document into ordered chunks whose lengths do not exceed a specified maximum size.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "1ce436fc-83fd-5813-b5b6-1bdbc9f839e2",
+   "labels": [
+    "Plain_Text_Chunk_Splitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "plain_text_chunk_splitter",
+    "description": "Splits a plain-text document into translatable chunks using the maximum chunk size threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "max_chunk_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "81123df0-28a6-5ac1-8866-f92d4e3a146a",
+   "to": "1ce436fc-83fd-5813-b5b6-1bdbc9f839e2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

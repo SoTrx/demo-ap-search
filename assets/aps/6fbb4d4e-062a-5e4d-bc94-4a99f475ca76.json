@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "6fbb4d4e-062a-5e4d-bc94-4a99f475ca76",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Reading Trend and Seasonality",
+    "description": "It takes weather reading records for a selected measure and separates the underlying trend from a seasonal profile for a fixed cycle length.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "7e3a1d65-8dfc-5b58-ae98-02662c3b9976",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "440ad49d-f086-5236-9545-3541d949880f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "771c4707-3b0a-588f-ad9c-7a773bc40ab2",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6fbb4d4e-062a-5e4d-bc94-4a99f475ca76",
+   "to": "7e3a1d65-8dfc-5b58-ae98-02662c3b9976",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7e3a1d65-8dfc-5b58-ae98-02662c3b9976",
+   "to": "440ad49d-f086-5236-9545-3541d949880f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "440ad49d-f086-5236-9545-3541d949880f",
+   "to": "771c4707-3b0a-588f-ad9c-7a773bc40ab2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "771c4707-3b0a-588f-ad9c-7a773bc40ab2",
+   "to": "7e3a1d65-8dfc-5b58-ae98-02662c3b9976",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6fbb4d4e-062a-5e4d-bc94-4a99f475ca76",
+   "to": "771c4707-3b0a-588f-ad9c-7a773bc40ab2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

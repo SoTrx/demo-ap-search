@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "8805a561-95c0-509c-8e8b-730f74ff1232",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe SQL Confusion Matrix",
+    "description": "Validates a SQL query against a schema, executes it to retrieve prediction rows, and aggregates predicted classes against labeled rows using a mapping into a matrix of predicted-versus-actual class counts.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "a5d41d86-0f6c-5344-bd11-972b5cfcea5d",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "473fc775-f7cb-5ad7-b480-bbd7717ff862",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "12b71f9f-0174-545f-8eec-8c68ad2d9749",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "9624d429-3a13-5c93-9d3a-d8112dd042c9",
+   "labels": [
+    "Build_Confusion_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_confusion_matrix",
+    "description": "Counts predicted class versus actual class pairs from aligned prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matrix",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8805a561-95c0-509c-8e8b-730f74ff1232",
+   "to": "a5d41d86-0f6c-5344-bd11-972b5cfcea5d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a5d41d86-0f6c-5344-bd11-972b5cfcea5d",
+   "to": "473fc775-f7cb-5ad7-b480-bbd7717ff862",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "473fc775-f7cb-5ad7-b480-bbd7717ff862",
+   "to": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "to": "a5d41d86-0f6c-5344-bd11-972b5cfcea5d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8805a561-95c0-509c-8e8b-730f74ff1232",
+   "to": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "to": "12b71f9f-0174-545f-8eec-8c68ad2d9749",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "12b71f9f-0174-545f-8eec-8c68ad2d9749",
+   "to": "9624d429-3a13-5c93-9d3a-d8112dd042c9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "9624d429-3a13-5c93-9d3a-d8112dd042c9",
+   "to": "0906bef8-b79e-53d5-8596-c0d918227dea",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8805a561-95c0-509c-8e8b-730f74ff1232",
+   "to": "9624d429-3a13-5c93-9d3a-d8112dd042c9",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

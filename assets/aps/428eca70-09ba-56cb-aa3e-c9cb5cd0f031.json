@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "428eca70-09ba-56cb-aa3e-c9cb5cd0f031",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "OCR Table Column Correlations",
+    "description": "Reconstructs table records from OCR table regions and text chunks, then computes a Pearson correlation matrix for mapped numeric columns.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "f24e2daf-831f-5d9c-bae7-c0202e959d8a",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "f02d6b26-104a-57f3-9b7a-3bb35dc47e4e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "eabaddca-c8c0-5d05-91ef-3fd8aa8d384a",
+   "labels": [
+    "Pearson_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pearson_correlation_matrix",
+    "description": "Computes a Pearson correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "428eca70-09ba-56cb-aa3e-c9cb5cd0f031",
+   "to": "f24e2daf-831f-5d9c-bae7-c0202e959d8a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f24e2daf-831f-5d9c-bae7-c0202e959d8a",
+   "to": "f02d6b26-104a-57f3-9b7a-3bb35dc47e4e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "f02d6b26-104a-57f3-9b7a-3bb35dc47e4e",
+   "to": "eabaddca-c8c0-5d05-91ef-3fd8aa8d384a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "eabaddca-c8c0-5d05-91ef-3fd8aa8d384a",
+   "to": "f24e2daf-831f-5d9c-bae7-c0202e959d8a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "428eca70-09ba-56cb-aa3e-c9cb5cd0f031",
+   "to": "eabaddca-c8c0-5d05-91ef-3fd8aa8d384a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

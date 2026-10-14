@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "d9e8f179-8afe-533c-95b2-b06f9ebfd174",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Expanded Medical Record Filter",
+    "description": "Expands a base medical code set through parent-child vocabulary links and returns only coded patient records containing a diagnosis from the expanded set.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "444c7445-f942-5ab4-ba23-5b888f244b35",
+   "labels": [
+    "Medical_Code_Set_Expander_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "code_set_expander",
+    "description": "Expands a base medical code set to descendant codes using parent-child vocabulary triples. It returns the original codes and any reachable descendants.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "base_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "vocabulary_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "expanded_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e11895a5-02ec-5d87-96c5-49cdb1cdf284",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "expanded_code_set"
+   }
+  },
+  {
+   "id": "a7e1d770-507d-534b-976c-03b1ea569262",
+   "labels": [
+    "Diagnosis_Code_Set_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_code_filter",
+    "description": "Keeps coded patient records containing at least one diagnosis code in the target medical code set. Records with no matching code are removed.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d9e8f179-8afe-533c-95b2-b06f9ebfd174",
+   "to": "444c7445-f942-5ab4-ba23-5b888f244b35",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "444c7445-f942-5ab4-ba23-5b888f244b35",
+   "to": "e11895a5-02ec-5d87-96c5-49cdb1cdf284",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['expanded_code_set']": "from['outputs']['expanded_code_set']"
+    }
+   }
+  },
+  {
+   "from": "e11895a5-02ec-5d87-96c5-49cdb1cdf284",
+   "to": "a7e1d770-507d-534b-976c-03b1ea569262",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['target_code_set']": "from['expanded_code_set']"
+    }
+   }
+  },
+  {
+   "from": "a7e1d770-507d-534b-976c-03b1ea569262",
+   "to": "444c7445-f942-5ab4-ba23-5b888f244b35",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "d9e8f179-8afe-533c-95b2-b06f9ebfd174",
+   "to": "a7e1d770-507d-534b-976c-03b1ea569262",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

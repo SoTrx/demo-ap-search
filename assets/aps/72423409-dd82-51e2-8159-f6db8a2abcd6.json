@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "72423409-dd82-51e2-8159-f6db8a2abcd6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Dataset Discovery Candidate Search",
+    "description": "Given a natural-language question about available data, the AP returns a limited ranked list of candidate dataset identifiers from a catalogue index.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "cc4db24e-527a-5e71-ac9a-52008c064a33",
+   "labels": [
+    "DatasetSearchQueryBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_search_query",
+    "description": "Translates a natural-language dataset question into keyword records for catalogue search. It expands each requested topic into searchable terms and facets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "question",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c799e66f-9a5b-5617-b912-cf1cd2969bea",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "keywords"
+   }
+  },
+  {
+   "id": "b01eead6-62bf-5eaf-9373-3dec3b725f19",
+   "labels": [
+    "DatasetCatalogueSearcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "search_dataset_catalogue",
+    "description": "Searches a dataset retrieval index using keyword records and returns ranked dataset identifiers. It applies the recommendation limit to the candidate list.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "keywords",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "72423409-dd82-51e2-8159-f6db8a2abcd6",
+   "to": "cc4db24e-527a-5e71-ac9a-52008c064a33",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "cc4db24e-527a-5e71-ac9a-52008c064a33",
+   "to": "c799e66f-9a5b-5617-b912-cf1cd2969bea",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['keywords']": "from['outputs']['keywords']"
+    }
+   }
+  },
+  {
+   "from": "c799e66f-9a5b-5617-b912-cf1cd2969bea",
+   "to": "b01eead6-62bf-5eaf-9373-3dec3b725f19",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['keywords']": "from['keywords']"
+    }
+   }
+  },
+  {
+   "from": "b01eead6-62bf-5eaf-9373-3dec3b725f19",
+   "to": "cc4db24e-527a-5e71-ac9a-52008c064a33",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "72423409-dd82-51e2-8159-f6db8a2abcd6",
+   "to": "b01eead6-62bf-5eaf-9373-3dec3b725f19",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

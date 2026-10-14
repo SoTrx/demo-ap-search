@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "de3622d3-247c-549b-a9dd-f57a77384ef4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Student Performance Profile Aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile containing scores by topic, overall accuracy, and a recent performance trend without recommending study material.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "b6163c4e-bb6c-5d73-9067-b3f068c428c2",
+   "labels": [
+    "Student_Performance_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_performance_aggregator",
+    "description": "Aggregates a student's assessment result rows into a profile with scores by topic, accuracy, and recent trend. Returns the profile without recommending study material.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "assessment_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "de3622d3-247c-549b-a9dd-f57a77384ef4",
+   "to": "b6163c4e-bb6c-5d73-9067-b3f068c428c2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

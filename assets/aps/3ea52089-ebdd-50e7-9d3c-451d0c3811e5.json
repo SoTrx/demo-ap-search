@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3ea52089-ebdd-50e7-9d3c-451d0c3811e5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Batch Label Predictions",
+    "description": "This AP trains a classifier from labeled feature rows and a target mapping, then classifies a batch of images and returns predicted labels with confidence scores.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "be1ab84d-2be8-58b4-8354-61c4b2de44a9",
+   "labels": [
+    "Train_Classification_Model_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "train_classifier",
+    "description": "Fits a classification model from feature rows and the target column identified in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9263b91e-7071-5f28-bed4-1a837475ca62",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "model"
+   }
+  },
+  {
+   "id": "0e9d0d17-6f25-5913-93ab-ab1a1c841c4b",
+   "labels": [
+    "Image_Classification_Predictor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_classification_predictor",
+    "description": "Applies an image classification model to an image batch and returns predicted labels with confidence scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3ea52089-ebdd-50e7-9d3c-451d0c3811e5",
+   "to": "be1ab84d-2be8-58b4-8354-61c4b2de44a9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "be1ab84d-2be8-58b4-8354-61c4b2de44a9",
+   "to": "9263b91e-7071-5f28-bed4-1a837475ca62",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['model']": "from['outputs']['model']"
+    }
+   }
+  },
+  {
+   "from": "9263b91e-7071-5f28-bed4-1a837475ca62",
+   "to": "0e9d0d17-6f25-5913-93ab-ab1a1c841c4b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['model']"
+    }
+   }
+  },
+  {
+   "from": "0e9d0d17-6f25-5913-93ab-ab1a1c841c4b",
+   "to": "be1ab84d-2be8-58b4-8354-61c4b2de44a9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3ea52089-ebdd-50e7-9d3c-451d0c3811e5",
+   "to": "0e9d0d17-6f25-5913-93ab-ab1a1c841c4b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

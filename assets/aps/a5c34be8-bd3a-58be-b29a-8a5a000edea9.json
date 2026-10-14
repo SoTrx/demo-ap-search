@@ -1,0 +1,305 @@
+{
+ "nodes": [
+  {
+   "id": "a5c34be8-bd3a-58be-b29a-8a5a000edea9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Chart Notes Summary Report",
+    "description": "Annotates one chart, combines it with two additional charts into a titled dashboard, and writes a plain-text executive summary of the panels, annotations, and filters.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "87048d31-e182-5010-8aa1-9a396ded0f2f",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ddde9240-7f17-5a44-b210-514d5b7407a2",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a8b1c796-ec57-5749-907c-d5dfb705ea89",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "chart_collection"
+   }
+  },
+  {
+   "id": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "labels": [
+    "Dashboard_Layout_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dashboard_layout_builder",
+    "description": "Arranges a chart collection into a dashboard specification with panels and titles.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "41cf9216-a88b-536e-a64e-f92c2f167021",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "dashboard"
+   }
+  },
+  {
+   "id": "208aecfe-5dcf-5f78-ae26-e7cfd59f1338",
+   "labels": [
+    "Report_Text_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "report_text_composer",
+    "description": "Writes a plain-text executive summary that describes the panels, annotations, and filters in a dashboard.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "dashboard",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a5c34be8-bd3a-58be-b29a-8a5a000edea9",
+   "to": "87048d31-e182-5010-8aa1-9a396ded0f2f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "87048d31-e182-5010-8aa1-9a396ded0f2f",
+   "to": "ddde9240-7f17-5a44-b210-514d5b7407a2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "ddde9240-7f17-5a44-b210-514d5b7407a2",
+   "to": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "to": "87048d31-e182-5010-8aa1-9a396ded0f2f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5c34be8-bd3a-58be-b29a-8a5a000edea9",
+   "to": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "to": "a8b1c796-ec57-5749-907c-d5dfb705ea89",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart_collection']": "from['outputs']['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "a8b1c796-ec57-5749-907c-d5dfb705ea89",
+   "to": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_collection']": "from['chart_collection']"
+    }
+   }
+  },
+  {
+   "from": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "to": "ad071385-a33e-5a63-9d09-c1f909e9863d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5c34be8-bd3a-58be-b29a-8a5a000edea9",
+   "to": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "to": "41cf9216-a88b-536e-a64e-f92c2f167021",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['dashboard']": "from['outputs']['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "41cf9216-a88b-536e-a64e-f92c2f167021",
+   "to": "208aecfe-5dcf-5f78-ae26-e7cfd59f1338",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['dashboard']": "from['dashboard']"
+    }
+   }
+  },
+  {
+   "from": "208aecfe-5dcf-5f78-ae26-e7cfd59f1338",
+   "to": "98c0b038-6a2f-5afa-bad3-951bec3b22c0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5c34be8-bd3a-58be-b29a-8a5a000edea9",
+   "to": "208aecfe-5dcf-5f78-ae26-e7cfd59f1338",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

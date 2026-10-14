@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "49130770-32a0-5317-aec4-e25491df1043",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Selected Categorical Column Flags",
+    "description": "This AP takes table rows and a feature-selection object, converts the chosen categorical columns into 0/1 indicator columns, removes the original categorical columns, and returns encoded_rows.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "f1ed1fb0-7466-5969-99fe-7ab53d6790d7",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "49130770-32a0-5317-aec4-e25491df1043",
+   "to": "f1ed1fb0-7466-5969-99fe-7ab53d6790d7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

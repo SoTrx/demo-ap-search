@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "572c8b65-6e8a-5fbb-9db9-d77dbf450a0e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Top-K Image Embedding Rankings",
+    "description": "Given query embeddings, an image index, and a top-k limit, this pattern returns the closest indexed image embeddings as per-query rankings.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "d9a63931-f4e0-5bb6-82a4-a7a7ce0fec1e",
+   "labels": [
+    "Image_Similarity_Searcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_searcher",
+    "description": "Returns the closest indexed image embeddings for each query embedding, limited to the requested top-k count.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query_embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "top_k",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rankings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "572c8b65-6e8a-5fbb-9db9-d77dbf450a0e",
+   "to": "d9a63931-f4e0-5bb6-82a4-a7a7ce0fec1e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

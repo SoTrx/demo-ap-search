@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "015ab9ab-9bf3-551e-9ec6-dfcc9aa5c542",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Filter Points Within Rectangle",
+    "description": "Returns the subset of point geometries that lie inside a given rectangular bounding box.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "a70fd08b-02a1-5185-b296-2af0ccbbe83a",
+   "labels": [
+    "Filter_Points_By_Bounding_Box_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "filter_points_by_bbox",
+    "description": "Keeps point geometries whose coordinates fall inside the supplied rectangular bounds.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "bounds",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "015ab9ab-9bf3-551e-9ec6-dfcc9aa5c542",
+   "to": "a70fd08b-02a1-5185-b296-2af0ccbbe83a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

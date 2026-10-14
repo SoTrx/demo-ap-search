@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "3a37a0aa-fc90-5e04-869b-46c6f7178fdb",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Level-Based MathE MCQ Selection",
+    "description": "Selects MathE multiple-choice questions for a topic and numeric proficiency level and returns the question items as JSON text without answer explanations.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "35cec421-9ea6-58e9-baf4-88e3cb858cdc",
+   "labels": [
+    "Test_Recommendation_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Test Recommendation",
+    "description": "Selects MathE multiple-choice questions (statement, answer options, index of the correct option), returned as JSON text, suited to a student's proficiency level on a MathE topic. Returns the questions only, without any explanation of the answers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "level",
+      "type": "number",
+      "required": true,
+      "default": 0.5
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3a37a0aa-fc90-5e04-869b-46c6f7178fdb",
+   "to": "35cec421-9ea6-58e9-baf4-88e3cb858cdc",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

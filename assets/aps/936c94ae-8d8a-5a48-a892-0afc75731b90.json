@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "936c94ae-8d8a-5a48-a892-0afc75731b90",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe Query Entity Enrichment",
+    "description": "Validates a provenance report before running a supplied SQL query and merges the returned rows into entity link records to add derived fields without changing unrelated entity fields.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "2f0d43b9-806a-5649-b841-924532aa98c3",
+   "labels": [
+    "Provenance_Policy_Check_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Provenance Policy Check",
+    "description": "Checks whether a provenance report lists required sources and transformations and returns a compliance flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "report",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "21aff89c-dac2-58c9-903e-282079e7e501",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "9f360321-28a2-5e24-91fb-d6fb2b146e70",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "372fd1b5-0b22-577b-9e92-b00b15eec8f1",
+   "labels": [
+    "Graph_Enrichment_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_enrichment_joiner",
+    "description": "Joins query result rows to entity link records to add graph-derived fields to each entity record. Returns enriched entity records without changing unrelated fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "enriched_entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "936c94ae-8d8a-5a48-a892-0afc75731b90",
+   "to": "2f0d43b9-806a-5649-b841-924532aa98c3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2f0d43b9-806a-5649-b841-924532aa98c3",
+   "to": "21aff89c-dac2-58c9-903e-282079e7e501",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "21aff89c-dac2-58c9-903e-282079e7e501",
+   "to": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "to": "2f0d43b9-806a-5649-b841-924532aa98c3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "936c94ae-8d8a-5a48-a892-0afc75731b90",
+   "to": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "to": "9f360321-28a2-5e24-91fb-d6fb2b146e70",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "9f360321-28a2-5e24-91fb-d6fb2b146e70",
+   "to": "372fd1b5-0b22-577b-9e92-b00b15eec8f1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['result_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "372fd1b5-0b22-577b-9e92-b00b15eec8f1",
+   "to": "b7889ed5-29de-57c7-8527-c9806c2d2fab",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "936c94ae-8d8a-5a48-a892-0afc75731b90",
+   "to": "372fd1b5-0b22-577b-9e92-b00b15eec8f1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

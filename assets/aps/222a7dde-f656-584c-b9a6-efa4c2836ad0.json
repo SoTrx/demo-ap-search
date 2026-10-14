@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "222a7dde-f656-584c-b9a6-efa4c2836ad0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Page Image Captioner",
+    "description": "Prepares an ordered batch of page images and generates one short caption per page using a selected vision model.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "9b88771a-e627-5832-9c8e-1591f24834bd",
+   "labels": [
+    "Image_Batch_Preparer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_batch_preparer",
+    "description": "Normalizes an ordered array of page images into a standard image batch with consistent size, orientation, and color format.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "278c1cdb-afe4-5e08-b314-c528bf6693b1",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "images"
+   }
+  },
+  {
+   "id": "b2095fba-6f57-5e21-8f4f-6adc0cb4ac03",
+   "labels": [
+    "Image_Caption_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_caption_generator",
+    "description": "Generates a short natural-language caption for each image in an image batch. Returns one caption record per image in the same order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "captions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "222a7dde-f656-584c-b9a6-efa4c2836ad0",
+   "to": "9b88771a-e627-5832-9c8e-1591f24834bd",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9b88771a-e627-5832-9c8e-1591f24834bd",
+   "to": "278c1cdb-afe4-5e08-b314-c528bf6693b1",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['images']": "from['outputs']['images']"
+    }
+   }
+  },
+  {
+   "from": "278c1cdb-afe4-5e08-b314-c528bf6693b1",
+   "to": "b2095fba-6f57-5e21-8f4f-6adc0cb4ac03",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['images']": "from['images']"
+    }
+   }
+  },
+  {
+   "from": "b2095fba-6f57-5e21-8f4f-6adc0cb4ac03",
+   "to": "9b88771a-e627-5832-9c8e-1591f24834bd",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "222a7dde-f656-584c-b9a6-efa4c2836ad0",
+   "to": "b2095fba-6f57-5e21-8f4f-6adc0cb4ac03",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

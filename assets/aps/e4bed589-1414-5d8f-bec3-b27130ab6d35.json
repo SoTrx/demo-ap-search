@@ -1,0 +1,239 @@
+{
+ "nodes": [
+  {
+   "id": "e4bed589-1414-5d8f-bec3-b27130ab6d35",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cross-Source Entity Graph Linking",
+    "description": "This AP matches records from two sources using supplied attribute mappings, groups records that represent the same real-world entity above a threshold, and returns node link records that connect each accepted group to existing graph nodes.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "23dca36c-32ee-5914-91b3-c6f25f8b7f29",
+   "labels": [
+    "Entity_Match_Candidate_Generator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_match_candidate_generator",
+    "description": "Generates candidate cross-source matches between two entity record sets using mapped attributes. It returns candidate pairs before clustering.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "573bd5a8-c202-50d9-87fc-900a2444331e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "candidate_pairs"
+   }
+  },
+  {
+   "id": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "labels": [
+    "Entity_Cluster_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_cluster_builder",
+    "description": "Groups candidate entity matches into clusters that represent the same real-world entity. It uses the supplied threshold to avoid chaining weak matches together.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4050d822-c46d-560c-b5b6-99af72c9255a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entity_groups"
+   }
+  },
+  {
+   "id": "3eb9f46d-4088-5f7d-a741-2a84810a5fde",
+   "labels": [
+    "Cluster_Graph_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cluster_graph_linker",
+    "description": "Links resolved entity record groups to existing graph nodes by matching cluster attributes to node properties in the triples. Returns node link records that map cluster identifiers to node identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_record_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "node_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e4bed589-1414-5d8f-bec3-b27130ab6d35",
+   "to": "23dca36c-32ee-5914-91b3-c6f25f8b7f29",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "23dca36c-32ee-5914-91b3-c6f25f8b7f29",
+   "to": "573bd5a8-c202-50d9-87fc-900a2444331e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['candidate_pairs']": "from['outputs']['candidate_pairs']"
+    }
+   }
+  },
+  {
+   "from": "573bd5a8-c202-50d9-87fc-900a2444331e",
+   "to": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['candidate_pairs']": "from['candidate_pairs']"
+    }
+   }
+  },
+  {
+   "from": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "to": "23dca36c-32ee-5914-91b3-c6f25f8b7f29",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e4bed589-1414-5d8f-bec3-b27130ab6d35",
+   "to": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "to": "4050d822-c46d-560c-b5b6-99af72c9255a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entity_groups']": "from['outputs']['entity_groups']"
+    }
+   }
+  },
+  {
+   "from": "4050d822-c46d-560c-b5b6-99af72c9255a",
+   "to": "3eb9f46d-4088-5f7d-a741-2a84810a5fde",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entity_record_groups']": "from['entity_groups']"
+    }
+   }
+  },
+  {
+   "from": "3eb9f46d-4088-5f7d-a741-2a84810a5fde",
+   "to": "ca910ae5-2107-589f-9b0c-ec285db6d88e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e4bed589-1414-5d8f-bec3-b27130ab6d35",
+   "to": "3eb9f46d-4088-5f7d-a741-2a84810a5fde",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

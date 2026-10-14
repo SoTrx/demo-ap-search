@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3ca06f6d-f2b0-5d6a-bc5e-fee4623f4c96",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Resampled Percentage Return Series",
+    "description": "Computes period-over-period percentage returns from a level time series and resamples the return series to the target granularity.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "e1b2958c-7ddf-52da-8212-1dc30da68cdc",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "52c77bb9-d4c1-5638-8f8e-69913edc2909",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "returns"
+   }
+  },
+  {
+   "id": "0a57c973-a315-5c09-b365-b5140b7e3b20",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3ca06f6d-f2b0-5d6a-bc5e-fee4623f4c96",
+   "to": "e1b2958c-7ddf-52da-8212-1dc30da68cdc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e1b2958c-7ddf-52da-8212-1dc30da68cdc",
+   "to": "52c77bb9-d4c1-5638-8f8e-69913edc2909",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['returns']": "from['outputs']['returns']"
+    }
+   }
+  },
+  {
+   "from": "52c77bb9-d4c1-5638-8f8e-69913edc2909",
+   "to": "0a57c973-a315-5c09-b365-b5140b7e3b20",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['returns']"
+    }
+   }
+  },
+  {
+   "from": "0a57c973-a315-5c09-b365-b5140b7e3b20",
+   "to": "e1b2958c-7ddf-52da-8212-1dc30da68cdc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3ca06f6d-f2b0-5d6a-bc5e-fee4623f4c96",
+   "to": "0a57c973-a315-5c09-b365-b5140b7e3b20",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

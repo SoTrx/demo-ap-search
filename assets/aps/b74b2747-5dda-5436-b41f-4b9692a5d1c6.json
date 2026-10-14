@@ -1,0 +1,155 @@
+{
+ "nodes": [
+  {
+   "id": "b74b2747-5dda-5436-b41f-4b9692a5d1c6",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic Gap Study Plan Builder",
+    "description": "Given a performance profile, topic, material limit, and question set, recommends matching study materials and combines them with the questions into a JSON study plan practice sequence.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "121e2b4e-61c9-5c4b-926c-88a2bcb9f8f3",
+   "labels": [
+    "Study_Material_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_material_recommender",
+    "description": "Recommends study material entries as JSON for a student's topic gap based on performance profile. Returns material entries only, without answers or explanations.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "material_limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "246d98ac-06a2-58e3-8c65-9ffe44604b1c",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "materials"
+   }
+  },
+  {
+   "id": "d409a443-d455-53ba-bf9b-31d4eb6a0066",
+   "labels": [
+    "Study_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_plan_builder",
+    "description": "Builds a study-plan JSON that interleaves recommended material and recommended questions into a practice sequence. Returns the plan only, without execution instructions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "study_plan",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b74b2747-5dda-5436-b41f-4b9692a5d1c6",
+   "to": "121e2b4e-61c9-5c4b-926c-88a2bcb9f8f3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "121e2b4e-61c9-5c4b-926c-88a2bcb9f8f3",
+   "to": "246d98ac-06a2-58e3-8c65-9ffe44604b1c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['materials']": "from['outputs']['materials']"
+    }
+   }
+  },
+  {
+   "from": "246d98ac-06a2-58e3-8c65-9ffe44604b1c",
+   "to": "d409a443-d455-53ba-bf9b-31d4eb6a0066",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['materials']": "from['materials']"
+    }
+   }
+  },
+  {
+   "from": "d409a443-d455-53ba-bf9b-31d4eb6a0066",
+   "to": "121e2b4e-61c9-5c4b-926c-88a2bcb9f8f3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b74b2747-5dda-5436-b41f-4b9692a5d1c6",
+   "to": "d409a443-d455-53ba-bf9b-31d4eb6a0066",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

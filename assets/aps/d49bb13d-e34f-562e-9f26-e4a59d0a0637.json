@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "d49bb13d-e34f-562e-9f26-e4a59d0a0637",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Simple Linear Regression Fit",
+    "description": "Fits a simple linear regression model to numeric table rows using a supplied column mapping and returns the fitted model.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "1ce5c1e2-c15f-5c08-8296-534a1d80b8c2",
+   "labels": [
+    "Simple_Linear_Regression_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "simple_linear_regression_fit",
+    "description": "Fits a simple linear regression model to selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "d49bb13d-e34f-562e-9f26-e4a59d0a0637",
+   "to": "1ce5c1e2-c15f-5c08-8296-534a1d80b8c2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

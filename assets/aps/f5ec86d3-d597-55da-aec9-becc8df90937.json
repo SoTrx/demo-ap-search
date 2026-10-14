@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "f5ec86d3-d597-55da-aec9-becc8df90937",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Encoded Categorical Dataset Profile",
+    "description": "Profiles row data after converting selected categorical columns into binary indicator columns, returning only row counts, null rates, unique counts, inferred types, and numeric ranges for the resulting columns.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "9cd2b561-80c4-5fbb-917f-38f039924e77",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e1dfb6ca-230a-5472-816a-b46a34a15e18",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "6e21ab0e-34dc-58eb-b3bc-221b4aa05057",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f5ec86d3-d597-55da-aec9-becc8df90937",
+   "to": "9cd2b561-80c4-5fbb-917f-38f039924e77",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9cd2b561-80c4-5fbb-917f-38f039924e77",
+   "to": "e1dfb6ca-230a-5472-816a-b46a34a15e18",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "e1dfb6ca-230a-5472-816a-b46a34a15e18",
+   "to": "6e21ab0e-34dc-58eb-b3bc-221b4aa05057",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "6e21ab0e-34dc-58eb-b3bc-221b4aa05057",
+   "to": "9cd2b561-80c4-5fbb-917f-38f039924e77",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f5ec86d3-d597-55da-aec9-becc8df90937",
+   "to": "6e21ab0e-34dc-58eb-b3bc-221b4aa05057",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

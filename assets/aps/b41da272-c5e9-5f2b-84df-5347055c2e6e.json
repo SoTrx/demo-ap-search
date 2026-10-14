@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "b41da272-c5e9-5f2b-84df-5347055c2e6e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Language-Confident Transcript Filter",
+    "description": "Convert audio segments to timestamped transcripts, then retain only the transcript records whose associated language identification confidence reaches the specified threshold.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "10894261-46f7-5bfb-99da-3b045647c769",
+   "labels": [
+    "Speech_Transcriber_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speech_transcriber",
+    "description": "Converts audio segments to text using an automatic speech recognition model. Returns transcript records containing recognized text, segment timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "75267dd0-79fe-5164-834c-7ed9ca95ae3b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "transcripts"
+   }
+  },
+  {
+   "id": "7f5135c9-303b-5134-aa4c-0246ec419709",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b41da272-c5e9-5f2b-84df-5347055c2e6e",
+   "to": "10894261-46f7-5bfb-99da-3b045647c769",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "10894261-46f7-5bfb-99da-3b045647c769",
+   "to": "75267dd0-79fe-5164-834c-7ed9ca95ae3b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['transcripts']": "from['outputs']['transcripts']"
+    }
+   }
+  },
+  {
+   "from": "75267dd0-79fe-5164-834c-7ed9ca95ae3b",
+   "to": "7f5135c9-303b-5134-aa4c-0246ec419709",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['transcripts']"
+    }
+   }
+  },
+  {
+   "from": "7f5135c9-303b-5134-aa4c-0246ec419709",
+   "to": "10894261-46f7-5bfb-99da-3b045647c769",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b41da272-c5e9-5f2b-84df-5347055c2e6e",
+   "to": "7f5135c9-303b-5134-aa4c-0246ec419709",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

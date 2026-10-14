@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "dd561d88-ac33-5ba4-ad89-1f108ff2d6c3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Normalized Extreme Climate Indicator",
+    "description": "Flags readings that cross a threshold and combines them with period and regional comparisons into a normalized climate indicator.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "c1f2c453-97cb-5ac1-8e30-10eb7be027c5",
+   "labels": [
+    "Time_Series_Anomaly_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Anomaly Detector",
+    "description": "Flags observations in a time series whose deviation exceeds a numeric threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "anomalies",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2e0afb80-b57f-5df1-a3e3-5e8074455f78",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "anomalies"
+   }
+  },
+  {
+   "id": "d9aacc97-5e72-5789-9d9b-f6da76e75eb7",
+   "labels": [
+    "Climate_Indicator_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "climate_indicator_calculator",
+    "description": "Computes a normalized climate indicator from period comparison, regional comparison, and detected extreme events.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "period_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "regional_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "extreme_events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "indicator",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dd561d88-ac33-5ba4-ad89-1f108ff2d6c3",
+   "to": "c1f2c453-97cb-5ac1-8e30-10eb7be027c5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c1f2c453-97cb-5ac1-8e30-10eb7be027c5",
+   "to": "2e0afb80-b57f-5df1-a3e3-5e8074455f78",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['anomalies']": "from['outputs']['anomalies']"
+    }
+   }
+  },
+  {
+   "from": "2e0afb80-b57f-5df1-a3e3-5e8074455f78",
+   "to": "d9aacc97-5e72-5789-9d9b-f6da76e75eb7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['extreme_events']": "from['anomalies']"
+    }
+   }
+  },
+  {
+   "from": "d9aacc97-5e72-5789-9d9b-f6da76e75eb7",
+   "to": "c1f2c453-97cb-5ac1-8e30-10eb7be027c5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "dd561d88-ac33-5ba4-ad89-1f108ff2d6c3",
+   "to": "d9aacc97-5e72-5789-9d9b-f6da76e75eb7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

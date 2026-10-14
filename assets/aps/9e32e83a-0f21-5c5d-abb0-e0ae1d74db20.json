@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "9e32e83a-0f21-5c5d-abb0-e0ae1d74db20",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Imputed Records Join",
+    "description": "This AP fills missing values in selected feature columns of input rows and then joins those filled rows with another table while marking each final record's source.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "8271b567-bc92-577d-b3ed-0c9e9e90f041",
+   "labels": [
+    "Impute_Missing_Values_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "impute_missing_values",
+    "description": "Fills missing values in selected feature columns of table rows using a mean for numeric columns and a mode for categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "2c09eb1e-f918-5fe2-80e5-108426b4a411",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "filled_rows"
+   }
+  },
+  {
+   "id": "57cc1644-4c7e-5a53-b2df-6d279a3070f2",
+   "labels": [
+    "Heterogeneous_Table_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "heterogeneous_table_joiner",
+    "description": "Joins two table datasets using a join key specification and returns the combined rows. It keeps source table markers to distinguish the two sides.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "join_key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "joined_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9e32e83a-0f21-5c5d-abb0-e0ae1d74db20",
+   "to": "8271b567-bc92-577d-b3ed-0c9e9e90f041",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8271b567-bc92-577d-b3ed-0c9e9e90f041",
+   "to": "2c09eb1e-f918-5fe2-80e5-108426b4a411",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['filled_rows']": "from['outputs']['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "2c09eb1e-f918-5fe2-80e5-108426b4a411",
+   "to": "57cc1644-4c7e-5a53-b2df-6d279a3070f2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['left_table_records']": "from['filled_rows']"
+    }
+   }
+  },
+  {
+   "from": "57cc1644-4c7e-5a53-b2df-6d279a3070f2",
+   "to": "8271b567-bc92-577d-b3ed-0c9e9e90f041",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9e32e83a-0f21-5c5d-abb0-e0ae1d74db20",
+   "to": "57cc1644-4c7e-5a53-b2df-6d279a3070f2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

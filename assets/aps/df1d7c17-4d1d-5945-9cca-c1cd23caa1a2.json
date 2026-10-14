@@ -1,0 +1,239 @@
+{
+ "nodes": [
+  {
+   "id": "df1d7c17-4d1d-5945-9cca-c1cd23caa1a2",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Validated Translation Chunking",
+    "description": "Validates translated segment alignments against a threshold, rebuilds a translated document with source fallback, and returns an ordered array of text chunks.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "0d8426e9-c526-5209-97be-fcafaaf95c9b",
+   "labels": [
+    "Translation_Alignment_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_alignment_validator",
+    "description": "Reviews segment alignments against a quality threshold and returns a validation report plus the alignments that pass.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accept_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "validation_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3622534d-69a3-526d-b410-4c32677f2824",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "accepted_segment_alignment"
+   }
+  },
+  {
+   "id": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "labels": [
+    "Multilingual_Text_Recomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "multilingual_text_recomposer",
+    "description": "Reassembles accepted aligned translated chunks into a full translated text, using original source chunks as fallback for unaligned content.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8ba2d9d4-e71a-5513-b582-7bcab25b7c05",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "translated_text"
+   }
+  },
+  {
+   "id": "e1a2ec74-760a-5434-96ea-a6bc219b2c3c",
+   "labels": [
+    "Document_Chunker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "document_chunker",
+    "description": "Splits a long plain-text document into an ordered array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "df1d7c17-4d1d-5945-9cca-c1cd23caa1a2",
+   "to": "0d8426e9-c526-5209-97be-fcafaaf95c9b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0d8426e9-c526-5209-97be-fcafaaf95c9b",
+   "to": "3622534d-69a3-526d-b410-4c32677f2824",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['accepted_segment_alignment']": "from['outputs']['accepted_segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "3622534d-69a3-526d-b410-4c32677f2824",
+   "to": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['accepted_segment_alignment']": "from['accepted_segment_alignment']"
+    }
+   }
+  },
+  {
+   "from": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "to": "0d8426e9-c526-5209-97be-fcafaaf95c9b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "df1d7c17-4d1d-5945-9cca-c1cd23caa1a2",
+   "to": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "to": "8ba2d9d4-e71a-5513-b582-7bcab25b7c05",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['translated_text']": "from['outputs']['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "8ba2d9d4-e71a-5513-b582-7bcab25b7c05",
+   "to": "e1a2ec74-760a-5434-96ea-a6bc219b2c3c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['text']": "from['translated_text']"
+    }
+   }
+  },
+  {
+   "from": "e1a2ec74-760a-5434-96ea-a6bc219b2c3c",
+   "to": "2fb8ca88-7614-5348-a9d0-b8310aa42871",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "df1d7c17-4d1d-5945-9cca-c1cd23caa1a2",
+   "to": "e1a2ec74-760a-5434-96ea-a6bc219b2c3c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

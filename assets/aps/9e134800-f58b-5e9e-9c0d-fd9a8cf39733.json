@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "9e134800-f58b-5e9e-9c0d-fd9a8cf39733",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Per Row Class Attribution Scores",
+    "description": "For each input row, explains the predicted class by assigning attribution scores to the model's feature columns.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "ffb5344d-655e-5604-9ef7-5f89adc1ba1a",
+   "labels": [
+    "Explain_Classifier_Predictions_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "explain_classifier_predictions",
+    "description": "Attributes the predicted class for each input row to the model feature columns and returns row-level attribution scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "feature_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "attributions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9e134800-f58b-5e9e-9c0d-fd9a8cf39733",
+   "to": "ffb5344d-655e-5604-9ef7-5f89adc1ba1a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

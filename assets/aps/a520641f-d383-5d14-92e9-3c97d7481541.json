@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "a520641f-d383-5d14-92e9-3c97d7481541",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weakest Topic Question Generator",
+    "description": "Given a student performance profile, a database schema, and a question limit, it identifies the weakest subject topic, narrows the schema to the relevant tables and columns, and returns recommended analytic questions.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "0a5ea8cb-5284-5e3b-a34e-6cfe756901bc",
+   "labels": [
+    "Topic_Gap_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "topic_gap_identifier",
+    "description": "Identifies the weakest subject topic from a student performance profile and returns it as a single topic string. Returns only the topic, not a remediation plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weakest_topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "35dace5c-705d-5fce-910e-c794947f29ae",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "weakest_topic"
+   }
+  },
+  {
+   "id": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "89322129-0256-55f2-ba51-20c7ca2e470b",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "d7c4350a-9f27-54e9-90a1-cee7586e9bae",
+   "labels": [
+    "Schema_Question_Suggester_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Question Suggester",
+    "description": "Generates analytic questions that can be asked about a database schema and returns them as recommended question JSON.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a520641f-d383-5d14-92e9-3c97d7481541",
+   "to": "0a5ea8cb-5284-5e3b-a34e-6cfe756901bc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0a5ea8cb-5284-5e3b-a34e-6cfe756901bc",
+   "to": "35dace5c-705d-5fce-910e-c794947f29ae",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weakest_topic']": "from['outputs']['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "35dace5c-705d-5fce-910e-c794947f29ae",
+   "to": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['topic']": "from['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "to": "0a5ea8cb-5284-5e3b-a34e-6cfe756901bc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a520641f-d383-5d14-92e9-3c97d7481541",
+   "to": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "to": "89322129-0256-55f2-ba51-20c7ca2e470b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "89322129-0256-55f2-ba51-20c7ca2e470b",
+   "to": "d7c4350a-9f27-54e9-90a1-cee7586e9bae",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "d7c4350a-9f27-54e9-90a1-cee7586e9bae",
+   "to": "11e3507b-6256-5ca1-ab4f-eaa92a7772aa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a520641f-d383-5d14-92e9-3c97d7481541",
+   "to": "d7c4350a-9f27-54e9-90a1-cee7586e9bae",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

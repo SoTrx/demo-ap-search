@@ -1,0 +1,317 @@
+{
+ "nodes": [
+  {
+   "id": "01e75eb9-0d56-530e-bcaa-49db438b5257",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Occupation Aggregates",
+    "description": "Applies survey weights to coded occupation records, builds weighted cross-tabulation estimates for mapped variables, converts those estimates into region-time readings, and summarizes the selected metric by region and period.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "70029311-3580-50b5-b27a-23bc3ddf2fba",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "64f2e33e-3c63-5ff2-a908-97026daf4547",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "weighted_survey_records"
+   }
+  },
+  {
+   "id": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "051b1054-b281-57e8-98c7-0c21d5e15a0e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e3491d90-60bf-5c2a-a3f0-2ce14664ea26",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "c7cbd716-0fb0-5088-8052-2ddf9890a4ec",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "01e75eb9-0d56-530e-bcaa-49db438b5257",
+   "to": "70029311-3580-50b5-b27a-23bc3ddf2fba",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "70029311-3580-50b5-b27a-23bc3ddf2fba",
+   "to": "64f2e33e-3c63-5ff2-a908-97026daf4547",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weighted_survey_records']": "from['outputs']['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "64f2e33e-3c63-5ff2-a908-97026daf4547",
+   "to": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['weighted_survey_records']": "from['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "to": "70029311-3580-50b5-b27a-23bc3ddf2fba",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01e75eb9-0d56-530e-bcaa-49db438b5257",
+   "to": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "to": "051b1054-b281-57e8-98c7-0c21d5e15a0e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "051b1054-b281-57e8-98c7-0c21d5e15a0e",
+   "to": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "to": "5c771f59-4941-5f1b-9a04-8cb2573d8afa",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01e75eb9-0d56-530e-bcaa-49db438b5257",
+   "to": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "to": "e3491d90-60bf-5c2a-a3f0-2ce14664ea26",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "e3491d90-60bf-5c2a-a3f0-2ce14664ea26",
+   "to": "c7cbd716-0fb0-5088-8052-2ddf9890a4ec",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "c7cbd716-0fb0-5088-8052-2ddf9890a4ec",
+   "to": "b6e05eab-5229-55f0-8fe9-e7955d022a99",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "01e75eb9-0d56-530e-bcaa-49db438b5257",
+   "to": "c7cbd716-0fb0-5088-8052-2ddf9890a4ec",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

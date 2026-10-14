@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "b6206c04-846a-5ba1-a0b2-eddfc5ac422a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Categorical Prediction With Probabilities",
+    "description": "Converts selected categorical columns in feature rows into binary indicator columns and uses a trained classifier to return predicted classes and probabilities.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "dc43d340-efa2-529e-aa16-d91a975be128",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4bf53ace-a617-5415-8cd3-df10dcaa884f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "89c66ebd-e380-51d8-8de3-b65147f6005e",
+   "labels": [
+    "Predict_With_Classifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "predict_with_classifier",
+    "description": "Applies the trained classifier to feature rows and returns result rows containing predicted classes and class probabilities.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b6206c04-846a-5ba1-a0b2-eddfc5ac422a",
+   "to": "dc43d340-efa2-529e-aa16-d91a975be128",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "dc43d340-efa2-529e-aa16-d91a975be128",
+   "to": "4bf53ace-a617-5415-8cd3-df10dcaa884f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "4bf53ace-a617-5415-8cd3-df10dcaa884f",
+   "to": "89c66ebd-e380-51d8-8de3-b65147f6005e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "89c66ebd-e380-51d8-8de3-b65147f6005e",
+   "to": "dc43d340-efa2-529e-aa16-d91a975be128",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b6206c04-846a-5ba1-a0b2-eddfc5ac422a",
+   "to": "89c66ebd-e380-51d8-8de3-b65147f6005e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

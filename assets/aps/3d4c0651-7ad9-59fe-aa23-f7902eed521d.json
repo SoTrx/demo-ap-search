@@ -1,0 +1,269 @@
+{
+ "nodes": [
+  {
+   "id": "3d4c0651-7ad9-59fe-aa23-f7902eed521d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Relevant Schema Query Safety Check",
+    "description": "The AP narrows a database schema to a subject topic, rewrites an SQL query for better performance against the narrowed schema, and returns a Boolean flag indicating whether the rewritten query references only the narrowed tables and columns.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "54e1d3d4-4728-50fb-bb87-2081e12ce7e0",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fdb803bb-9227-5f2d-b957-1af35b33496e",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "query"
+   }
+  },
+  {
+   "id": "59511690-c766-5c10-bd7f-ebc2a1926585",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3d4c0651-7ad9-59fe-aa23-f7902eed521d",
+   "to": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "to": "54e1d3d4-4728-50fb-bb87-2081e12ce7e0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "54e1d3d4-4728-50fb-bb87-2081e12ce7e0",
+   "to": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "to": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3d4c0651-7ad9-59fe-aa23-f7902eed521d",
+   "to": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "to": "fdb803bb-9227-5f2d-b957-1af35b33496e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['query']": "from['outputs']['query']"
+    }
+   }
+  },
+  {
+   "from": "fdb803bb-9227-5f2d-b957-1af35b33496e",
+   "to": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['query']": "from['query']"
+    }
+   }
+  },
+  {
+   "from": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "to": "59511690-c766-5c10-bd7f-ebc2a1926585",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "59511690-c766-5c10-bd7f-ebc2a1926585",
+   "to": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "to": "4cd8b125-48d7-5992-9261-fbedae840d53",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "to": "7cd17d76-17c7-5479-9f54-def59f0648cb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3d4c0651-7ad9-59fe-aa23-f7902eed521d",
+   "to": "1c445c6e-217a-5206-b194-2357ccbf07a4",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

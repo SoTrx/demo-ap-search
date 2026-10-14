@@ -1,0 +1,269 @@
+{
+ "nodes": [
+  {
+   "id": "b896ff54-cc6f-5bdf-ad45-b53638aafea4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjusted Volatility From Returns",
+    "description": "Produces a seasonally adjusted rolling realized volatility series from a return array, using a rolling window and a seasonal period length.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a36fe4ae-a29d-5906-bab0-8b2ca685d59d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a17bf491-a973-597f-b270-67a4d343ae9b",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "dadd410b-d266-5c90-a7b3-eb977eef247b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b896ff54-cc6f-5bdf-ad45-b53638aafea4",
+   "to": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "to": "a36fe4ae-a29d-5906-bab0-8b2ca685d59d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "a36fe4ae-a29d-5906-bab0-8b2ca685d59d",
+   "to": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "to": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b896ff54-cc6f-5bdf-ad45-b53638aafea4",
+   "to": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "to": "a17bf491-a973-597f-b270-67a4d343ae9b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "a17bf491-a973-597f-b270-67a4d343ae9b",
+   "to": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "to": "dadd410b-d266-5c90-a7b3-eb977eef247b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "dadd410b-d266-5c90-a7b3-eb977eef247b",
+   "to": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "to": "e84fc3b0-4ced-5e9c-8874-74774c775eeb",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "to": "fe6be953-03d6-5189-a8a2-c828a485fd3f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "b896ff54-cc6f-5bdf-ad45-b53638aafea4",
+   "to": "c73bd101-1fe2-581e-a112-b5a37bf38b4a",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

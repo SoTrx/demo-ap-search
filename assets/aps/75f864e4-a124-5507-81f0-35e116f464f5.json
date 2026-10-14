@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "75f864e4-a124-5507-81f0-35e116f464f5",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Trend and Seasonality Decomposition",
+    "description": "Decomposes a supplied economic indicator series into a trend array and a seasonality object after estimating and removing its seasonal profile.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "2c787b2a-a9b4-58b9-9a11-7a0ba4e1ab3b",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a06baf29-aa3e-5b63-953a-5384438e7d06",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3808f2f2-99c8-5ca6-812e-b53bd018d141",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "adjusted_series"
+   }
+  },
+  {
+   "id": "01016a4c-cbb8-58ff-9953-74ac19cf78b1",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "75f864e4-a124-5507-81f0-35e116f464f5",
+   "to": "2c787b2a-a9b4-58b9-9a11-7a0ba4e1ab3b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2c787b2a-a9b4-58b9-9a11-7a0ba4e1ab3b",
+   "to": "a06baf29-aa3e-5b63-953a-5384438e7d06",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "a06baf29-aa3e-5b63-953a-5384438e7d06",
+   "to": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "to": "2c787b2a-a9b4-58b9-9a11-7a0ba4e1ab3b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "75f864e4-a124-5507-81f0-35e116f464f5",
+   "to": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "to": "3808f2f2-99c8-5ca6-812e-b53bd018d141",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['adjusted_series']": "from['outputs']['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "3808f2f2-99c8-5ca6-812e-b53bd018d141",
+   "to": "01016a4c-cbb8-58ff-9953-74ac19cf78b1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "01016a4c-cbb8-58ff-9953-74ac19cf78b1",
+   "to": "6f0b1ec3-90ce-563c-82fb-4983931d17fc",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "75f864e4-a124-5507-81f0-35e116f464f5",
+   "to": "01016a4c-cbb8-58ff-9953-74ac19cf78b1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

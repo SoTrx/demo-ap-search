@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "adf28ce3-a73f-5ca4-b2cb-f67d6cd07305",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Extract Tables From Page Images",
+    "description": "Segments page images into layout blocks, isolates table regions, and uses the associated OCR text to return header-and-cell table records.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "f6d44ca1-f278-513d-b1d4-ebc91cacfea2",
+   "labels": [
+    "Layout_Block_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "detect_layout_blocks",
+    "description": "Segments page images into layout blocks such as paragraphs, headings, figures, and tables.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5fba174b-f5f5-5424-be05-6866a51b302c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "layout_blocks"
+   }
+  },
+  {
+   "id": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "labels": [
+    "Table_Region_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_regions",
+    "description": "Selects table layout blocks and converts them into bounding table regions ready for cell extraction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0032c916-2be8-5467-9305-180f6c0bd40f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_regions"
+   }
+  },
+  {
+   "id": "1cdedabe-82d5-5195-a3c3-c71cb5a5616f",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "adf28ce3-a73f-5ca4-b2cb-f67d6cd07305",
+   "to": "f6d44ca1-f278-513d-b1d4-ebc91cacfea2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f6d44ca1-f278-513d-b1d4-ebc91cacfea2",
+   "to": "5fba174b-f5f5-5424-be05-6866a51b302c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['layout_blocks']": "from['outputs']['layout_blocks']"
+    }
+   }
+  },
+  {
+   "from": "5fba174b-f5f5-5424-be05-6866a51b302c",
+   "to": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['layout_blocks']": "from['layout_blocks']"
+    }
+   }
+  },
+  {
+   "from": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "to": "f6d44ca1-f278-513d-b1d4-ebc91cacfea2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "adf28ce3-a73f-5ca4-b2cb-f67d6cd07305",
+   "to": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "to": "0032c916-2be8-5467-9305-180f6c0bd40f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_regions']": "from['outputs']['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "0032c916-2be8-5467-9305-180f6c0bd40f",
+   "to": "1cdedabe-82d5-5195-a3c3-c71cb5a5616f",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['table_regions']": "from['table_regions']"
+    }
+   }
+  },
+  {
+   "from": "1cdedabe-82d5-5195-a3c3-c71cb5a5616f",
+   "to": "e353e1ea-1163-50e5-b163-5b76196a8aa2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "adf28ce3-a73f-5ca4-b2cb-f67d6cd07305",
+   "to": "1cdedabe-82d5-5195-a3c3-c71cb5a5616f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

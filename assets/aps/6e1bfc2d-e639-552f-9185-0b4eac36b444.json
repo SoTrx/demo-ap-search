@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "6e1bfc2d-e639-552f-9185-0b4eac36b444",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Geodesic Polygon Map Layer",
+    "description": "Generates a vector map layer specification from polygon features and their geodesic area metrics.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "2194d7cb-ac26-5e68-a11b-5aeccbd4720c",
+   "labels": [
+    "Compute_Polygon_Area_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "compute_polygon_area",
+    "description": "Calculates geodesic area metrics for each polygon feature.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "area_metrics",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a6e51b29-bb96-58fe-9257-b130e597bf29",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "area_metrics"
+   }
+  },
+  {
+   "id": "3d1da4fa-af9c-5a37-b64c-e06c9faa0513",
+   "labels": [
+    "Build_Area_Map_Layer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_area_map_layer",
+    "description": "Builds a vector map layer specification from polygons and their area metrics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "area_metrics",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layer",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6e1bfc2d-e639-552f-9185-0b4eac36b444",
+   "to": "2194d7cb-ac26-5e68-a11b-5aeccbd4720c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2194d7cb-ac26-5e68-a11b-5aeccbd4720c",
+   "to": "a6e51b29-bb96-58fe-9257-b130e597bf29",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['area_metrics']": "from['outputs']['area_metrics']"
+    }
+   }
+  },
+  {
+   "from": "a6e51b29-bb96-58fe-9257-b130e597bf29",
+   "to": "3d1da4fa-af9c-5a37-b64c-e06c9faa0513",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['area_metrics']": "from['area_metrics']"
+    }
+   }
+  },
+  {
+   "from": "3d1da4fa-af9c-5a37-b64c-e06c9faa0513",
+   "to": "2194d7cb-ac26-5e68-a11b-5aeccbd4720c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6e1bfc2d-e639-552f-9185-0b4eac36b444",
+   "to": "3d1da4fa-af9c-5a37-b64c-e06c9faa0513",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

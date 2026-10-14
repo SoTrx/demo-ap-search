@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "827ef01c-558a-55cd-80dd-7962c4065ed7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing Values After Encoding Report",
+    "description": "Converts selected categorical columns into binary indicator columns, drops the originals, and returns a report of null, empty, whitespace, and placeholder cells in the encoded table.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "9d11d524-2d08-5ed3-96ae-bdf3e48662a1",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8f5410db-2eff-5030-8862-218a4473559b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "encoded_rows"
+   }
+  },
+  {
+   "id": "21e0e7dd-44e3-5a76-bd96-8ae129982e40",
+   "labels": [
+    "Missing_Value_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "missing_value_detector",
+    "description": "Flags null, empty, whitespace, and placeholder cells in table rows, using the profile to identify likely text columns. Returns a missing-value report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "827ef01c-558a-55cd-80dd-7962c4065ed7",
+   "to": "9d11d524-2d08-5ed3-96ae-bdf3e48662a1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "9d11d524-2d08-5ed3-96ae-bdf3e48662a1",
+   "to": "8f5410db-2eff-5030-8862-218a4473559b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['encoded_rows']": "from['outputs']['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "8f5410db-2eff-5030-8862-218a4473559b",
+   "to": "21e0e7dd-44e3-5a76-bd96-8ae129982e40",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['encoded_rows']"
+    }
+   }
+  },
+  {
+   "from": "21e0e7dd-44e3-5a76-bd96-8ae129982e40",
+   "to": "9d11d524-2d08-5ed3-96ae-bdf3e48662a1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "827ef01c-558a-55cd-80dd-7962c4065ed7",
+   "to": "21e0e7dd-44e3-5a76-bd96-8ae129982e40",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "15e3b0ff-1216-52da-ba2a-8057cd14c646",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Mapped Column Value Translation Recommender",
+    "description": "It uses a column mapping and a domain comparison report to recommend value-level translations that make mapped columns compatible.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "558498a9-60fb-5492-a2fb-3d7257356659",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "15e3b0ff-1216-52da-ba2a-8057cd14c646",
+   "to": "558498a9-60fb-5492-a2fb-3d7257356659",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

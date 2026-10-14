@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e389ae23-77b4-51a1-8101-445ab7d524aa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "High Confidence Cleaned Transcripts",
+    "description": "Cleans raw transcript records by collapsing repeated words, removing filler disfluencies and normalizing whitespace, then returns only those cleaned records whose associated language identification confidence meets the supplied threshold.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "a38fcebe-f535-5cda-8d4a-136996c3197c",
+   "labels": [
+    "Transcript_Disfluency_Cleaner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "transcript_disfluency_cleaner",
+    "description": "Cleans transcript records by collapsing repeated words, removing filler disfluencies, and normalizing whitespace. Returns transcript records with timing and confidence preserved.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "cleaned_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "135bd96a-4007-5861-a3c3-3a7f0e151ba2",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "cleaned_transcripts"
+   }
+  },
+  {
+   "id": "f0c2d218-245a-530d-8a9a-b8849e3c1480",
+   "labels": [
+    "Language_Confidence_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "language_confidence_filter",
+    "description": "Keeps transcript records whose associated language identification confidence meets the supplied threshold. Returns only transcript records that pass the language confidence screen.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "language_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e389ae23-77b4-51a1-8101-445ab7d524aa",
+   "to": "a38fcebe-f535-5cda-8d4a-136996c3197c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a38fcebe-f535-5cda-8d4a-136996c3197c",
+   "to": "135bd96a-4007-5861-a3c3-3a7f0e151ba2",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['cleaned_transcripts']": "from['outputs']['cleaned_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "135bd96a-4007-5861-a3c3-3a7f0e151ba2",
+   "to": "f0c2d218-245a-530d-8a9a-b8849e3c1480",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['transcripts']": "from['cleaned_transcripts']"
+    }
+   }
+  },
+  {
+   "from": "f0c2d218-245a-530d-8a9a-b8849e3c1480",
+   "to": "a38fcebe-f535-5cda-8d4a-136996c3197c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e389ae23-77b4-51a1-8101-445ab7d524aa",
+   "to": "f0c2d218-245a-530d-8a9a-b8849e3c1480",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

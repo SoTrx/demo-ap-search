@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "89cc297c-e237-5bab-88bd-6c9867fdcae0",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Embedding Similarity Ranking",
+    "description": "Builds a visual similarity index from image embeddings and returns the closest indexed image embeddings for each query embedding, limited to the requested top-k count.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "c347af46-4387-5f01-94f5-e165ed57bc7b",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "484ebf2c-a7ab-5cb0-826f-fc7db4f27361",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "e280ce09-f900-5dd5-9d54-dcfc5c5c8831",
+   "labels": [
+    "Image_Similarity_Searcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_searcher",
+    "description": "Returns the closest indexed image embeddings for each query embedding, limited to the requested top-k count.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query_embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "top_k",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "rankings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "89cc297c-e237-5bab-88bd-6c9867fdcae0",
+   "to": "c347af46-4387-5f01-94f5-e165ed57bc7b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "c347af46-4387-5f01-94f5-e165ed57bc7b",
+   "to": "484ebf2c-a7ab-5cb0-826f-fc7db4f27361",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "484ebf2c-a7ab-5cb0-826f-fc7db4f27361",
+   "to": "e280ce09-f900-5dd5-9d54-dcfc5c5c8831",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "e280ce09-f900-5dd5-9d54-dcfc5c5c8831",
+   "to": "c347af46-4387-5f01-94f5-e165ed57bc7b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "89cc297c-e237-5bab-88bd-6c9867fdcae0",
+   "to": "e280ce09-f900-5dd5-9d54-dcfc5c5c8831",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

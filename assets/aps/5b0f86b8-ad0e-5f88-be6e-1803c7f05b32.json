@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "5b0f86b8-ad0e-5f88-be6e-1803c7f05b32",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Predicted vs Actual Class Matrix",
+    "description": "Counts each pair of predicted class and actual class from aligned model predictions and ground-truth labels into a matrix.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "b0d3e08a-38f3-5505-bfa9-95255849bca5",
+   "labels": [
+    "Build_Confusion_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_confusion_matrix",
+    "description": "Counts predicted class versus actual class pairs from aligned prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matrix",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5b0f86b8-ad0e-5f88-be6e-1803c7f05b32",
+   "to": "b0d3e08a-38f3-5505-bfa9-95255849bca5",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

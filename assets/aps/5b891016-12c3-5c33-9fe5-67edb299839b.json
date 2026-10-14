@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "5b891016-12c3-5c33-9fe5-67edb299839b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Resampled Historical VaR Estimate",
+    "description": "This AP resamples a time-series array to a target granularity and computes historical value at risk for the supplied confidence level and forecast horizon.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "5f6e0169-2e53-5f0c-b711-5a638cc4c24b",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7c3a2179-4f3d-5dbe-bb9d-9b6d27076527",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "9048fb1c-f613-5ef3-8d42-27bf02d3c7f1",
+   "labels": [
+    "Value_At_Risk_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_at_risk_calculator",
+    "description": "Estimates historical value at risk from a return series at the supplied confidence level and forecast horizon. It returns a scalar risk measure.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "confidence",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "horizon",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "var",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5b891016-12c3-5c33-9fe5-67edb299839b",
+   "to": "5f6e0169-2e53-5f0c-b711-5a638cc4c24b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5f6e0169-2e53-5f0c-b711-5a638cc4c24b",
+   "to": "7c3a2179-4f3d-5dbe-bb9d-9b6d27076527",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "7c3a2179-4f3d-5dbe-bb9d-9b6d27076527",
+   "to": "9048fb1c-f613-5ef3-8d42-27bf02d3c7f1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['returns']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "9048fb1c-f613-5ef3-8d42-27bf02d3c7f1",
+   "to": "5f6e0169-2e53-5f0c-b711-5a638cc4c24b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5b891016-12c3-5c33-9fe5-67edb299839b",
+   "to": "9048fb1c-f613-5ef3-8d42-27bf02d3c7f1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

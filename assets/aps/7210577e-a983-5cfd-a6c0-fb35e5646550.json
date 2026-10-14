@@ -1,0 +1,305 @@
+{
+ "nodes": [
+  {
+   "id": "7210577e-a983-5cfd-a6c0-fb35e5646550",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Dashboard Chart Collection",
+    "description": "Profiles a table row array, turns the profile into a short dataset card, uses that card to annotate the first chart, and returns an ordered three-chart dashboard collection.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "77b1e737-c3c8-533e-a9d0-038011dd27a1",
+   "labels": [
+    "Dataset_Profile_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "dataset_profile_summarizer",
+    "description": "Profiles a table row array into a dataset profile with row counts, per-column null rates, unique counts, inferred types, and numeric ranges. Returns only the profile.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fdc9b673-0ff4-5016-8db9-90cdabb858cc",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "labels": [
+    "DatasetProfileSummarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "summarize_dataset_profile",
+    "description": "Composes a plain-text dataset card from a dataset profile. It explains the dataset size, key columns, and profile coverage in short sentences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "19b92c06-1ee8-58df-85f0-b050791a1b90",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1bb661c1-f773-5492-9387-c585ed4baaa9",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "6ad9336a-c769-58d5-944d-16f5fdb2696e",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7210577e-a983-5cfd-a6c0-fb35e5646550",
+   "to": "77b1e737-c3c8-533e-a9d0-038011dd27a1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "77b1e737-c3c8-533e-a9d0-038011dd27a1",
+   "to": "fdc9b673-0ff4-5016-8db9-90cdabb858cc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "fdc9b673-0ff4-5016-8db9-90cdabb858cc",
+   "to": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "to": "77b1e737-c3c8-533e-a9d0-038011dd27a1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7210577e-a983-5cfd-a6c0-fb35e5646550",
+   "to": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "to": "19b92c06-1ee8-58df-85f0-b050791a1b90",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "19b92c06-1ee8-58df-85f0-b050791a1b90",
+   "to": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "to": "2873ce6a-e9db-5866-a356-7722ff535386",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7210577e-a983-5cfd-a6c0-fb35e5646550",
+   "to": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "to": "1bb661c1-f773-5492-9387-c585ed4baaa9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "1bb661c1-f773-5492-9387-c585ed4baaa9",
+   "to": "6ad9336a-c769-58d5-944d-16f5fdb2696e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "6ad9336a-c769-58d5-944d-16f5fdb2696e",
+   "to": "2512b8d8-a72f-5377-b3ec-4420aff04f32",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7210577e-a983-5cfd-a6c0-fb35e5646550",
+   "to": "6ad9336a-c769-58d5-944d-16f5fdb2696e",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

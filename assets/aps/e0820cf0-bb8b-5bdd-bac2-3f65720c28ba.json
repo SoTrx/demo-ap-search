@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e0820cf0-bb8b-5bdd-bac2-3f65720c28ba",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation Support Validator",
+    "description": "Summarizes chunks into a shorter plain-text answer and checks whether that answer is supported by the cited passages for the query.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "b2823548-fc44-5c12-849e-2b15597fdabe",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9e389fc7-dff9-526c-b458-3543c22a23b9",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "f51ac0d3-6742-5141-a481-a04715a08829",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e0820cf0-bb8b-5bdd-bac2-3f65720c28ba",
+   "to": "b2823548-fc44-5c12-849e-2b15597fdabe",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b2823548-fc44-5c12-849e-2b15597fdabe",
+   "to": "9e389fc7-dff9-526c-b458-3543c22a23b9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "9e389fc7-dff9-526c-b458-3543c22a23b9",
+   "to": "f51ac0d3-6742-5141-a481-a04715a08829",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "f51ac0d3-6742-5141-a481-a04715a08829",
+   "to": "b2823548-fc44-5c12-849e-2b15597fdabe",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e0820cf0-bb8b-5bdd-bac2-3f65720c28ba",
+   "to": "f51ac0d3-6742-5141-a481-a04715a08829",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

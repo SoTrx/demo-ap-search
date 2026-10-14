@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "1cd8436d-65e9-577e-af75-d98e918d2b32",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe Variance SQL Result Rows",
+    "description": "Checks whether all period variances in a comparison report fall within an absolute limit, then runs a SQL query with that safety check and returns the query result rows.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "70fee472-50ff-5858-a5c9-3976cf5ef177",
+   "labels": [
+    "Budget_Variance_Safety_Flag_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_variance_safety_flag",
+    "description": "Checks period variances in the comparison report against the supplied absolute limit. It returns a safety flag that is true when every period variance is within the limit.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "safe",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6c8e468d-d3f1-5ddd-bbd9-ea1c04751da3",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "safe"
+   }
+  },
+  {
+   "id": "a0e3bf47-0281-5174-aa01-fa72dd52ecea",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1cd8436d-65e9-577e-af75-d98e918d2b32",
+   "to": "70fee472-50ff-5858-a5c9-3976cf5ef177",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "70fee472-50ff-5858-a5c9-3976cf5ef177",
+   "to": "6c8e468d-d3f1-5ddd-bbd9-ea1c04751da3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['safe']": "from['outputs']['safe']"
+    }
+   }
+  },
+  {
+   "from": "6c8e468d-d3f1-5ddd-bbd9-ea1c04751da3",
+   "to": "a0e3bf47-0281-5174-aa01-fa72dd52ecea",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['safe']"
+    }
+   }
+  },
+  {
+   "from": "a0e3bf47-0281-5174-aa01-fa72dd52ecea",
+   "to": "70fee472-50ff-5858-a5c9-3976cf5ef177",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1cd8436d-65e9-577e-af75-d98e918d2b32",
+   "to": "a0e3bf47-0281-5174-aa01-fa72dd52ecea",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

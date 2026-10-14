@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "576b6fc0-843f-5345-abcc-a73ffcf0c129",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Normalized Climate Indicator Builder",
+    "description": "Combines a period report, a regional comparison report, and detected extreme events into a normalized climate indicator object.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "5e43ebdb-45cf-5e41-8112-0292d9906641",
+   "labels": [
+    "Climate_Indicator_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "climate_indicator_calculator",
+    "description": "Computes a normalized climate indicator from period comparison, regional comparison, and detected extreme events.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "period_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "regional_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "extreme_events",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "indicator",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "576b6fc0-843f-5345-abcc-a73ffcf0c129",
+   "to": "5e43ebdb-45cf-5e41-8112-0292d9906641",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

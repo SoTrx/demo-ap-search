@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "7cfa41e7-8382-55ff-b51a-c0a751b429fb",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Combined Re-Identification Risk Score",
+    "description": "Combines k-anonymity, l-diversity and equivalence-class evidence into one numeric re-identification risk score.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "36ddf102-d151-5a42-98ad-a4354e20f466",
+   "labels": [
+    "Reidentification_Risk_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "reidentification_risk_scorer",
+    "description": "Combines k-anonymity, l-diversity, and equivalence-class size evidence into one re-identification risk score. Higher values indicate a greater chance of linking a pseudonymised record to an external dataset.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "k_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "l_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7cfa41e7-8382-55ff-b51a-c0a751b429fb",
+   "to": "36ddf102-d151-5a42-98ad-a4354e20f466",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

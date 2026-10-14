@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "f89d4d5e-efdd-510d-a440-52dbf4a8eb35",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Database Study Plan Builder",
+    "description": "Generates database-schema practice questions and combines them with materials and a performance profile to produce a study-plan JSON.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "a6edaab6-dbd2-5696-9797-2fa01b0755d3",
+   "labels": [
+    "Schema_Question_Suggester_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Question Suggester",
+    "description": "Generates analytic questions that can be asked about a database schema and returns them as recommended question JSON.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "limit",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c707e8fa-93d8-538c-9158-5a6a52c7da5f",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "questions"
+   }
+  },
+  {
+   "id": "630cfbab-7b15-500d-b37e-6dbe6822dd34",
+   "labels": [
+    "Study_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_plan_builder",
+    "description": "Builds a study-plan JSON that interleaves recommended material and recommended questions into a practice sequence. Returns the plan only, without execution instructions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "materials",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "study_plan",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f89d4d5e-efdd-510d-a440-52dbf4a8eb35",
+   "to": "a6edaab6-dbd2-5696-9797-2fa01b0755d3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a6edaab6-dbd2-5696-9797-2fa01b0755d3",
+   "to": "c707e8fa-93d8-538c-9158-5a6a52c7da5f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['questions']": "from['outputs']['questions']"
+    }
+   }
+  },
+  {
+   "from": "c707e8fa-93d8-538c-9158-5a6a52c7da5f",
+   "to": "630cfbab-7b15-500d-b37e-6dbe6822dd34",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['questions']": "from['questions']"
+    }
+   }
+  },
+  {
+   "from": "630cfbab-7b15-500d-b37e-6dbe6822dd34",
+   "to": "a6edaab6-dbd2-5696-9797-2fa01b0755d3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f89d4d5e-efdd-510d-a440-52dbf4a8eb35",
+   "to": "630cfbab-7b15-500d-b37e-6dbe6822dd34",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

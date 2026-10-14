@@ -1,0 +1,317 @@
+{
+ "nodes": [
+  {
+   "id": "a5dd9c12-0f6c-5f15-ae1d-3bebe0f80b09",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Target Comparison Chart Bundle",
+    "description": "Groups weather readings by period, compares them with a target period set, creates a comparison chart, and collects it with two provided charts into a dashboard-ready chart array.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "0a00ec90-ae9c-5392-8810-a28c0afe28db",
+   "labels": [
+    "Period_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_aggregator",
+    "description": "Groups weather readings by time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e7cfb14e-ebc3-545c-b30d-33eab89eddc6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "labels": [
+    "Period_Summary_Comparator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_summary_comparator",
+    "description": "Compares baseline and target period summaries and returns period-by-period differences.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "baseline_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "23acb41c-4447-57af-b919-f763ebcca7ef",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "labels": [
+    "Period_Comparison_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_comparison_chart_builder",
+    "description": "Turns a period comparison report into a chart specification that contrasts baseline and target values for each period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e0e77ffb-6925-5829-a4b8-aaf20dbf48e3",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "a405dcc0-4f4b-5f5d-a7b9-125b92b21f04",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a5dd9c12-0f6c-5f15-ae1d-3bebe0f80b09",
+   "to": "0a00ec90-ae9c-5392-8810-a28c0afe28db",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0a00ec90-ae9c-5392-8810-a28c0afe28db",
+   "to": "e7cfb14e-ebc3-545c-b30d-33eab89eddc6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "e7cfb14e-ebc3-545c-b30d-33eab89eddc6",
+   "to": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['baseline_summary']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "to": "0a00ec90-ae9c-5392-8810-a28c0afe28db",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5dd9c12-0f6c-5f15-ae1d-3bebe0f80b09",
+   "to": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "to": "23acb41c-4447-57af-b919-f763ebcca7ef",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "23acb41c-4447-57af-b919-f763ebcca7ef",
+   "to": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['comparison']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "to": "4b3f9c32-c0b9-5ce8-b64f-3d1875d1f4e2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5dd9c12-0f6c-5f15-ae1d-3bebe0f80b09",
+   "to": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "to": "e0e77ffb-6925-5829-a4b8-aaf20dbf48e3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "e0e77ffb-6925-5829-a4b8-aaf20dbf48e3",
+   "to": "a405dcc0-4f4b-5f5d-a7b9-125b92b21f04",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "a405dcc0-4f4b-5f5d-a7b9-125b92b21f04",
+   "to": "4af27871-bae6-59ec-af58-3c8f09c30a8c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a5dd9c12-0f6c-5f15-ae1d-3bebe0f80b09",
+   "to": "a405dcc0-4f4b-5f5d-a7b9-125b92b21f04",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

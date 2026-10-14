@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "b68be9ce-1a1d-54e4-ba1b-c2ba9700d41d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Translate Text Chunks by Target Language",
+    "description": "Translates each input text chunk into the requested target language and returns the translated chunks as an array.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "64956b68-861f-5dce-9b6a-4ebfa191f43b",
+   "labels": [
+    "Text_Chunk_Translator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "text_chunk_translator",
+    "description": "Translates each source text chunk into the requested target language.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_language",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b68be9ce-1a1d-54e4-ba1b-c2ba9700d41d",
+   "to": "64956b68-861f-5dce-9b6a-4ebfa191f43b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "e1260c8f-f69a-5887-9077-0dadf3943a99",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Rolling Volatility Chart",
+    "description": "Turns a returns series into a line chart specification by computing a moving volatility estimate, resampling it to a chosen period, and formatting it for plotting.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "5c4c0d3e-006b-5766-8c4e-f6fc7e5ea10f",
+   "labels": [
+    "Rolling_Volatility_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rolling_volatility_calculator",
+    "description": "Computes rolling realized volatility from a return series using the supplied rolling window size. It returns a time series of volatility values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "volatility",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "681baeca-da96-52f4-8790-66766b7783ea",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "volatility"
+   }
+  },
+  {
+   "id": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "1424c224-f60f-57fd-aa6b-0f53eb4e3141",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "34a9e4bd-987e-551a-ad6e-eac3dac69d55",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e1260c8f-f69a-5887-9077-0dadf3943a99",
+   "to": "5c4c0d3e-006b-5766-8c4e-f6fc7e5ea10f",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "5c4c0d3e-006b-5766-8c4e-f6fc7e5ea10f",
+   "to": "681baeca-da96-52f4-8790-66766b7783ea",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['volatility']": "from['outputs']['volatility']"
+    }
+   }
+  },
+  {
+   "from": "681baeca-da96-52f4-8790-66766b7783ea",
+   "to": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['volatility']"
+    }
+   }
+  },
+  {
+   "from": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "to": "5c4c0d3e-006b-5766-8c4e-f6fc7e5ea10f",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e1260c8f-f69a-5887-9077-0dadf3943a99",
+   "to": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "to": "1424c224-f60f-57fd-aa6b-0f53eb4e3141",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "1424c224-f60f-57fd-aa6b-0f53eb4e3141",
+   "to": "34a9e4bd-987e-551a-ad6e-eac3dac69d55",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "34a9e4bd-987e-551a-ad6e-eac3dac69d55",
+   "to": "d3df56e0-2dee-5927-887e-b9f7019a972c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e1260c8f-f69a-5887-9077-0dadf3943a99",
+   "to": "34a9e4bd-987e-551a-ad6e-eac3dac69d55",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

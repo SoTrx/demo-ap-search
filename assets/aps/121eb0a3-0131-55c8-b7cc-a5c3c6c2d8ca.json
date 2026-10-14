@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "121eb0a3-0131-55c8-b7cc-a5c3c6c2d8ca",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Budget Actual Variance by Period",
+    "description": "The AP standardizes supplied budget and actual records according to mappings, then produces a per-fiscal-period report of absolute and percentage variance.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "d2370aeb-de3d-5137-a741-0c9622eae37b",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0f4b4152-fc6c-52fa-9517-f5125cc8ecef",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "harmonized_records"
+   }
+  },
+  {
+   "id": "146113ed-09ea-579f-afc7-1770db8283dd",
+   "labels": [
+    "Budget_Period_Variance_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_period_variance_builder",
+    "description": "Compares budgeted and actual amount columns by fiscal period and computes absolute and percentage variance for each period. It returns a period comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "121eb0a3-0131-55c8-b7cc-a5c3c6c2d8ca",
+   "to": "d2370aeb-de3d-5137-a741-0c9622eae37b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d2370aeb-de3d-5137-a741-0c9622eae37b",
+   "to": "0f4b4152-fc6c-52fa-9517-f5125cc8ecef",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['harmonized_records']": "from['outputs']['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "0f4b4152-fc6c-52fa-9517-f5125cc8ecef",
+   "to": "146113ed-09ea-579f-afc7-1770db8283dd",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['records']": "from['harmonized_records']"
+    }
+   }
+  },
+  {
+   "from": "146113ed-09ea-579f-afc7-1770db8283dd",
+   "to": "d2370aeb-de3d-5137-a741-0c9622eae37b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "121eb0a3-0131-55c8-b7cc-a5c3c6c2d8ca",
+   "to": "146113ed-09ea-579f-afc7-1770db8283dd",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

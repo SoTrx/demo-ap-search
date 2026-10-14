@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "c7f97237-759b-5411-82de-a299b0d0cbfc",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "MathE Weakest Topic MCQ Generator",
+    "description": "Takes a student performance profile and proficiency level to identify the weakest MathE topic and returns MathE multiple-choice questions as JSON text.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "98c61080-8df4-57b1-8d9d-1ecbd11bcca4",
+   "labels": [
+    "Topic_Gap_Identifier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "topic_gap_identifier",
+    "description": "Identifies the weakest subject topic from a student performance profile and returns it as a single topic string. Returns only the topic, not a remediation plan.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weakest_topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a6387146-4d9e-5558-9483-265462ce9eea",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "weakest_topic"
+   }
+  },
+  {
+   "id": "9cfdbcb0-0020-5c02-a34e-6b7c547e3d73",
+   "labels": [
+    "Test_Recommendation_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Test Recommendation",
+    "description": "Selects MathE multiple-choice questions (statement, answer options, index of the correct option), returned as JSON text, suited to a student's proficiency level on a MathE topic. Returns the questions only, without any explanation of the answers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "level",
+      "type": "number",
+      "required": true,
+      "default": 0.5
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "questions",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c7f97237-759b-5411-82de-a299b0d0cbfc",
+   "to": "98c61080-8df4-57b1-8d9d-1ecbd11bcca4",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "98c61080-8df4-57b1-8d9d-1ecbd11bcca4",
+   "to": "a6387146-4d9e-5558-9483-265462ce9eea",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weakest_topic']": "from['outputs']['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "a6387146-4d9e-5558-9483-265462ce9eea",
+   "to": "9cfdbcb0-0020-5c02-a34e-6b7c547e3d73",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['topic']": "from['weakest_topic']"
+    }
+   }
+  },
+  {
+   "from": "9cfdbcb0-0020-5c02-a34e-6b7c547e3d73",
+   "to": "98c61080-8df4-57b1-8d9d-1ecbd11bcca4",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c7f97237-759b-5411-82de-a299b0d0cbfc",
+   "to": "9cfdbcb0-0020-5c02-a34e-6b7c547e3d73",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

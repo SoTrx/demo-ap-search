@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "079d7e25-287c-5799-8c9f-bd579ad91df9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Forecast Accuracy Score",
+    "description": "Computes a single accuracy score for a forecast from an observed seasonal time series and its fixed seasonal length.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "2372d5fb-0f7a-5bc7-95e2-f02e85d2f215",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "10d400c1-aa2b-5475-952d-49534d4c0a64",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "b63c61d3-0b13-5d18-9dfb-ddf34cad15c6",
+   "labels": [
+    "Forecast_Accuracy_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Forecast Accuracy Scorer",
+    "description": "Scores a forecast series against the observed tail of an actual time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "forecast",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "accuracy",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "079d7e25-287c-5799-8c9f-bd579ad91df9",
+   "to": "2372d5fb-0f7a-5bc7-95e2-f02e85d2f215",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2372d5fb-0f7a-5bc7-95e2-f02e85d2f215",
+   "to": "10d400c1-aa2b-5475-952d-49534d4c0a64",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "10d400c1-aa2b-5475-952d-49534d4c0a64",
+   "to": "b63c61d3-0b13-5d18-9dfb-ddf34cad15c6",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "b63c61d3-0b13-5d18-9dfb-ddf34cad15c6",
+   "to": "2372d5fb-0f7a-5bc7-95e2-f02e85d2f215",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "079d7e25-287c-5799-8c9f-bd579ad91df9",
+   "to": "b63c61d3-0b13-5d18-9dfb-ddf34cad15c6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

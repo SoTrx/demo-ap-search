@@ -1,0 +1,221 @@
+{
+ "nodes": [
+  {
+   "id": "1f1aca63-8d91-5c8c-84e3-f682e828fe1f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Image Query Passage Retrieval",
+    "description": "Embeds each image in an image batch with a model, builds a nearest-neighbor visual index, and returns BM25-ranked text passages for the query.",
+    "process": "image_analysis"
+   }
+  },
+  {
+   "id": "e0959c29-f851-53e0-ac50-3f1467732358",
+   "labels": [
+    "Image_Embedding_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_embedding_extractor",
+    "description": "Extracts fixed-length visual embeddings from each image in an image batch.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0a98bbcb-8ff7-5b8c-a93f-545d77fcf554",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "embeddings"
+   }
+  },
+  {
+   "id": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "labels": [
+    "Image_Similarity_Index_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "image_similarity_index_builder",
+    "description": "Builds a nearest-neighbor retrieval index from image embeddings so that images can be compared by visual similarity.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "embeddings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "4f2f1e4b-9229-5e66-98ff-6c8744bf39b3",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "index"
+   }
+  },
+  {
+   "id": "eda9628a-14a3-59cf-9b7e-e535f7e50b8d",
+   "labels": [
+    "Lexical_Passage_Retriever_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "bm25_passage_retriever",
+    "description": "Retrieves text chunks from a search index using lexical BM25 scoring.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "index",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1f1aca63-8d91-5c8c-84e3-f682e828fe1f",
+   "to": "e0959c29-f851-53e0-ac50-3f1467732358",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e0959c29-f851-53e0-ac50-3f1467732358",
+   "to": "0a98bbcb-8ff7-5b8c-a93f-545d77fcf554",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['embeddings']": "from['outputs']['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "0a98bbcb-8ff7-5b8c-a93f-545d77fcf554",
+   "to": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['embeddings']": "from['embeddings']"
+    }
+   }
+  },
+  {
+   "from": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "to": "e0959c29-f851-53e0-ac50-3f1467732358",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1f1aca63-8d91-5c8c-84e3-f682e828fe1f",
+   "to": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "to": "4f2f1e4b-9229-5e66-98ff-6c8744bf39b3",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['index']": "from['outputs']['index']"
+    }
+   }
+  },
+  {
+   "from": "4f2f1e4b-9229-5e66-98ff-6c8744bf39b3",
+   "to": "eda9628a-14a3-59cf-9b7e-e535f7e50b8d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['index']": "from['index']"
+    }
+   }
+  },
+  {
+   "from": "eda9628a-14a3-59cf-9b7e-e535f7e50b8d",
+   "to": "e33b8d45-29d5-5ba8-99aa-fa1ac1605787",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1f1aca63-8d91-5c8c-84e3-f682e828fe1f",
+   "to": "eda9628a-14a3-59cf-9b7e-e535f7e50b8d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

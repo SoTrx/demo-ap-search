@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "e79d9f3a-fee9-5b92-a06d-953466dc0bd4",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Vector Area Map Layer",
+    "description": "Builds a vector map layer specification by pairing polygon geometries with their area metrics.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "82ba3ad9-6921-5480-b5ff-fbc070da5813",
+   "labels": [
+    "Build_Area_Map_Layer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_area_map_layer",
+    "description": "Builds a vector map layer specification from polygons and their area metrics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "area_metrics",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "layer",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e79d9f3a-fee9-5b92-a06d-953466dc0bd4",
+   "to": "82ba3ad9-6921-5480-b5ff-fbc070da5813",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

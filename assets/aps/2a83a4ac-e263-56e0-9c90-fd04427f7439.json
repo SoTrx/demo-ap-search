@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "2a83a4ac-e263-56e0-9c90-fd04427f7439",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Study Urgency Priority Scorer",
+    "description": "Combines a student performance profile with an estimated proficiency level to produce one numeric study priority score.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "6e35cd6e-b03a-5136-8dda-71a4723ae176",
+   "labels": [
+    "Study_Priority_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "study_priority_scorer",
+    "description": "Scores how urgent a topic is for study by combining the student performance profile with the estimated proficiency level. Returns one numeric priority score.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "priority_score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2a83a4ac-e263-56e0-9c90-fd04427f7439",
+   "to": "6e35cd6e-b03a-5136-8dda-71a4723ae176",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

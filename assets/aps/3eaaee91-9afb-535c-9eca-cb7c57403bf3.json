@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "3eaaee91-9afb-535c-9eca-cb7c57403bf3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Entity Enrichment",
+    "description": "Builds weighted survey cross-tabulations and joins their result rows to entity link records to return enriched entity records with survey estimates and graph-derived fields.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "6fa89b0b-b49e-5342-9efc-44793c629dae",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "69093baf-1dd7-5dc0-8864-185bc0156aea",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "53e99d3e-aec7-5b94-9f0c-d13362d6578c",
+   "labels": [
+    "Graph_Enrichment_Joiner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_enrichment_joiner",
+    "description": "Joins query result rows to entity link records to add graph-derived fields to each entity record. Returns enriched entity records without changing unrelated fields.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "enriched_entity_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "3eaaee91-9afb-535c-9eca-cb7c57403bf3",
+   "to": "6fa89b0b-b49e-5342-9efc-44793c629dae",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6fa89b0b-b49e-5342-9efc-44793c629dae",
+   "to": "69093baf-1dd7-5dc0-8864-185bc0156aea",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "69093baf-1dd7-5dc0-8864-185bc0156aea",
+   "to": "53e99d3e-aec7-5b94-9f0c-d13362d6578c",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['result_rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "53e99d3e-aec7-5b94-9f0c-d13362d6578c",
+   "to": "6fa89b0b-b49e-5342-9efc-44793c629dae",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "3eaaee91-9afb-535c-9eca-cb7c57403bf3",
+   "to": "53e99d3e-aec7-5b94-9f0c-d13362d6578c",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

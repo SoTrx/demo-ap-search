@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "c641618e-1978-580b-8024-cbc11caef155",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymised Dataset Re-identification Risk Score",
+    "description": "It examines records that have had direct personal details removed, groups records sharing the same quasi-identifier pattern, and combines k-anonymity, l-diversity, and group-size evidence into one numeric re-identification risk score.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "df761248-df4a-5025-8b64-309a425d0fe3",
+   "labels": [
+    "Quasi_Identifier_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "quasi_identifier_detector",
+    "description": "Identifies quasi-identifier columns and combinations that could uniquely identify records after direct personal data is removed. It uses the personal-data report to avoid treating direct identifiers as quasi-identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6d75c566-e278-55c1-9251-b020d26a153a",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "47b6d227-8a4c-5d26-9f16-66f8bba58d3f",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "groups"
+   }
+  },
+  {
+   "id": "612b1ecd-47d7-5866-a38c-b6c523c13c0d",
+   "labels": [
+    "Reidentification_Risk_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "reidentification_risk_scorer",
+    "description": "Combines k-anonymity, l-diversity, and equivalence-class size evidence into one re-identification risk score. Higher values indicate a greater chance of linking a pseudonymised record to an external dataset.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "k_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "l_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c641618e-1978-580b-8024-cbc11caef155",
+   "to": "df761248-df4a-5025-8b64-309a425d0fe3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "df761248-df4a-5025-8b64-309a425d0fe3",
+   "to": "6d75c566-e278-55c1-9251-b020d26a153a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "6d75c566-e278-55c1-9251-b020d26a153a",
+   "to": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['quasi_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "to": "df761248-df4a-5025-8b64-309a425d0fe3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c641618e-1978-580b-8024-cbc11caef155",
+   "to": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "to": "47b6d227-8a4c-5d26-9f16-66f8bba58d3f",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['groups']": "from['outputs']['groups']"
+    }
+   }
+  },
+  {
+   "from": "47b6d227-8a4c-5d26-9f16-66f8bba58d3f",
+   "to": "612b1ecd-47d7-5866-a38c-b6c523c13c0d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['groups']": "from['groups']"
+    }
+   }
+  },
+  {
+   "from": "612b1ecd-47d7-5866-a38c-b6c523c13c0d",
+   "to": "d651e9de-4d03-5684-a45d-82e2e9ebe4f9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c641618e-1978-580b-8024-cbc11caef155",
+   "to": "612b1ecd-47d7-5866-a38c-b6c523c13c0d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

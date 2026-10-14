@@ -1,0 +1,239 @@
+{
+ "nodes": [
+  {
+   "id": "6c2fdd31-5270-5779-8d4a-ee10076915af",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Answer Support Confusion Matrix",
+    "description": "It checks whether an answer summary is supported by the cited passages, runs the supplied SQL query only if that check allows it, and finally builds a matrix counting each predicted class against the actual labeled class.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "8c8749b7-26c0-525d-b4e8-d36d90a0b3bf",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0aae36b7-ff2f-59e1-a490-75564de993a8",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "supported"
+   }
+  },
+  {
+   "id": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "1b57a80f-46ba-5e9c-bccd-3f5913cf2e1c",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "3c639814-1aea-5906-ab71-b04fae1df428",
+   "labels": [
+    "Build_Confusion_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_confusion_matrix",
+    "description": "Counts predicted class versus actual class pairs from aligned prediction rows and labeled table rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "labeled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "matrix",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "6c2fdd31-5270-5779-8d4a-ee10076915af",
+   "to": "8c8749b7-26c0-525d-b4e8-d36d90a0b3bf",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8c8749b7-26c0-525d-b4e8-d36d90a0b3bf",
+   "to": "0aae36b7-ff2f-59e1-a490-75564de993a8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['supported']": "from['outputs']['supported']"
+    }
+   }
+  },
+  {
+   "from": "0aae36b7-ff2f-59e1-a490-75564de993a8",
+   "to": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['supported']"
+    }
+   }
+  },
+  {
+   "from": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "to": "8c8749b7-26c0-525d-b4e8-d36d90a0b3bf",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6c2fdd31-5270-5779-8d4a-ee10076915af",
+   "to": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "to": "1b57a80f-46ba-5e9c-bccd-3f5913cf2e1c",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "1b57a80f-46ba-5e9c-bccd-3f5913cf2e1c",
+   "to": "3c639814-1aea-5906-ab71-b04fae1df428",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "3c639814-1aea-5906-ab71-b04fae1df428",
+   "to": "2b9bf7f9-e47a-59fc-a6bb-841034a0e7f9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "6c2fdd31-5270-5779-8d4a-ee10076915af",
+   "to": "3c639814-1aea-5906-ab71-b04fae1df428",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "nodes": [
+  {
+   "id": "30e0956d-4393-5a75-b2a0-8c557b86a832",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Segment Alignment Acceptance Validator",
+    "description": "It checks translated segment alignments against a supplied quality threshold and returns a validation report alongside only the alignments that meet the threshold.",
+    "process": "translation_multilingual"
+   }
+  },
+  {
+   "id": "96912e68-dc8d-53d3-854b-5d1db6e42029",
+   "labels": [
+    "Translation_Alignment_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "translation_alignment_validator",
+    "description": "Reviews segment alignments against a quality threshold and returns a validation report plus the alignments that pass.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "translated_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accept_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "validation_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "accepted_segment_alignment",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "30e0956d-4393-5a75-b2a0-8c557b86a832",
+   "to": "96912e68-dc8d-53d3-854b-5d1db6e42029",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

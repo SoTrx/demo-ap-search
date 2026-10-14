@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "c656b528-34ec-5f33-baf6-98fff0b273eb",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjusted Trend Returns",
+    "description": "Removes a fixed seasonal cycle from a time series, resamples the resulting trend to a chosen granularity, and outputs period-over-period percentage returns.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "81e2dfb7-4bf3-562a-a28a-70977ea11ed1",
+   "labels": [
+    "Seasonal_Decomposer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Seasonal Decomposer",
+    "description": "Decomposes a time series into a trend component and a seasonal profile for a fixed seasonal period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "season_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "trend",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "seasonality",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "ec6c6136-dc68-5cc6-bbb2-846d5fffe1c8",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "trend"
+   }
+  },
+  {
+   "id": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "3ce2b48f-fcf4-5534-ac42-4b8c977a4579",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "resampled"
+   }
+  },
+  {
+   "id": "77f771c6-50f5-5ef1-95c9-7db29d264793",
+   "labels": [
+    "Period_Return_Calculator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "period_return_calculator",
+    "description": "Converts a level series into period-over-period percentage returns using the supplied period granularity. It returns a time series of returns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "returns",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "c656b528-34ec-5f33-baf6-98fff0b273eb",
+   "to": "81e2dfb7-4bf3-562a-a28a-70977ea11ed1",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "81e2dfb7-4bf3-562a-a28a-70977ea11ed1",
+   "to": "ec6c6136-dc68-5cc6-bbb2-846d5fffe1c8",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['trend']": "from['outputs']['trend']"
+    }
+   }
+  },
+  {
+   "from": "ec6c6136-dc68-5cc6-bbb2-846d5fffe1c8",
+   "to": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['trend']"
+    }
+   }
+  },
+  {
+   "from": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "to": "81e2dfb7-4bf3-562a-a28a-70977ea11ed1",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c656b528-34ec-5f33-baf6-98fff0b273eb",
+   "to": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "to": "3ce2b48f-fcf4-5534-ac42-4b8c977a4579",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['resampled']": "from['outputs']['resampled']"
+    }
+   }
+  },
+  {
+   "from": "3ce2b48f-fcf4-5534-ac42-4b8c977a4579",
+   "to": "77f771c6-50f5-5ef1-95c9-7db29d264793",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['resampled']"
+    }
+   }
+  },
+  {
+   "from": "77f771c6-50f5-5ef1-95c9-7db29d264793",
+   "to": "d7c6f3fd-3cac-520b-9d5e-a86f3906222e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "c656b528-34ec-5f33-baf6-98fff0b273eb",
+   "to": "77f771c6-50f5-5ef1-95c9-7db29d264793",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

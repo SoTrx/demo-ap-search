@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "82fb6b0f-15b3-5544-9e43-480660ab8a76",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Time Series Granularity Converter",
+    "description": "Converts an input time series array to a requested period granularity and outputs the resulting time series array.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "75f0fa46-c6c3-5da0-a3ce-2351c86b2314",
+   "labels": [
+    "Time_Series_Resampler_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Resampler",
+    "description": "Resamples a time series to a target period granularity and returns a new time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "resampled",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "82fb6b0f-15b3-5544-9e43-480660ab8a76",
+   "to": "75f0fa46-c6c3-5da0-a3ce-2351c86b2314",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

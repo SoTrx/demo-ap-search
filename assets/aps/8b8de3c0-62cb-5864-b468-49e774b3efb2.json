@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "8b8de3c0-62cb-5864-b468-49e774b3efb2",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Answer Citation Support Check",
+    "description": "Given a query, a proposed answer summary, and citation passages, determines whether the passages back up the answer and returns a true/false result.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "b295ef67-4353-5dcc-95eb-a7f58d7d1822",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8b8de3c0-62cb-5864-b468-49e774b3efb2",
+   "to": "b295ef67-4353-5dcc-95eb-a7f58d7d1822",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

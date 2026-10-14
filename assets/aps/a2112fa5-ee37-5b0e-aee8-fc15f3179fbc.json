@@ -1,0 +1,275 @@
+{
+ "nodes": [
+  {
+   "id": "a2112fa5-ee37-5b0e-aee8-fc15f3179fbc",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Passage-Grounded Answer Support Checker",
+    "description": "Given a query and retrieved passages, the AP produces a brief answer, selects backing excerpts, and returns whether that answer is supported.",
+    "process": "information_retrieval"
+   }
+  },
+  {
+   "id": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "labels": [
+    "Answer_Synthesizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_synthesizer",
+    "description": "Generates an answer summary for a query from retrieved text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7365d0e4-b825-5100-b5dc-0208d04d0301",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "answer_summary"
+   }
+  },
+  {
+   "id": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "labels": [
+    "Answer_Evidence_Locator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_evidence_locator",
+    "description": "Finds retrieved text chunks that support the generated answer and returns them as citation records.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "passages",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6cfdd3bc-32ae-58e5-9a72-4e9a9e9c5568",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "citations"
+   }
+  },
+  {
+   "id": "60e9afd5-9632-5f63-8d6f-2f2447385fd6",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "answer_summary"
+   }
+  },
+  {
+   "id": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "labels": [
+    "Answer_Faithfulness_Checker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "answer_faithfulness_checker",
+    "description": "Checks whether the answer summary is supported by the cited passages for the query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "answer_summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "citations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "supported",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a2112fa5-ee37-5b0e-aee8-fc15f3179fbc",
+   "to": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "to": "7365d0e4-b825-5100-b5dc-0208d04d0301",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['answer_summary']": "from['outputs']['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "7365d0e4-b825-5100-b5dc-0208d04d0301",
+   "to": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "to": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a2112fa5-ee37-5b0e-aee8-fc15f3179fbc",
+   "to": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "to": "6cfdd3bc-32ae-58e5-9a72-4e9a9e9c5568",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['citations']": "from['outputs']['citations']"
+    }
+   }
+  },
+  {
+   "from": "6cfdd3bc-32ae-58e5-9a72-4e9a9e9c5568",
+   "to": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['citations']": "from['citations']"
+    }
+   }
+  },
+  {
+   "from": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "to": "60e9afd5-9632-5f63-8d6f-2f2447385fd6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['answer_summary']": "from['outputs']['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "60e9afd5-9632-5f63-8d6f-2f2447385fd6",
+   "to": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['answer_summary']": "from['answer_summary']"
+    }
+   }
+  },
+  {
+   "from": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "to": "b9f64024-56d5-5f4d-8ddc-9e8b79db2bc2",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "to": "42cef4b0-0fd0-5220-8383-e63c45272585",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a2112fa5-ee37-5b0e-aee8-fc15f3179fbc",
+   "to": "922ab5f4-25a8-5d98-affa-f38b5b1af5c1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "850c795a-4aa3-53dd-b463-d22e5bc33538",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Group Node Matching",
+    "description": "Matches resolved entity record groups to existing graph nodes by comparing group attributes with node properties, returning cluster-to-node identifier link records.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "6bbc2ed6-6fda-5618-ad0f-10e55051e731",
+   "labels": [
+    "Cluster_Graph_Linker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cluster_graph_linker",
+    "description": "Links resolved entity record groups to existing graph nodes by matching cluster attributes to node properties in the triples. Returns node link records that map cluster identifiers to node identifiers.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entity_record_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_triples",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "node_link_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "850c795a-4aa3-53dd-b463-d22e5bc33538",
+   "to": "6bbc2ed6-6fda-5618-ad0f-10e55051e731",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "5febdbdd-253d-5261-8af0-84233005ddc9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymised Re-identification Risk Score",
+    "description": "Combines pseudonymised records, quasi-identifier definitions, and k/l privacy reports into a single re-identification risk score.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "83d71d7a-ce3a-5cf4-9609-28404b5444b5",
+   "labels": [
+    "Equivalence_Class_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "equivalence_class_builder",
+    "description": "Groups pseudonymised records into equivalence classes by their quasi-identifier values. Each group contains the member records that share the same quasi-identifier pattern.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c4a8b981-c242-5ffb-9fda-dac9da3017cc",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "groups"
+   }
+  },
+  {
+   "id": "04193f08-d235-5d10-a640-c9220d807c54",
+   "labels": [
+    "Reidentification_Risk_Scorer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "reidentification_risk_scorer",
+    "description": "Combines k-anonymity, l-diversity, and equivalence-class size evidence into one re-identification risk score. Higher values indicate a greater chance of linking a pseudonymised record to an external dataset.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "k_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "l_report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "score",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5febdbdd-253d-5261-8af0-84233005ddc9",
+   "to": "83d71d7a-ce3a-5cf4-9609-28404b5444b5",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "83d71d7a-ce3a-5cf4-9609-28404b5444b5",
+   "to": "c4a8b981-c242-5ffb-9fda-dac9da3017cc",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['groups']": "from['outputs']['groups']"
+    }
+   }
+  },
+  {
+   "from": "c4a8b981-c242-5ffb-9fda-dac9da3017cc",
+   "to": "04193f08-d235-5d10-a640-c9220d807c54",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['groups']": "from['groups']"
+    }
+   }
+  },
+  {
+   "from": "04193f08-d235-5d10-a640-c9220d807c54",
+   "to": "83d71d7a-ce3a-5cf4-9609-28404b5444b5",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "5febdbdd-253d-5261-8af0-84233005ddc9",
+   "to": "04193f08-d235-5d10-a640-c9220d807c54",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

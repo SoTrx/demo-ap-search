@@ -1,0 +1,215 @@
+{
+ "nodes": [
+  {
+   "id": "53aec21e-c260-594d-94b9-952063a7a651",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Sample-Based Duplicate Row Groups",
+    "description": "Infers duplicate-key fields from a sample and groups full table rows into candidate duplicate clusters without removing rows.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "ea18280b-b801-5783-a60d-a29af3f1aefe",
+   "labels": [
+    "DatasetColumnProfileBuilder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "build_dataset_column_profile",
+    "description": "Builds a column-level profile from table records. It summarizes observed column names, inferred types, and row counts for catalogue comparison.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sample_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6f0ae312-89b4-5735-9b27-daaeca7e97d5",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "labels": [
+    "Duplicate_Key_Selector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_key_selector",
+    "description": "Selects candidate duplicate-key columns and matching options from a dataset profile. Returns a duplicate-key specification without grouping rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "eca48a79-00a2-5321-b0ec-f9bf926857e9",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "key_spec"
+   }
+  },
+  {
+   "id": "3afa1f26-1e1f-5e7a-bdad-1fb2d88fc874",
+   "labels": [
+    "Duplicate_Record_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "duplicate_record_detector",
+    "description": "Groups table rows into duplicate candidate clusters using a duplicate-key specification. Returns duplicate groups without deleting rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "key_spec",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "duplicate_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "53aec21e-c260-594d-94b9-952063a7a651",
+   "to": "ea18280b-b801-5783-a60d-a29af3f1aefe",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "ea18280b-b801-5783-a60d-a29af3f1aefe",
+   "to": "6f0ae312-89b4-5735-9b27-daaeca7e97d5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "6f0ae312-89b4-5735-9b27-daaeca7e97d5",
+   "to": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "to": "ea18280b-b801-5783-a60d-a29af3f1aefe",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "53aec21e-c260-594d-94b9-952063a7a651",
+   "to": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "to": "eca48a79-00a2-5321-b0ec-f9bf926857e9",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['key_spec']": "from['outputs']['key_spec']"
+    }
+   }
+  },
+  {
+   "from": "eca48a79-00a2-5321-b0ec-f9bf926857e9",
+   "to": "3afa1f26-1e1f-5e7a-bdad-1fb2d88fc874",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['key_spec']": "from['key_spec']"
+    }
+   }
+  },
+  {
+   "from": "3afa1f26-1e1f-5e7a-bdad-1fb2d88fc874",
+   "to": "56697436-bcbe-5518-93b4-1aa57e7e1560",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "53aec21e-c260-594d-94b9-952063a7a651",
+   "to": "3afa1f26-1e1f-5e7a-bdad-1fb2d88fc874",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

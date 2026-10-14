@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "b48659dd-82d6-50a4-987c-0b334c590178",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Same Entity Group Builder",
+    "description": "Groups candidate entity match pairs into clusters representing the same real-world entity, using a confidence threshold to prevent weak pairs from chaining groups together.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "fabb0cd0-27e2-5ba5-8bcb-f05b5d9d6f7f",
+   "labels": [
+    "Entity_Cluster_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_cluster_builder",
+    "description": "Groups candidate entity matches into clusters that represent the same real-world entity. It uses the supplied threshold to avoid chaining weak matches together.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidate_pairs",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold_value",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entity_groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "b48659dd-82d6-50a4-987c-0b334c590178",
+   "to": "fabb0cd0-27e2-5ba5-8bcb-f05b5d9d6f7f",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

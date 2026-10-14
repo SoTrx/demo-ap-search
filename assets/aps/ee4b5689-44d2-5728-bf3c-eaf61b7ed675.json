@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "ee4b5689-44d2-5728-bf3c-eaf61b7ed675",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Occupation Survey Crosstabs",
+    "description": "Applies a survey weight plan to coded occupation response records and builds a weighted cross-tabulation by mapped row and column variables, returning unweighted counts, weighted counts, and percentages.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "1e41c0e6-c3d3-51e1-844d-0b782c9ba752",
+   "labels": [
+    "Weighted_Survey_Record_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weighted_survey_record_builder",
+    "description": "Applies the weight plan to coded response records and adds a numeric weight field to each output record. It returns weighted survey records without changing the underlying response values.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_occupation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "survey_weight_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "767cd2ef-67ee-5c33-b95f-0cfca17d1d13",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "weighted_survey_records"
+   }
+  },
+  {
+   "id": "40f2bbfa-df4e-5ee0-8155-68c08dd2fda0",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ee4b5689-44d2-5728-bf3c-eaf61b7ed675",
+   "to": "1e41c0e6-c3d3-51e1-844d-0b782c9ba752",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "1e41c0e6-c3d3-51e1-844d-0b782c9ba752",
+   "to": "767cd2ef-67ee-5c33-b95f-0cfca17d1d13",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['weighted_survey_records']": "from['outputs']['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "767cd2ef-67ee-5c33-b95f-0cfca17d1d13",
+   "to": "40f2bbfa-df4e-5ee0-8155-68c08dd2fda0",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['weighted_survey_records']": "from['weighted_survey_records']"
+    }
+   }
+  },
+  {
+   "from": "40f2bbfa-df4e-5ee0-8155-68c08dd2fda0",
+   "to": "1e41c0e6-c3d3-51e1-844d-0b782c9ba752",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ee4b5689-44d2-5728-bf3c-eaf61b7ed675",
+   "to": "40f2bbfa-df4e-5ee0-8155-68c08dd2fda0",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

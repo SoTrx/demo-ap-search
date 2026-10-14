@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "61eb72a2-b3db-5b7d-988e-307b8e84a438",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Schema Match Categorical Encoder",
+    "description": "Given two schemas and row data, identify matching categorical columns and return encoded rows where those columns become binary indicator columns and originals are removed.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "f06481a7-14de-5d0c-bc45-3b2add497a78",
+   "labels": [
+    "Schema_Column_Mapping_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_column_matcher",
+    "description": "Finds corresponding columns between two database schemas and returns a column mapping. It uses table names, column names, and inferred types.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "source_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target_schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "8aaaf650-8d4b-5f71-879d-5d878774acd5",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "mapping"
+   }
+  },
+  {
+   "id": "627bd4b9-a08c-58c8-a9dd-9358a4613b83",
+   "labels": [
+    "One_Hot_Encode_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_hot_encode_features",
+    "description": "Converts selected categorical feature columns in table rows into binary indicator columns and removes the original categorical columns.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "encoded_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "61eb72a2-b3db-5b7d-988e-307b8e84a438",
+   "to": "f06481a7-14de-5d0c-bc45-3b2add497a78",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f06481a7-14de-5d0c-bc45-3b2add497a78",
+   "to": "8aaaf650-8d4b-5f71-879d-5d878774acd5",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['mapping']": "from['outputs']['mapping']"
+    }
+   }
+  },
+  {
+   "from": "8aaaf650-8d4b-5f71-879d-5d878774acd5",
+   "to": "627bd4b9-a08c-58c8-a9dd-9358a4613b83",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['features']": "from['mapping']"
+    }
+   }
+  },
+  {
+   "from": "627bd4b9-a08c-58c8-a9dd-9358a4613b83",
+   "to": "f06481a7-14de-5d0c-bc45-3b2add497a78",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "61eb72a2-b3db-5b7d-988e-307b8e84a438",
+   "to": "627bd4b9-a08c-58c8-a9dd-9358a4613b83",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "e4561388-eee4-57ad-a052-3c36a6f7c7ad",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Value Mapping Recommendations",
+    "description": "Generates value translations to make mapped columns from two dataset profiles compatible when their value domains differ.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "a30f21c2-91f5-5b5e-b6b9-2b7e76a65d49",
+   "labels": [
+    "Domain_Comparison_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "domain_comparison_builder",
+    "description": "Compares two dataset profiles and reports columns whose value domains are incompatible. Returns the comparison report without rewriting the datasets.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "left_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "right_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "131c1fcd-e604-562e-9185-3f320cfdf454",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "report"
+   }
+  },
+  {
+   "id": "60f1ffc6-158d-59ca-b785-f3fedebf840b",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "e4561388-eee4-57ad-a052-3c36a6f7c7ad",
+   "to": "a30f21c2-91f5-5b5e-b6b9-2b7e76a65d49",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a30f21c2-91f5-5b5e-b6b9-2b7e76a65d49",
+   "to": "131c1fcd-e604-562e-9185-3f320cfdf454",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['report']": "from['outputs']['report']"
+    }
+   }
+  },
+  {
+   "from": "131c1fcd-e604-562e-9185-3f320cfdf454",
+   "to": "60f1ffc6-158d-59ca-b785-f3fedebf840b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['comparison_report']": "from['report']"
+    }
+   }
+  },
+  {
+   "from": "60f1ffc6-158d-59ca-b785-f3fedebf840b",
+   "to": "a30f21c2-91f5-5b5e-b6b9-2b7e76a65d49",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "e4561388-eee4-57ad-a052-3c36a6f7c7ad",
+   "to": "60f1ffc6-158d-59ca-b785-f3fedebf840b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

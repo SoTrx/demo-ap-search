@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "628b2a20-903e-5a57-84a1-530191d59a3c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Audio Segmentation Speech Transcription",
+    "description": "Segments an audio file by silence threshold and returns recognized text transcripts with timing and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "e1bf28a2-e110-5915-bbe9-7684d63e7db9",
+   "labels": [
+    "Audio_Segmenter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "audio_segmenter",
+    "description": "Splits an audio file into speech segments using silence and energy thresholds. Returns segment records with identifiers, start times, and end times.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "audio_file",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "silence_threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "bf04de20-7908-58e2-afec-f88a9cd233a4",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "segments"
+   }
+  },
+  {
+   "id": "a9b55cf3-d4e0-590a-adf9-920fbf95bc92",
+   "labels": [
+    "Speech_Transcriber_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speech_transcriber",
+    "description": "Converts audio segments to text using an automatic speech recognition model. Returns transcript records containing recognized text, segment timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "segments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "628b2a20-903e-5a57-84a1-530191d59a3c",
+   "to": "e1bf28a2-e110-5915-bbe9-7684d63e7db9",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "e1bf28a2-e110-5915-bbe9-7684d63e7db9",
+   "to": "bf04de20-7908-58e2-afec-f88a9cd233a4",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['segments']": "from['outputs']['segments']"
+    }
+   }
+  },
+  {
+   "from": "bf04de20-7908-58e2-afec-f88a9cd233a4",
+   "to": "a9b55cf3-d4e0-590a-adf9-920fbf95bc92",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['segments']": "from['segments']"
+    }
+   }
+  },
+  {
+   "from": "a9b55cf3-d4e0-590a-adf9-920fbf95bc92",
+   "to": "e1bf28a2-e110-5915-bbe9-7684d63e7db9",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "628b2a20-903e-5a57-84a1-530191d59a3c",
+   "to": "a9b55cf3-d4e0-590a-adf9-920fbf95bc92",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

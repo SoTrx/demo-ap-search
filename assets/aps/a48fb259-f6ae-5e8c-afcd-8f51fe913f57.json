@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "a48fb259-f6ae-5e8c-afcd-8f51fe913f57",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Missing Table Cell Report",
+    "description": "Normalizes extracted table records and returns a report of null, empty, whitespace, and placeholder cells in likely text columns.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "17aff705-7209-5618-8e04-6b38590ed29b",
+   "labels": [
+    "Table_Record_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "normalize_table_records",
+    "description": "Normalizes table headers and cell values in extracted table records for consistent tabular analysis.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "740aae7e-776a-50e1-8c29-06434966f674",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "83f9b1a8-0af7-5aea-94b2-e1f748335a16",
+   "labels": [
+    "Missing_Value_Detector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "missing_value_detector",
+    "description": "Flags null, empty, whitespace, and placeholder cells in table rows, using the profile to identify likely text columns. Returns a missing-value report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "a48fb259-f6ae-5e8c-afcd-8f51fe913f57",
+   "to": "17aff705-7209-5618-8e04-6b38590ed29b",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "17aff705-7209-5618-8e04-6b38590ed29b",
+   "to": "740aae7e-776a-50e1-8c29-06434966f674",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "740aae7e-776a-50e1-8c29-06434966f674",
+   "to": "83f9b1a8-0af7-5aea-94b2-e1f748335a16",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "83f9b1a8-0af7-5aea-94b2-e1f748335a16",
+   "to": "17aff705-7209-5618-8e04-6b38590ed29b",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "a48fb259-f6ae-5e8c-afcd-8f51fe913f57",
+   "to": "83f9b1a8-0af7-5aea-94b2-e1f748335a16",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,227 @@
+{
+ "nodes": [
+  {
+   "id": "917f1c93-6260-501a-8cb8-d2409e17395e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "OCR Table Correlation Significance Test",
+    "description": "Extracts table cells from OCR table regions, computes Pearson correlations for mapped numeric columns, and tests their statistical significance at alpha.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "f250d7b5-dac5-57e2-a112-d20b1cf30ed0",
+   "labels": [
+    "Table_Cell_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_cells",
+    "description": "Extracts headers and cell values from table regions using the corresponding OCR text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "94c1296d-afb5-5021-a18b-88130deb8dd6",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "table_records"
+   }
+  },
+  {
+   "id": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "labels": [
+    "Pearson_Correlation_Matrix_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pearson_correlation_matrix",
+    "description": "Computes a Pearson correlation matrix for selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dedcc076-afa0-5d83-8b2b-7d9835e19e1d",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "correlations"
+   }
+  },
+  {
+   "id": "1c7cefc9-9def-5d19-badc-1e002e60bd08",
+   "labels": [
+    "Correlation_Significance_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "correlation_significance_test",
+    "description": "Tests whether correlations in a correlation matrix are statistically significant at the supplied threshold. Returns a hypothesis test result with pair-level p-values and decisions.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "correlations",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "917f1c93-6260-501a-8cb8-d2409e17395e",
+   "to": "f250d7b5-dac5-57e2-a112-d20b1cf30ed0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f250d7b5-dac5-57e2-a112-d20b1cf30ed0",
+   "to": "94c1296d-afb5-5021-a18b-88130deb8dd6",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['table_records']": "from['outputs']['table_records']"
+    }
+   }
+  },
+  {
+   "from": "94c1296d-afb5-5021-a18b-88130deb8dd6",
+   "to": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['table_records']"
+    }
+   }
+  },
+  {
+   "from": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "to": "f250d7b5-dac5-57e2-a112-d20b1cf30ed0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "917f1c93-6260-501a-8cb8-d2409e17395e",
+   "to": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "to": "dedcc076-afa0-5d83-8b2b-7d9835e19e1d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['correlations']": "from['outputs']['correlations']"
+    }
+   }
+  },
+  {
+   "from": "dedcc076-afa0-5d83-8b2b-7d9835e19e1d",
+   "to": "1c7cefc9-9def-5d19-badc-1e002e60bd08",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['correlations']": "from['correlations']"
+    }
+   }
+  },
+  {
+   "from": "1c7cefc9-9def-5d19-badc-1e002e60bd08",
+   "to": "8d0548bb-9186-5907-abbe-9dc15366a249",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "917f1c93-6260-501a-8cb8-d2409e17395e",
+   "to": "1c7cefc9-9def-5d19-badc-1e002e60bd08",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

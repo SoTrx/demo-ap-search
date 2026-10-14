@@ -1,0 +1,65 @@
+{
+ "nodes": [
+  {
+   "id": "1a67d55b-af5e-556f-8162-92e499b6b8ad",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Summary by Region and Period",
+    "description": "Groups weather readings by region and time period and computes the requested summary metric.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "e4b01ee9-d47c-5cd3-bf9b-015dda2b16d3",
+   "labels": [
+    "Regional_Aggregator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regional_aggregator",
+    "description": "Groups weather readings by region and time period and computes the chosen summary metric.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_granularity",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "summary_metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1a67d55b-af5e-556f-8162-92e499b6b8ad",
+   "to": "e4b01ee9-d47c-5cd3-bf9b-015dda2b16d3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

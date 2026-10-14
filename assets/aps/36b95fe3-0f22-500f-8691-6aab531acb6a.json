@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "36b95fe3-0f22-500f-8691-6aab531acb6a",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Budget Actual Period Variance Report",
+    "description": "Takes fiscal-period budget and actual records with field mappings and returns a period-by-period report of absolute and percentage variances.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "361b9948-ebbe-5ab0-968b-68f63e47f916",
+   "labels": [
+    "Budget_Period_Variance_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "budget_period_variance_builder",
+    "description": "Compares budgeted and actual amount columns by fiscal period and computes absolute and percentage variance for each period. It returns a period comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "comparison",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "36b95fe3-0f22-500f-8691-6aab531acb6a",
+   "to": "361b9948-ebbe-5ab0-968b-68f63e47f916",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,269 @@
+{
+ "nodes": [
+  {
+   "id": "f3989581-6ac2-5bfd-8882-8b2b194fac3d",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonal Adjustment for Economic Series",
+    "description": "Smooths a raw time series with a moving average, estimates seasonal indices for a given seasonal period, and returns the seasonally adjusted time series.",
+    "process": "time_series"
+   }
+  },
+  {
+   "id": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "labels": [
+    "Time_Series_Smoother_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Time Series Smoother",
+    "description": "Smooths a time series with a moving average window and returns the smoothed time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "window_size",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "smoothed",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d546bffd-633f-5725-84ba-d3fbf906021b",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "labels": [
+    "Indicator_Seasonality_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_estimator",
+    "description": "Estimates seasonal patterns in an economic indicator time series for the supplied seasonal period length. It returns a seasonality profile describing seasonal indices by period.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "period_length",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "e19feb2b-d5f8-524f-9379-f4d087b65e12",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "profile"
+   }
+  },
+  {
+   "id": "015b9ee1-59cb-55c2-9463-a3aa46e4b319",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "smoothed"
+   }
+  },
+  {
+   "id": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "f3989581-6ac2-5bfd-8882-8b2b194fac3d",
+   "to": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "to": "d546bffd-633f-5725-84ba-d3fbf906021b",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "d546bffd-633f-5725-84ba-d3fbf906021b",
+   "to": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "to": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f3989581-6ac2-5bfd-8882-8b2b194fac3d",
+   "to": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "to": "e19feb2b-d5f8-524f-9379-f4d087b65e12",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['profile']": "from['outputs']['profile']"
+    }
+   }
+  },
+  {
+   "from": "e19feb2b-d5f8-524f-9379-f4d087b65e12",
+   "to": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['profile']": "from['profile']"
+    }
+   }
+  },
+  {
+   "from": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "to": "015b9ee1-59cb-55c2-9463-a3aa46e4b319",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['smoothed']": "from['outputs']['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "015b9ee1-59cb-55c2-9463-a3aa46e4b319",
+   "to": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['smoothed']"
+    }
+   }
+  },
+  {
+   "from": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "to": "7e1cc1a2-0174-5103-a82a-f7af70a8e987",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "to": "f8e791f5-4256-5cab-80e2-189d0a2d0e47",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "f3989581-6ac2-5bfd-8882-8b2b194fac3d",
+   "to": "64690147-3b47-5fb9-a115-8c23c0bd69f8",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

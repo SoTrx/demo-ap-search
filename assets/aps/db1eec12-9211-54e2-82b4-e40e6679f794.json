@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "db1eec12-9211-54e2-82b4-e40e6679f794",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "ISCO Occupation Coding Records",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns occupation coding records with candidate occupation codes and confidence scores.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "bad993dd-766f-5d98-850d-abbaa9020bf7",
+   "labels": [
+    "ISCO_Candidate_Matcher_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "isco_candidate_matcher",
+    "description": "Matches cleaned occupational text chunks against an ISCO code set and returns candidate occupation codes with confidence scores. It may return multiple candidates for each text chunk.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "occupation_code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "occupation_coding_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "db1eec12-9211-54e2-82b4-e40e6679f794",
+   "to": "bad993dd-766f-5d98-850d-abbaa9020bf7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

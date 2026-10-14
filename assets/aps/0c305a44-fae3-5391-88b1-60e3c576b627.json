@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "0c305a44-fae3-5391-88b1-60e3c576b627",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Patient Survival Record Preparation",
+    "description": "Converts raw patient records and a medical term list into survival records by adding standard diagnosis codes and extracting mapped patient identifiers, follow-up times, and event indicators while dropping rows missing time or event.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "588b3ef3-e4a1-597f-a746-d0088a815c2e",
+   "labels": [
+    "Diagnosis_Term_Code_Mapper_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "diagnosis_coder",
+    "description": "Assigns standard codes to diagnosis text fields using terms and synonyms from the supplied medical code set. It appends coded diagnosis fields without removing source text.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "code_set",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6f2946b3-045f-52a7-b62e-3c92784ed02e",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "coded_patient_records"
+   }
+  },
+  {
+   "id": "ab9829a5-3bd5-5520-96a3-bf653e243ac7",
+   "labels": [
+    "Survival_Event_Table_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survival_table_builder",
+    "description": "Builds survival records from coded patient records by extracting patient identifier, follow-up time, and event indicator columns named in the column mapping. Records with missing time or event values are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0c305a44-fae3-5391-88b1-60e3c576b627",
+   "to": "588b3ef3-e4a1-597f-a746-d0088a815c2e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "588b3ef3-e4a1-597f-a746-d0088a815c2e",
+   "to": "6f2946b3-045f-52a7-b62e-3c92784ed02e",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['coded_patient_records']": "from['outputs']['coded_patient_records']"
+    }
+   }
+  },
+  {
+   "from": "6f2946b3-045f-52a7-b62e-3c92784ed02e",
+   "to": "ab9829a5-3bd5-5520-96a3-bf653e243ac7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['coded_patient_records']": "from['coded_patient_records']"
+    }
+   }
+  },
+  {
+   "from": "ab9829a5-3bd5-5520-96a3-bf653e243ac7",
+   "to": "588b3ef3-e4a1-597f-a746-d0088a815c2e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0c305a44-fae3-5391-88b1-60e3c576b627",
+   "to": "ab9829a5-3bd5-5520-96a3-bf653e243ac7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

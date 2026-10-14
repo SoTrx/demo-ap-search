@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "0dba8ad5-59ce-55ec-97af-fb879ab63d23",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Pseudonymisation Plan Builder",
+    "description": "Combines personal-data and quasi-identifier reports into a plan naming direct fields to tokenise and quasi-identifier fields to preserve for re-identification checks.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "296ee5df-2d33-5836-92a8-e46867735484",
+   "labels": [
+    "Pseudonymisation_Plan_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "pseudonymisation_plan_builder",
+    "description": "Builds a pseudonymisation plan from the personal-data and quasi-identifier reports. The plan names direct fields to tokenise and quasi-identifier fields to preserve for re-identification checks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "personal_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "quasi_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0dba8ad5-59ce-55ec-97af-fb879ab63d23",
+   "to": "296ee5df-2d33-5836-92a8-e46867735484",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

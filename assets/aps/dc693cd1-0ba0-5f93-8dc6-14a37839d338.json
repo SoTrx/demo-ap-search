@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "dc693cd1-0ba0-5f93-8dc6-14a37839d338",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic-Relevant Schema Reduction",
+    "description": "Takes a full database schema string and a topic string, then returns the schema filtered to tables and columns relevant to that topic.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "0d950e38-a1a6-53d6-819c-4bf24df3a5aa",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dc693cd1-0ba0-5f93-8dc6-14a37839d338",
+   "to": "0d950e38-a1a6-53d6-819c-4bf24df3a5aa",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

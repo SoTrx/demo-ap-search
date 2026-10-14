@@ -1,0 +1,155 @@
+{
+ "nodes": [
+  {
+   "id": "998fca20-2595-5c22-9e5f-fc87f8631f3b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Target Mean t-Test",
+    "description": "Computes overall and grouped numeric summaries from table rows and performs a one-sample t-test of the mean against a target at a chosen significance level.",
+    "process": "statistics"
+   }
+  },
+  {
+   "id": "0a0e697e-79e8-5a61-9abe-d5c55562ce70",
+   "labels": [
+    "Descriptive_Statistics_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "descriptive_statistics_calculator",
+    "description": "Computes mean, variance, skewness, and kurtosis for selected numeric columns in table rows. Also computes the same summaries within each group defined by the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "overall",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "grouped",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "923dc6fd-0029-5ea9-83a5-0d65f23b9f30",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "overall"
+   }
+  },
+  {
+   "id": "e4eca6a2-496d-57b5-b37b-e5a4efac7d9b",
+   "labels": [
+    "One_Sample_T_Test_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "one_sample_t_test",
+    "description": "Runs a one-sample t-test from previously computed descriptive statistics and a hypothesized target mean. Returns a hypothesis test result with statistic, p-value, and decision.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "stats",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "target",
+      "type": "number",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "test_result",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "998fca20-2595-5c22-9e5f-fc87f8631f3b",
+   "to": "0a0e697e-79e8-5a61-9abe-d5c55562ce70",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0a0e697e-79e8-5a61-9abe-d5c55562ce70",
+   "to": "923dc6fd-0029-5ea9-83a5-0d65f23b9f30",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['overall']": "from['outputs']['overall']"
+    }
+   }
+  },
+  {
+   "from": "923dc6fd-0029-5ea9-83a5-0d65f23b9f30",
+   "to": "e4eca6a2-496d-57b5-b37b-e5a4efac7d9b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['stats']": "from['overall']"
+    }
+   }
+  },
+  {
+   "from": "e4eca6a2-496d-57b5-b37b-e5a4efac7d9b",
+   "to": "0a0e697e-79e8-5a61-9abe-d5c55562ce70",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "998fca20-2595-5c22-9e5f-fc87f8631f3b",
+   "to": "e4eca6a2-496d-57b5-b37b-e5a4efac7d9b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

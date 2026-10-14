@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "95bc5947-b877-559d-84bf-9e73cf993f83",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Graph Question Query Plan Builder",
+    "description": "It turns a natural-language graph question and schema into an executable graph query plan.",
+    "process": "knowledge_graphs"
+   }
+  },
+  {
+   "id": "c76d4d47-90bc-5acb-b4df-18b990732f47",
+   "labels": [
+    "Graph_Query_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "graph_query_builder",
+    "description": "Translates a natural-language graph question into an executable graph query plan. The graph schema is used to resolve query entities, relation names, and property paths.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "natural_language_query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "graph_schema",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "graph_query_plan",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "95bc5947-b877-559d-84bf-9e73cf993f83",
+   "to": "c76d4d47-90bc-5acb-b4df-18b990732f47",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

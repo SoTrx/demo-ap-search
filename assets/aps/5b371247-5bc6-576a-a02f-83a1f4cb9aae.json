@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "5b371247-5bc6-576a-a02f-83a1f4cb9aae",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Page Image Text Extraction",
+    "description": "Extracts readable text from each supplied page image and returns it as page-ordered text chunks.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "6ac55334-5895-5fcc-95ef-5ce3e68d5415",
+   "labels": [
+    "Page_Image_Ocr_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "page_image_ocr",
+    "description": "Runs OCR on each page image and returns recognized page text as ordered text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "page_images",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "5b371247-5bc6-576a-a02f-83a1f4cb9aae",
+   "to": "6ac55334-5895-5fcc-95ef-5ce3e68d5415",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

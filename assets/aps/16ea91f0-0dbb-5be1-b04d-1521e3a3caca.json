@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "16ea91f0-0dbb-5be1-b04d-1521e3a3caca",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic-Safe SQL Query Validator",
+    "description": "The AP narrows a database schema to the parts relevant to a subject topic and then returns whether an SQL query uses only those allowed parts.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "171cd405-7f79-5579-943a-a04bd557b0f3",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "c9928197-a644-5017-989a-799d3658b3ca",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "147e4216-edd9-557f-8031-11e35d39ed17",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "16ea91f0-0dbb-5be1-b04d-1521e3a3caca",
+   "to": "171cd405-7f79-5579-943a-a04bd557b0f3",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "171cd405-7f79-5579-943a-a04bd557b0f3",
+   "to": "c9928197-a644-5017-989a-799d3658b3ca",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "c9928197-a644-5017-989a-799d3658b3ca",
+   "to": "147e4216-edd9-557f-8031-11e35d39ed17",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "147e4216-edd9-557f-8031-11e35d39ed17",
+   "to": "171cd405-7f79-5579-943a-a04bd557b0f3",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "16ea91f0-0dbb-5be1-b04d-1521e3a3caca",
+   "to": "147e4216-edd9-557f-8031-11e35d39ed17",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "1733dc66-4867-52e5-abcf-6e19c09b4d0f",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Standardized Linear Model Builder",
+    "description": "Standardizes selected numeric columns in input rows and fits a simple linear regression model using the supplied column mapping.",
+    "process": "machine_learning"
+   }
+  },
+  {
+   "id": "0890b588-57a8-52b6-b347-2c8754c7a739",
+   "labels": [
+    "Standardize_Numeric_Features_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "standardize_numeric_features",
+    "description": "Rescales selected numeric feature columns in table rows to zero mean and unit variance.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "features",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "scaled_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "dc498b75-0be9-5f2b-82a5-81c62d2243e0",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "scaled_rows"
+   }
+  },
+  {
+   "id": "51f14142-ed10-55b2-bc4d-418d6828aaf1",
+   "labels": [
+    "Simple_Linear_Regression_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "simple_linear_regression_fit",
+    "description": "Fits a simple linear regression model to selected numeric columns in table rows using the supplied column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1733dc66-4867-52e5-abcf-6e19c09b4d0f",
+   "to": "0890b588-57a8-52b6-b347-2c8754c7a739",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0890b588-57a8-52b6-b347-2c8754c7a739",
+   "to": "dc498b75-0be9-5f2b-82a5-81c62d2243e0",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['scaled_rows']": "from['outputs']['scaled_rows']"
+    }
+   }
+  },
+  {
+   "from": "dc498b75-0be9-5f2b-82a5-81c62d2243e0",
+   "to": "51f14142-ed10-55b2-bc4d-418d6828aaf1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['scaled_rows']"
+    }
+   }
+  },
+  {
+   "from": "51f14142-ed10-55b2-bc4d-418d6828aaf1",
+   "to": "0890b588-57a8-52b6-b347-2c8754c7a739",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1733dc66-4867-52e5-abcf-6e19c09b4d0f",
+   "to": "51f14142-ed10-55b2-bc4d-418d6828aaf1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "dddbc55b-1035-54a5-b22c-7d9b4f1bacc8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Row Validation Violation Report",
+    "description": "Checks supplied data rows against rule specifications and returns a report of row-level violations.",
+    "process": "data_quality"
+   }
+  },
+  {
+   "id": "be3abdb5-1b1f-5c04-98f6-a89ec2d84243",
+   "labels": [
+    "Table_Rule_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "table_rule_validator",
+    "description": "Validates table rows against a validation rule specification and returns row-level violations. Returns only violations, without modifying the rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "rules",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dddbc55b-1035-54a5-b22c-7d9b4f1bacc8",
+   "to": "be3abdb5-1b1f-5c04-98f6-a89ec2d84243",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "cc88417e-9d6b-5dc4-80a2-fc9db4c1de5c",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Table Regions from Layout Blocks",
+    "description": "The AP takes layout_blocks, keeps the table blocks, and outputs bounding table_regions ready for cell extraction.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "27ed60b1-34e4-5d65-988d-3651cafc74b2",
+   "labels": [
+    "Table_Region_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_table_regions",
+    "description": "Selects table layout blocks and converts them into bounding table regions ready for cell extraction.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "layout_blocks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "table_regions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cc88417e-9d6b-5dc4-80a2-fc9db4c1de5c",
+   "to": "27ed60b1-34e4-5d65-988d-3651cafc74b2",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

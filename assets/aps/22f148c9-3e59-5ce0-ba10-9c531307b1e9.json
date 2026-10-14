@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "22f148c9-3e59-5ce0-ba10-9c531307b1e9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Time-Series Line Chart",
+    "description": "Builds a line chart from an ordered metric series and adds a short explanatory note with highlighting hints.",
+    "process": "visualization_reporting"
+   }
+  },
+  {
+   "id": "a81a1efd-f02c-5273-b10f-45915548847e",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "0a9febad-b2d9-56bd-a53d-dfef4a3511cf",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "1e6e32c8-9fe8-56e2-af35-4973cecb9cb7",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "22f148c9-3e59-5ce0-ba10-9c531307b1e9",
+   "to": "a81a1efd-f02c-5273-b10f-45915548847e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "a81a1efd-f02c-5273-b10f-45915548847e",
+   "to": "0a9febad-b2d9-56bd-a53d-dfef4a3511cf",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "0a9febad-b2d9-56bd-a53d-dfef4a3511cf",
+   "to": "1e6e32c8-9fe8-56e2-af35-4973cecb9cb7",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "1e6e32c8-9fe8-56e2-af35-4973cecb9cb7",
+   "to": "a81a1efd-f02c-5273-b10f-45915548847e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "22f148c9-3e59-5ce0-ba10-9c531307b1e9",
+   "to": "1e6e32c8-9fe8-56e2-af35-4973cecb9cb7",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

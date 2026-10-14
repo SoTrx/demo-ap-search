@@ -1,0 +1,233 @@
+{
+ "nodes": [
+  {
+   "id": "26b8740b-c55a-5e13-9988-87a6bf0fb7fa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Cox Patient Survival Prediction Scorer",
+    "description": "Builds survival analysis records from coded patient tables and a column mapping, fits a Cox proportional hazards model, and scores new rows to return interval-wrapped predictions controlled by alpha.",
+    "process": "health_biomedical"
+   }
+  },
+  {
+   "id": "d4105bdf-c079-5d5f-b62f-7b23ece268c8",
+   "labels": [
+    "Survival_Event_Table_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "survival_table_builder",
+    "description": "Builds survival records from coded patient records by extracting patient identifier, follow-up time, and event indicator columns named in the column mapping. Records with missing time or event values are excluded.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "coded_patient_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a4d53095-3e60-5d21-a45c-6d000b847187",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "survival_records"
+   }
+  },
+  {
+   "id": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "labels": [
+    "Cox_Proportional_Hazards_Fitter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "cox_hazard_fitter",
+    "description": "Fits a Cox proportional hazards model to survival records using covariates named in the column mapping. The output is a regression fit containing hazard ratios and model diagnostics.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "survival_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "regression_fit",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "5d56887b-ed07-536d-ac7d-2bd187094640",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "regression_fit"
+   }
+  },
+  {
+   "id": "e7ad215b-04ec-535a-8edd-539fa3985c66",
+   "labels": [
+    "Regression_Prediction_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "regression_prediction_interval",
+    "description": "Applies a fitted regression model to new table rows to produce predicted values with prediction intervals. The threshold value controls the width of the intervals.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "new_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "alpha",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "predictions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "26b8740b-c55a-5e13-9988-87a6bf0fb7fa",
+   "to": "d4105bdf-c079-5d5f-b62f-7b23ece268c8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d4105bdf-c079-5d5f-b62f-7b23ece268c8",
+   "to": "a4d53095-3e60-5d21-a45c-6d000b847187",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['survival_records']": "from['outputs']['survival_records']"
+    }
+   }
+  },
+  {
+   "from": "a4d53095-3e60-5d21-a45c-6d000b847187",
+   "to": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['survival_records']": "from['survival_records']"
+    }
+   }
+  },
+  {
+   "from": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "to": "d4105bdf-c079-5d5f-b62f-7b23ece268c8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "26b8740b-c55a-5e13-9988-87a6bf0fb7fa",
+   "to": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "to": "5d56887b-ed07-536d-ac7d-2bd187094640",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['regression_fit']": "from['outputs']['regression_fit']"
+    }
+   }
+  },
+  {
+   "from": "5d56887b-ed07-536d-ac7d-2bd187094640",
+   "to": "e7ad215b-04ec-535a-8edd-539fa3985c66",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['model']": "from['regression_fit']"
+    }
+   }
+  },
+  {
+   "from": "e7ad215b-04ec-535a-8edd-539fa3985c66",
+   "to": "84a0767a-3cd9-5e7b-83cc-81b6a5837569",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "26b8740b-c55a-5e13-9988-87a6bf0fb7fa",
+   "to": "e7ad215b-04ec-535a-8edd-539fa3985c66",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

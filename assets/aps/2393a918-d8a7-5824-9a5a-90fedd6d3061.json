@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "2393a918-d8a7-5824-9a5a-90fedd6d3061",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Address to Point Converter",
+    "description": "Converts an array of textual addresses into an array of point geometries representing their locations.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "f8b72082-e671-5cb6-a2bd-d8e3eae283ab",
+   "labels": [
+    "Geocode_Address_Batch_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "geocode_address_batch",
+    "description": "Converts a list of textual addresses into point geometries.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "address_list",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2393a918-d8a7-5824-9a5a-90fedd6d3061",
+   "to": "f8b72082-e671-5cb6-a2bd-d8e3eae283ab",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

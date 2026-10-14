@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "1f71131a-d938-54d0-8b9e-b0aec9721244",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Profile-Aware Dataset Candidate Ranking",
+    "description": "Ranks recommended dataset identifiers for a seed dataset by compatibility with a supplied schema and coverage profile.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "3d3ee0e0-ad6b-5edc-bb30-f3991b273af6",
+   "labels": [
+    "DatasetRecommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "GetRecommendations Operator",
+    "description": "Dataset-to-Dataset recommender operator. Accepts a seed dataset as input and returns a ranked list of recommended dataset IDs as output.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "seed",
+      "type": "sc:Dataset",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "n",
+      "type": "number",
+      "required": false,
+      "default": 2
+     }
+    ],
+    "outputs": [
+     {
+      "name": "recommendations",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "fe165f05-0a12-5742-a7ed-2dc110f2d16d",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "recommendations"
+   }
+  },
+  {
+   "id": "8ddfa4f6-0f66-5930-b8bf-b0d89109acfc",
+   "labels": [
+    "DatasetDiscoveryReranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rerank_dataset_candidates",
+    "description": "Reranks candidate dataset identifiers against a reference dataset profile. It puts candidates with more compatible schema and coverage characteristics first.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "reference_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "ranked_candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1f71131a-d938-54d0-8b9e-b0aec9721244",
+   "to": "3d3ee0e0-ad6b-5edc-bb30-f3991b273af6",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3d3ee0e0-ad6b-5edc-bb30-f3991b273af6",
+   "to": "fe165f05-0a12-5742-a7ed-2dc110f2d16d",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['recommendations']": "from['outputs']['recommendations']"
+    }
+   }
+  },
+  {
+   "from": "fe165f05-0a12-5742-a7ed-2dc110f2d16d",
+   "to": "8ddfa4f6-0f66-5930-b8bf-b0d89109acfc",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['candidates']": "from['recommendations']"
+    }
+   }
+  },
+  {
+   "from": "8ddfa4f6-0f66-5930-b8bf-b0d89109acfc",
+   "to": "3d3ee0e0-ad6b-5edc-bb30-f3991b273af6",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "1f71131a-d938-54d0-8b9e-b0aec9721244",
+   "to": "8ddfa4f6-0f66-5930-b8bf-b0d89109acfc",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

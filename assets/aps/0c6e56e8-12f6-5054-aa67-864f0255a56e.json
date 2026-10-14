@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "0c6e56e8-12f6-5054-aa67-864f0255a56e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weighted Survey Weather Readings",
+    "description": "Builds a weighted survey summary from provided records and column mapping, then converts the result into normalized weather reading records for one selected variable.",
+    "process": "occupations_surveys"
+   }
+  },
+  {
+   "id": "0c6c183d-10db-5cf5-8253-f1600be04552",
+   "labels": [
+    "Occupation_Cross_Tabulation_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "occupation_cross_tabulation_builder",
+    "description": "Builds a cross-tabulation table from weighted survey records using the row and column variables named in the column mapping. It returns result rows with unweighted counts, weighted counts, and percentages.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "weighted_survey_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d3f5fff7-1888-57d9-8b87-e94ca2399017",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result_rows"
+   }
+  },
+  {
+   "id": "25f8d1ea-5787-543c-b1af-2d734e20fa76",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0c6e56e8-12f6-5054-aa67-864f0255a56e",
+   "to": "0c6c183d-10db-5cf5-8253-f1600be04552",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "0c6c183d-10db-5cf5-8253-f1600be04552",
+   "to": "d3f5fff7-1888-57d9-8b87-e94ca2399017",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result_rows']": "from['outputs']['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "d3f5fff7-1888-57d9-8b87-e94ca2399017",
+   "to": "25f8d1ea-5787-543c-b1af-2d734e20fa76",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['rows']": "from['result_rows']"
+    }
+   }
+  },
+  {
+   "from": "25f8d1ea-5787-543c-b1af-2d734e20fa76",
+   "to": "0c6c183d-10db-5cf5-8253-f1600be04552",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0c6e56e8-12f6-5054-aa67-864f0255a56e",
+   "to": "25f8d1ea-5787-543c-b1af-2d734e20fa76",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

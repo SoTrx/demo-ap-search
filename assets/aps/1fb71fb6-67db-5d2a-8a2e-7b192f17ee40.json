@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "1fb71fb6-67db-5d2a-8a2e-7b192f17ee40",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Speaker Transcript Alignment",
+    "description": "Merges transcript segments with speaker assignment data to return speaker-attributed transcript records with text, timing, and confidence.",
+    "process": "audio_speech"
+   }
+  },
+  {
+   "id": "2463c81b-9d79-5758-a116-d0b36d28ddc3",
+   "labels": [
+    "Speaker_Transcript_Aligner_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "speaker_transcript_aligner",
+    "description": "Merges transcript records with speaker assignment records by segment identifier and time overlap. Returns speaker transcript records containing speaker, text, timing, and confidence.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "transcripts",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "assignments",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "aligned_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "1fb71fb6-67db-5d2a-8a2e-7b192f17ee40",
+   "to": "2463c81b-9d79-5758-a116-d0b36d28ddc3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

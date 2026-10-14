@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "9219f870-9f19-5ff9-ac9b-36e3912b5c0e",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Estimate Student Topic Proficiency",
+    "description": "Given a student's performance profile and a topic, returns an estimated proficiency level for that topic.",
+    "process": "education_analytics"
+   }
+  },
+  {
+   "id": "24237793-6481-58d8-af5a-11d4b41d12e6",
+   "labels": [
+    "Student_Proficiency_Estimator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "student_proficiency_estimator",
+    "description": "Estimates a student's proficiency level for a topic from the student performance profile. Uses only the profile and the requested topic.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "performance_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "proficiency_level",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9219f870-9f19-5ff9-ac9b-36e3912b5c0e",
+   "to": "24237793-6481-58d8-af5a-11d4b41d12e6",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

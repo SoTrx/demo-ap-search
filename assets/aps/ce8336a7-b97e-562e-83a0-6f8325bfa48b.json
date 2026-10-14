@@ -1,0 +1,317 @@
+{
+ "nodes": [
+  {
+   "id": "ce8336a7-b97e-562e-83a0-6f8325bfa48b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Dashboard Chart Collection Builder",
+    "description": "Creates an ordered dashboard collection by building an annotated line chart from an economic indicator or price table and attaching it to two supplied chart specifications.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "b294f5d9-e745-5b2a-969e-248ede9934a0",
+   "labels": [
+    "Economic_Indicator_Series_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "economic_indicator_series_builder",
+    "description": "Builds an ordered economic indicator or price time series from table rows. It uses the date and value columns named in the column mapping.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "22327ea3-cc99-52c1-ad85-ed334ee1ac86",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "series"
+   }
+  },
+  {
+   "id": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "7c71cc0b-9ee9-5b32-b07c-b6da73c9fc12",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "d961c273-942f-51dd-b37a-5027c6c71e09",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "chart"
+   }
+  },
+  {
+   "id": "bf094781-f2cc-5964-a03b-2c498aeadfdb",
+   "labels": [
+    "Chart_Spec_Collector_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_spec_collector",
+    "description": "Collects individual chart specifications into an ordered collection for dashboard assembly.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart_1",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_2",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "chart_3",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart_collection",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "ce8336a7-b97e-562e-83a0-6f8325bfa48b",
+   "to": "b294f5d9-e745-5b2a-969e-248ede9934a0",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "b294f5d9-e745-5b2a-969e-248ede9934a0",
+   "to": "22327ea3-cc99-52c1-ad85-ed334ee1ac86",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['series']": "from['outputs']['series']"
+    }
+   }
+  },
+  {
+   "from": "22327ea3-cc99-52c1-ad85-ed334ee1ac86",
+   "to": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['series']"
+    }
+   }
+  },
+  {
+   "from": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "to": "b294f5d9-e745-5b2a-969e-248ede9934a0",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ce8336a7-b97e-562e-83a0-6f8325bfa48b",
+   "to": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "to": "7c71cc0b-9ee9-5b32-b07c-b6da73c9fc12",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "7c71cc0b-9ee9-5b32-b07c-b6da73c9fc12",
+   "to": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "to": "93ca8639-f78b-5de2-b18d-870d2622859a",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ce8336a7-b97e-562e-83a0-6f8325bfa48b",
+   "to": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "to": "d961c273-942f-51dd-b37a-5027c6c71e09",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['chart']": "from['outputs']['chart']"
+    }
+   }
+  },
+  {
+   "from": "d961c273-942f-51dd-b37a-5027c6c71e09",
+   "to": "bf094781-f2cc-5964-a03b-2c498aeadfdb",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['chart_1']": "from['chart']"
+    }
+   }
+  },
+  {
+   "from": "bf094781-f2cc-5964-a03b-2c498aeadfdb",
+   "to": "3e8e0218-5953-5cab-af1d-0778b0591d3d",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "ce8336a7-b97e-562e-83a0-6f8325bfa48b",
+   "to": "bf094781-f2cc-5964-a03b-2c498aeadfdb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

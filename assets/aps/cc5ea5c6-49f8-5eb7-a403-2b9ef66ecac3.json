@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "cc5ea5c6-49f8-5eb7-a403-2b9ef66ecac3",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Spatially Assign Points To Polygons",
+    "description": "Assigns each point to the polygon that contains it and returns the polygons with the matched point attributes joined.",
+    "process": "geospatial"
+   }
+  },
+  {
+   "id": "f48e2d0c-cbdb-547a-ac4f-a0b971855482",
+   "labels": [
+    "Spatial_Join_Points_To_Polygons_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "spatial_join_points_polygons",
+    "description": "Assigns point geometries to containing polygons and returns polygons with joined point attributes.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "points",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "polygons",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "cc5ea5c6-49f8-5eb7-a403-2b9ef66ecac3",
+   "to": "f48e2d0c-cbdb-547a-ac4f-a0b971855482",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

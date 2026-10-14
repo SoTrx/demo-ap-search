@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "4f8c636f-8a97-5eb2-beec-5804594ef063",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Annotated Chart From Chunks",
+    "description": "The AP summarizes text chunks into a note and adds that note plus highlighting hints to an existing chart specification.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "d89bd03b-35ee-5129-9c55-ba371b8c5a49",
+   "labels": [
+    "Chunk_Summarizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_summarizer",
+    "description": "Summarizes an array of text chunks into a shorter plain-text summary.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "summary",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "9660f12c-8556-5c96-b3d4-198924639d5a",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "summary"
+   }
+  },
+  {
+   "id": "bf128a01-7411-5639-9973-8bfa04b8f33b",
+   "labels": [
+    "Chart_Annotation_Composer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chart_annotation_composer",
+    "description": "Adds a short text annotation and highlighting hints to an existing chart specification.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "note",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "4f8c636f-8a97-5eb2-beec-5804594ef063",
+   "to": "d89bd03b-35ee-5129-9c55-ba371b8c5a49",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "d89bd03b-35ee-5129-9c55-ba371b8c5a49",
+   "to": "9660f12c-8556-5c96-b3d4-198924639d5a",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['summary']": "from['outputs']['summary']"
+    }
+   }
+  },
+  {
+   "from": "9660f12c-8556-5c96-b3d4-198924639d5a",
+   "to": "bf128a01-7411-5639-9973-8bfa04b8f33b",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['note']": "from['summary']"
+    }
+   }
+  },
+  {
+   "from": "bf128a01-7411-5639-9973-8bfa04b8f33b",
+   "to": "d89bd03b-35ee-5129-9c55-ba371b8c5a49",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "4f8c636f-8a97-5eb2-beec-5804594ef063",
+   "to": "bf128a01-7411-5639-9973-8bfa04b8f33b",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

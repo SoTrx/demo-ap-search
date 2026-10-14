@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "9ffe58c0-251e-5d41-aca5-9822c01c9bc9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Seasonally Adjusted Indicator Line Chart",
+    "description": "Adjusts an economic time series using a provided seasonality profile and produces a line chart specification for the adjusted metric.",
+    "process": "finance_economics"
+   }
+  },
+  {
+   "id": "03de6ba8-b78f-5f35-94b2-2b8d80697a0e",
+   "labels": [
+    "Indicator_Seasonality_Adjuster_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "indicator_seasonality_adjuster",
+    "description": "Removes seasonal effects from an economic indicator time series using a seasonality profile. It returns a seasonally adjusted time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "adjusted_series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "522bbbbd-6beb-5c27-bbfd-76d610c90a52",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "adjusted_series"
+   }
+  },
+  {
+   "id": "a107470c-3dac-5005-bb5e-e5d142cc23e3",
+   "labels": [
+    "Line_Chart_Builder_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "line_chart_builder",
+    "description": "Builds a line chart specification from an ordered time series and the name of the metric being plotted.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "chart",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "9ffe58c0-251e-5d41-aca5-9822c01c9bc9",
+   "to": "03de6ba8-b78f-5f35-94b2-2b8d80697a0e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "03de6ba8-b78f-5f35-94b2-2b8d80697a0e",
+   "to": "522bbbbd-6beb-5c27-bbfd-76d610c90a52",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['adjusted_series']": "from['outputs']['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "522bbbbd-6beb-5c27-bbfd-76d610c90a52",
+   "to": "a107470c-3dac-5005-bb5e-e5d142cc23e3",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['series']": "from['adjusted_series']"
+    }
+   }
+  },
+  {
+   "from": "a107470c-3dac-5005-bb5e-e5d142cc23e3",
+   "to": "03de6ba8-b78f-5f35-94b2-2b8d80697a0e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "9ffe58c0-251e-5d41-aca5-9822c01c9bc9",
+   "to": "a107470c-3dac-5005-bb5e-e5d142cc23e3",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "262a71ed-c0d7-5982-a0a6-d13e3859f6a9",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Weather Rows to Numeric Series",
+    "description": "Normalizes generic weather result rows for one measured variable and returns the corresponding numeric values as an ordered time series.",
+    "process": "meteorology_climate"
+   }
+  },
+  {
+   "id": "21b50b90-c92c-532e-ae98-11c2bbdd254e",
+   "labels": [
+    "Weather_Readings_Normalizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "weather_readings_normalizer",
+    "description": "Converts generic result rows into normalized weather reading records for one measured variable.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable_name",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "28ec870e-8522-5f72-82a0-5dae9feff226",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "readings"
+   }
+  },
+  {
+   "id": "c0135405-32d0-5611-955c-749e1100b707",
+   "labels": [
+    "Weather_To_Time_Series_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Weather To Time Series",
+    "description": "Converts weather reading records for a selected variable into an ordered numeric time series.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "readings",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "series",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "262a71ed-c0d7-5982-a0a6-d13e3859f6a9",
+   "to": "21b50b90-c92c-532e-ae98-11c2bbdd254e",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "21b50b90-c92c-532e-ae98-11c2bbdd254e",
+   "to": "28ec870e-8522-5f72-82a0-5dae9feff226",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['readings']": "from['outputs']['readings']"
+    }
+   }
+  },
+  {
+   "from": "28ec870e-8522-5f72-82a0-5dae9feff226",
+   "to": "c0135405-32d0-5611-955c-749e1100b707",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['readings']": "from['readings']"
+    }
+   }
+  },
+  {
+   "from": "c0135405-32d0-5611-955c-749e1100b707",
+   "to": "21b50b90-c92c-532e-ae98-11c2bbdd254e",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "262a71ed-c0d7-5982-a0a6-d13e3859f6a9",
+   "to": "c0135405-32d0-5611-955c-749e1100b707",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "520bd3ef-1b7b-5e71-b32a-b2ab22831c59",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Rank Candidates Against Dataset Profile",
+    "description": "Reranks candidate dataset identifiers so those whose schema and coverage best match a reference dataset profile appear first.",
+    "process": "dataset_discovery"
+   }
+  },
+  {
+   "id": "e18c94a4-d9ec-5854-9550-ce5784bf6bbb",
+   "labels": [
+    "DatasetDiscoveryReranker_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "rerank_dataset_candidates",
+    "description": "Reranks candidate dataset identifiers against a reference dataset profile. It puts candidates with more compatible schema and coverage characteristics first.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "reference_profile",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "ranked_candidates",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "520bd3ef-1b7b-5e71-b32a-b2ab22831c59",
+   "to": "e18c94a4-d9ec-5854-9550-ce5784bf6bbb",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

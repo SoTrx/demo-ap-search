@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "2b15a568-e5d4-5053-8010-7aa3aac03d29",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Model Explanations for SQL Rows",
+    "description": "Executes an SQL query over the dataset and attributes each predicted class in the returned rows to the model's feature columns.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "38b6df87-2745-58b3-9491-75f073bede20",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "c562d1e6-6dc4-58b8-a639-815d13850039",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "result"
+   }
+  },
+  {
+   "id": "5fc381e1-f890-5071-a34b-f05792ca581d",
+   "labels": [
+    "Explain_Classifier_Predictions_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "explain_classifier_predictions",
+    "description": "Attributes the predicted class for each input row to the model feature columns and returns row-level attribution scores.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "model",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "predicted_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "feature_rows",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "attributions",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "2b15a568-e5d4-5053-8010-7aa3aac03d29",
+   "to": "38b6df87-2745-58b3-9491-75f073bede20",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "38b6df87-2745-58b3-9491-75f073bede20",
+   "to": "c562d1e6-6dc4-58b8-a639-815d13850039",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['result']": "from['outputs']['result']"
+    }
+   }
+  },
+  {
+   "from": "c562d1e6-6dc4-58b8-a639-815d13850039",
+   "to": "5fc381e1-f890-5071-a34b-f05792ca581d",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['predicted_rows']": "from['result']"
+    }
+   }
+  },
+  {
+   "from": "5fc381e1-f890-5071-a34b-f05792ca581d",
+   "to": "38b6df87-2745-58b3-9491-75f073bede20",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "2b15a568-e5d4-5053-8010-7aa3aac03d29",
+   "to": "5fc381e1-f890-5071-a34b-f05792ca581d",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

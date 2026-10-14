@@ -1,0 +1,149 @@
+{
+ "nodes": [
+  {
+   "id": "0e8fdfef-7bcb-5c50-9937-effb9295267b",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Harmonize Records to Target Schema",
+    "description": "Given a column mapping, a domain comparison report, and raw table records, recommend compatible value translations and rewrite the records into target column names and values without changing row order.",
+    "process": "data_integration"
+   }
+  },
+  {
+   "id": "122bfe08-a738-5696-82d3-bae166f10f30",
+   "labels": [
+    "Value_Mapping_Recommender_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "value_mapping_recommender",
+    "description": "Recommends value-level translations that make mapped columns compatible. It uses the column mapping and the domain comparison report.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "comparison_report",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "150582f0-d05a-589a-afd5-bbe3a41a4797",
+   "labels": [
+    "ResultType",
+    "object"
+   ],
+   "properties": {
+    "name": "value_mapping"
+   }
+  },
+  {
+   "id": "2ae733db-66d8-5360-bce9-2c847555c6d1",
+   "labels": [
+    "Schema_Mapping_Applier_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "schema_mapping_applier",
+    "description": "Renames columns and converts values in table rows so they conform to a target schema. It applies the supplied column and value mappings without changing the row order.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "table_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "column_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "value_mapping",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "harmonized_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "0e8fdfef-7bcb-5c50-9937-effb9295267b",
+   "to": "122bfe08-a738-5696-82d3-bae166f10f30",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "122bfe08-a738-5696-82d3-bae166f10f30",
+   "to": "150582f0-d05a-589a-afd5-bbe3a41a4797",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['value_mapping']": "from['outputs']['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "150582f0-d05a-589a-afd5-bbe3a41a4797",
+   "to": "2ae733db-66d8-5360-bce9-2c847555c6d1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['value_mapping']": "from['value_mapping']"
+    }
+   }
+  },
+  {
+   "from": "2ae733db-66d8-5360-bce9-2c847555c6d1",
+   "to": "122bfe08-a738-5696-82d3-bae166f10f30",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "0e8fdfef-7bcb-5c50-9937-effb9295267b",
+   "to": "2ae733db-66d8-5360-bce9-2c847555c6d1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

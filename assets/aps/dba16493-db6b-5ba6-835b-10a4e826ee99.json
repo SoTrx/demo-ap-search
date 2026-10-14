@@ -1,0 +1,59 @@
+{
+ "nodes": [
+  {
+   "id": "dba16493-db6b-5ba6-835b-10a4e826ee99",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "k-Anonymity Group Size Report",
+    "description": "Returns a k-anonymity report from group counts and a threshold, listing all class sizes, the minimum k, and classes below threshold.",
+    "process": "privacy_anonymisation"
+   }
+  },
+  {
+   "id": "caacac84-4c3f-5e4f-a4c4-2334d3d14487",
+   "labels": [
+    "K_Anonymity_Evaluator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "k_anonymity_evaluator",
+    "description": "Compares equivalence-class sizes with a minimum group-size threshold and returns a k-anonymity report. The report lists class sizes, the minimum k achieved, and classes that do not meet the threshold.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "groups",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "threshold",
+      "type": "number",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "report",
+      "type": "object",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "dba16493-db6b-5ba6-835b-10a4e826ee99",
+   "to": "caacac84-4c3f-5e4f-a4c4-2334d3d14487",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

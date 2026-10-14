@@ -1,0 +1,137 @@
+{
+ "nodes": [
+  {
+   "id": "7953ba70-7adb-56c0-a001-9460795cbd81",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Entity Type Filtering for Chunks",
+    "description": "Extracts named entities with context from text chunks and returns only the records matching the requested entity type.",
+    "process": "text_nlp"
+   }
+  },
+  {
+   "id": "665eb221-33db-5a38-a2b2-18d7e48ed77c",
+   "labels": [
+    "Chunk_Entity_Extractor_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "chunk_entity_extractor",
+    "description": "Extracts named entities and their context from an array of text chunks.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "b7f6413b-f071-52c8-ba2d-1a0161cfcb25",
+   "labels": [
+    "ResultType",
+    "array"
+   ],
+   "properties": {
+    "name": "entities"
+   }
+  },
+  {
+   "id": "4fe1fbed-bf0a-50a7-8470-f3cb3479de31",
+   "labels": [
+    "Entity_Type_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "entity_type_filter",
+    "description": "Keeps only extracted entity records whose entity type matches the requested type.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "entity_type",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "filtered_entities",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "7953ba70-7adb-56c0-a001-9460795cbd81",
+   "to": "665eb221-33db-5a38-a2b2-18d7e48ed77c",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "665eb221-33db-5a38-a2b2-18d7e48ed77c",
+   "to": "b7f6413b-f071-52c8-ba2d-1a0161cfcb25",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['entities']": "from['outputs']['entities']"
+    }
+   }
+  },
+  {
+   "from": "b7f6413b-f071-52c8-ba2d-1a0161cfcb25",
+   "to": "4fe1fbed-bf0a-50a7-8470-f3cb3479de31",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['entities']": "from['entities']"
+    }
+   }
+  },
+  {
+   "from": "4fe1fbed-bf0a-50a7-8470-f3cb3479de31",
+   "to": "665eb221-33db-5a38-a2b2-18d7e48ed77c",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "7953ba70-7adb-56c0-a001-9460795cbd81",
+   "to": "4fe1fbed-bf0a-50a7-8470-f3cb3479de31",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "nodes": [
+  {
+   "id": "acd8773d-0a68-5183-9d7d-645072c858fa",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Citation Extraction With Context",
+    "description": "Given an array of text chunks, this AP detects bibliographic citations and returns structured citation records with the surrounding context.",
+    "process": "document_processing"
+   }
+  },
+  {
+   "id": "bf560cf7-11e9-5719-a10b-1dbd63f25959",
+   "labels": [
+    "Citation_From_Text_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "extract_citations_from_text",
+    "description": "Detects bibliographic citations in text chunks and returns citation records with surrounding context.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "text_chunks",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "citation_records",
+      "type": "array",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "acd8773d-0a68-5183-9d7d-645072c858fa",
+   "to": "bf560cf7-11e9-5719-a10b-1dbd63f25959",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

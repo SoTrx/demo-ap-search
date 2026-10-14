@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "8f382a9a-f854-51ad-8588-2b362b6cf3a7",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Topic-aware SQL Query Optimizer",
+    "description": "Narrows a supplied database schema to the tables and columns relevant to a topic, then rewrites a supplied SQL query into a more efficient SQL query.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "6dff1715-c6f8-5e55-8fb5-627e5c7431a8",
+   "labels": [
+    "Schema_Relevance_Filter_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "Schema Relevance Filter",
+    "description": "Filters a database schema down to tables and columns relevant to a subject topic and returns the reduced schema.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "a593937f-939c-5f8a-8878-2b1016d3cb28",
+   "labels": [
+    "ResultType",
+    "string"
+   ],
+   "properties": {
+    "name": "schema"
+   }
+  },
+  {
+   "id": "54c928fd-db08-55e3-9a87-991e80e6edf1",
+   "labels": [
+    "SQL_Optimizer_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Optimizer",
+    "description": "Rewrites an SQL query for better performance using the database schema and returns the optimized query.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "8f382a9a-f854-51ad-8588-2b362b6cf3a7",
+   "to": "6dff1715-c6f8-5e55-8fb5-627e5c7431a8",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "6dff1715-c6f8-5e55-8fb5-627e5c7431a8",
+   "to": "a593937f-939c-5f8a-8878-2b1016d3cb28",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['schema']": "from['outputs']['schema']"
+    }
+   }
+  },
+  {
+   "from": "a593937f-939c-5f8a-8878-2b1016d3cb28",
+   "to": "54c928fd-db08-55e3-9a87-991e80e6edf1",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['schema']": "from['schema']"
+    }
+   }
+  },
+  {
+   "from": "54c928fd-db08-55e3-9a87-991e80e6edf1",
+   "to": "6dff1715-c6f8-5e55-8fb5-627e5c7431a8",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "8f382a9a-f854-51ad-8588-2b362b6cf3a7",
+   "to": "54c928fd-db08-55e3-9a87-991e80e6edf1",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+ "nodes": [
+  {
+   "id": "02ac8bf9-5eed-5971-8c01-ec2217565bd8",
+   "labels": [
+    "Analytical_Pattern"
+   ],
+   "properties": {
+    "name": "Safe SQL Query Execution",
+    "description": "Validates an SQL query against a supplied schema and, when safe, executes it to return the result rows.",
+    "process": "sql_analytics"
+   }
+  },
+  {
+   "id": "562874ab-1151-5cea-b1d7-5e46d1f1c054",
+   "labels": [
+    "SQL_Schema_Validator_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Schema Validator",
+    "description": "Checks whether an SQL query references only tables and columns present in the schema and returns a safety flag.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "schema",
+      "type": "string",
+      "required": true,
+      "default": ""
+     }
+    ],
+    "outputs": [
+     {
+      "name": "flag",
+      "type": "boolean",
+      "required": true,
+      "default": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "6335a7a2-33e1-59df-88ea-8805deb92bda",
+   "labels": [
+    "ResultType",
+    "boolean"
+   ],
+   "properties": {
+    "name": "flag"
+   }
+  },
+  {
+   "id": "2c2edf64-d18b-5f61-96fc-0989f433fc40",
+   "labels": [
+    "SQL_Query_Operator",
+    "Operator"
+   ],
+   "properties": {
+    "name": "SQL Execution",
+    "description": "Executes an SQL query against the input dataset and returns the result rows.",
+    "version": "1.0.0",
+    "step": 1,
+    "inputs": [
+     {
+      "name": "sql",
+      "type": "string",
+      "required": true,
+      "default": ""
+     },
+     {
+      "name": "is_safe",
+      "type": "boolean",
+      "required": true,
+      "default": true
+     }
+    ],
+    "outputs": [
+     {
+      "name": "result",
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    ]
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "02ac8bf9-5eed-5971-8c01-ec2217565bd8",
+   "to": "562874ab-1151-5cea-b1d7-5e46d1f1c054",
+   "labels": [
+    "consist_of"
+   ]
+  },
+  {
+   "from": "562874ab-1151-5cea-b1d7-5e46d1f1c054",
+   "to": "6335a7a2-33e1-59df-88ea-8805deb92bda",
+   "labels": [
+    "output"
+   ],
+   "properties": {
+    "mapping": {
+     "to['flag']": "from['outputs']['flag']"
+    }
+   }
+  },
+  {
+   "from": "6335a7a2-33e1-59df-88ea-8805deb92bda",
+   "to": "2c2edf64-d18b-5f61-96fc-0989f433fc40",
+   "labels": [
+    "input"
+   ],
+   "properties": {
+    "mapping": {
+     "to['inputs']['is_safe']": "from['flag']"
+    }
+   }
+  },
+  {
+   "from": "2c2edf64-d18b-5f61-96fc-0989f433fc40",
+   "to": "562874ab-1151-5cea-b1d7-5e46d1f1c054",
+   "labels": [
+    "follows"
+   ],
+   "properties": {}
+  },
+  {
+   "from": "02ac8bf9-5eed-5971-8c01-ec2217565bd8",
+   "to": "2c2edf64-d18b-5f61-96fc-0989f433fc40",
+   "labels": [
+    "consist_of"
+   ]
+  }
+ ]
+}
