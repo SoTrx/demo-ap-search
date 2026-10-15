@@ -1,6 +1,6 @@
 [project]
 name = "demo-ap-search"
-version = "0.1.0"
+version = "0.2.0"
 description = "Today's AP search and the custom embedder's, side by side, over 605 APs"
 readme = "README.md"
 requires-python = ">=3.14"

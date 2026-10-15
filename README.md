@@ -37,12 +37,36 @@ uv run streamlit run main.py                                                    
 In VS Code, the *Python:Streamlit* launch configuration (F5) does the second line. Running
 `main.py` as a plain Python file does not work: Streamlit apps are started by `streamlit run`.
 
-`docker-compose.yml` alone builds and runs the app too, behind an external `traefik` network.
+`docker-compose.yml` alone runs the released app image (built on each `v*` tag), behind an external
+`traefik` network.
 
-- **First start:** moma-new downloads the model (about 550 MB) into the `hf-cache` volume.
+- **First start:** moma-old and moma-new download their models (about 90 and 550 MB) into the
+  `hf-cache` volume.
 - **First page load:** the app loads the 605 APs into both searches. The new one embeds them on
-  CPU, which takes a few minutes (`OMP_NUM_THREADS` is set in the compose file). The APs stay in the two Neo4j containers, so this happens
-  once.
+  CPU, which takes a few minutes (`OMP_NUM_THREADS`, 2 by default, sets its threads: set it to the
+  machine's cores). The APs stay in the `neo4j-old` and `neo4j-new` volumes, so this happens once.
+
+### On a small machine
+
+Once the APs are loaded, the stack takes about 2.5 GB: moma-new 1 GB, moma-old 500 MB, each Neo4j
+450 MB (capped in the compose file: left alone, it sizes itself from the host's RAM). Loading the
+APs takes more: moma-new reaches 1.9 GB embedding them, and keeps it until restarted. So load them
+on a bigger machine, and copy the volumes:
+
+```bash
+# On the big machine, after the first page load:
+docker compose stop
+for v in hf-cache neo4j-old neo4j-new; do
+  docker run --rm -v demo-ap-search_$v:/v alpine tar -czf - -C /v . > $v.tgz
+done
+
+# On the small machine, with the three .tgz (about 500 MB, nearly all of it the models):
+docker compose create
+for v in hf-cache neo4j-old neo4j-new; do
+  docker run --rm -i -v demo-ap-search_$v:/v alpine tar -xzf - -C /v < $v.tgz
+done
+docker compose up -d
+```
 
 ## Architecture
 

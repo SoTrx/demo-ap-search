@@ -1,7 +1,11 @@
+# Fixed, so the volumes are named demo-ap-search_* whatever the folder is called.
+name: demo-ap-search
+
 services:
 
   app:
-    build: .
+    # Built and pushed by .github/workflows/docker-image.yml on each v* tag.
+    image: ghcr.io/sotrx/sotrx/demo-ap-search:v0.2.0
     labels:
     - traefik.enable=true
     - traefik.http.routers.demo-search.rule=PathPrefix(`/demo-search`)
@@ -13,6 +17,8 @@ services:
       - MOMA_OLD_URL=http://moma-old:5000
       - MOMA_NEW_URL=http://moma-new:5000
       - STREAMLIT_SERVER_BASE_URL_PATH=${APP_BASE_URL_PATH:-}
+      # glibc keeps one memory pool per thread by default, and rarely gives any back.
+      - MALLOC_ARENA_MAX=2
     restart: always
     depends_on:
       moma-old:
@@ -35,8 +41,13 @@ services:
       # No trace collector in this demo.
       - OTEL_SDK_DISABLED=true
       # PyTorch takes one thread per core by default; on a busy machine they fight and an
-      # embedding takes seconds instead of milliseconds.
-      - OMP_NUM_THREADS=8
+      # embedding takes seconds instead of milliseconds. Set it to the machine's cores.
+      - OMP_NUM_THREADS=${OMP_NUM_THREADS:-2}
+      # glibc keeps one memory pool per thread by default, and rarely gives any back.
+      - MALLOC_ARENA_MAX=2
+    volumes:
+      # Shared with moma-new: each model is downloaded once, not at every recreation.
+      - hf-cache:/root/.cache/huggingface
     restart: always
     healthcheck: &moma-health
       test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\" || exit 1"]
@@ -62,8 +73,10 @@ services:
       # No trace collector in this demo.
       - OTEL_SDK_DISABLED=true
       # PyTorch takes one thread per core by default; on a busy machine they fight and an
-      # embedding takes seconds instead of milliseconds.
-      - OMP_NUM_THREADS=8
+      # embedding takes seconds instead of milliseconds. Set it to the machine's cores.
+      - OMP_NUM_THREADS=${OMP_NUM_THREADS:-2}
+      # glibc keeps one memory pool per thread by default, and rarely gives any back.
+      - MALLOC_ARENA_MAX=2
       - EMBEDDER_MODEL=SoTrxII/analytical-pattern-embedder:v2
     volumes:
       # The model is downloaded once (about 550 MB).
@@ -86,18 +99,33 @@ services:
       - traefik.enable=false
     environment:
       - NEO4J_AUTH=neo4j/momademo
+      # The 605 APs take about 10 MB. Left alone, Neo4j sizes its memory from the host's RAM.
+      - NEO4J_server_memory_heap_initial__size=128m
+      - NEO4J_server_memory_heap_max__size=192m
+      - NEO4J_server_memory_pagecache_size=64m
+      - MALLOC_ARENA_MAX=2
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
       interval: 10s
       timeout: 5s
+      # Neo4j takes over a minute to start on a small or busy machine.
+      start_period: 180s
     networks:
       - internal
+    volumes:
+      - neo4j-old:/data
 
-  neo4j-new: *neo4j
+  neo4j-new:
+    <<: *neo4j
+    volumes:
+      - neo4j-new:/data
 
 volumes:
   hf-cache:
+  # Named, so they can be seeded on another machine and copied over (see the README).
+  neo4j-old:
+  neo4j-new:
 
 networks:
   traefik:
